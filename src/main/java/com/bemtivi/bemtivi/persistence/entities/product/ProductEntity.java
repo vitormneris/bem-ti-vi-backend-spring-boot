@@ -1,13 +1,16 @@
-package com.bemtivi.bemtivi.persistence.entities;
+package com.bemtivi.bemtivi.persistence.entities.product;
 
+import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
+@ToString
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -31,4 +34,7 @@ public class ProductEntity {
     @NotNull
     @Column(name = "descricao")
     private String description;
+    @NotNull
+    @Embedded
+    private ActivationStatusEntity activationStatus;
 }

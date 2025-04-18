@@ -1,5 +1,6 @@
-package com.bemtivi.bemtivi.domain;
+package com.bemtivi.bemtivi.domain.product;
 
+import com.bemtivi.bemtivi.domain.ActivationStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,5 @@ public class Product {
     private String pathImage;
     private BigDecimal price;
     private String description;
+    private ActivationStatus activationStatus;
 }
