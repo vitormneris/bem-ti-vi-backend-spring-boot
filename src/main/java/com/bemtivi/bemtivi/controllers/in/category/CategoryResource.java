@@ -1,9 +1,9 @@
-package com.bemtivi.bemtivi.controllers.in.product;
+package com.bemtivi.bemtivi.controllers.in.category;
 
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
-import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
-import com.bemtivi.bemtivi.controllers.in.product.mappers.ProductWebMapper;
-import com.bemtivi.bemtivi.services.ProductService;
+import com.bemtivi.bemtivi.controllers.in.category.dto.CategoryDTO;
+import com.bemtivi.bemtivi.controllers.in.category.mappers.CategoryWebMapper;
+import com.bemtivi.bemtivi.services.CategoryService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.groups.Default;
@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/produto")
-public class ProductResource {
-    private final ProductService productService;
-    private final ProductWebMapper mapper;
+@RequestMapping(value = "/categoria")
+public class CategoryResource {
+    private final CategoryService categoryService;
+    private final CategoryWebMapper mapper;
 
     @GetMapping(value = "/paginacao")
-    public ResponseEntity<PageResponseDTO<ProductDTO>> paginate(
+    public ResponseEntity<PageResponseDTO<CategoryDTO>> paginate(
             @RequestParam(name = "isActive", defaultValue = "true", required = false)
             Boolean isActive,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false)
@@ -33,33 +33,33 @@ public class ProductResource {
             @RequestParam(name = "name", required = false)
             String name
     ) {
-        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(productService.paginate(isActive, pageSize, page, name)));
+        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(categoryService.paginate(isActive, pageSize, page, name)));
     }
 
     @GetMapping(value = "/{id}/buscar")
-    public ResponseEntity<ProductDTO> findById(@PathVariable(name = "id") String id) {
-        return ResponseEntity.ok().body(mapper.mapToDTO(productService.findById(id)));
+    public ResponseEntity<CategoryDTO> findById(@PathVariable(name = "id") String id) {
+        return ResponseEntity.ok().body(mapper.mapToDTO(categoryService.findById(id)));
     }
 
     @PostMapping(value = "/inserir")
-    public ResponseEntity<ProductDTO> insert(@Validated(Default.class) @RequestBody ProductDTO productDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDTO(productService.insert(mapper.mapToDomain(productDTO))));
+    public ResponseEntity<CategoryDTO> insert(@Validated(Default.class) @RequestBody CategoryDTO categoryDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDTO(categoryService.insert(mapper.mapToDomain(categoryDTO))));
     }
 
     @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") String id, @Validated(ProductDTO.Mandatory.class) @RequestBody ProductDTO productDTO) {
-        return ResponseEntity.ok().body(mapper.mapToDTO(productService.update(id, mapper.mapToDomain(productDTO))));
+    public ResponseEntity<CategoryDTO> update(@PathVariable(name = "id") String id, @Validated(CategoryDTO.Mandatory.class) @RequestBody CategoryDTO categoryDTO) {
+        return ResponseEntity.ok().body(mapper.mapToDTO(categoryService.update(id, mapper.mapToDomain(categoryDTO))));
     }
 
     @DeleteMapping(value = "/{id}/desativar")
     public ResponseEntity<Void> deactivate(@PathVariable(name = "id") String id) {
-        productService.deactivate(id);
+        categoryService.deactivate(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping(value = "/{id}/deletar")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
-        productService.delete(id);
+        categoryService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

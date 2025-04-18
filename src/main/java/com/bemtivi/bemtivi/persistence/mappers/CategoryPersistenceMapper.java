@@ -1,32 +1,31 @@
 package com.bemtivi.bemtivi.persistence.mappers;
 
 import com.bemtivi.bemtivi.domain.PageResponse;
-import com.bemtivi.bemtivi.domain.product.Product;
-import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
-import org.springframework.data.domain.Page;
+import com.bemtivi.bemtivi.domain.category.Category;
+import com.bemtivi.bemtivi.persistence.entities.category.CategoryEntity;
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface ProductPersistenceMapper {
-    Product mapToDomain(ProductEntity productEntity);
-    ProductEntity mapToEntity(Product product);
+public interface CategoryPersistenceMapper {
+    CategoryEntity mapToEntity(Category category);
+    Category mapToDomain(CategoryEntity categoryEntity);
 
-    default PageResponse<Product> mapToPageResponseDomain(Page<ProductEntity> pageResponse) {
+    default PageResponse<Category> mapToPageResponseDomain(Page<CategoryEntity> pageResponse) {
         int previousPage = pageResponse.hasPrevious() ? pageResponse.getNumber() - 1 : pageResponse.getNumber();
         int nextPage = pageResponse.hasNext() ? pageResponse.getNumber() + 1 : pageResponse.getNumber();
-        Set<Product> products = pageResponse.getContent().stream().map(this::mapToDomain).collect(Collectors.toSet());
-        return PageResponse.<Product>builder()
+        Set<Category> categories = pageResponse.getContent().stream().map(this::mapToDomain).collect(Collectors.toSet());
+        return PageResponse.<Category>builder()
                 .pageSize(pageResponse.getNumberOfElements())
                 .totalElements(pageResponse.getTotalElements())
                 .currentPage(pageResponse.getNumber())
                 .previousPage(previousPage)
                 .nextPage(nextPage)
-                .content(products)
+                .content(categories)
                 .totalPages(pageResponse.getTotalPages())
                 .build();
     }
-
 }

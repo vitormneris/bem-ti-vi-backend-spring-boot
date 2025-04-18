@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.persistence.entities.product;
+package com.bemtivi.bemtivi.persistence.entities.category;
 
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import jakarta.persistence.*;
@@ -7,31 +7,26 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "tb_produtos")
-public class ProductEntity {
+@Table(name = "tb_categorias")
+public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @EqualsAndHashCode.Include
-    @Column(name = "produto_id")
+    @Column(name = "categoria_id")
     private String id;
     @NotNull
     @Column(name = "nome")
     private String name;
     @NotNull
+    @Column(name = "cor_do_card")
+    private String cardColor;
+    @NotNull
     @Column(name = "caminho_da_imagem")
     private String pathImage;
-    @NotNull
-    @Column(name = "preco")
-    private BigDecimal price;
-    @NotNull
-    @Column(name = "descricao")
-    private String description;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }
