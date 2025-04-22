@@ -4,13 +4,16 @@ import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
 import com.bemtivi.bemtivi.controllers.in.product.mappers.ProductWebMapper;
 import com.bemtivi.bemtivi.services.ProductService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,13 +44,24 @@ public class ProductResource {
     }
 
     @PostMapping(value = "/inserir")
-    public ResponseEntity<ProductDTO> insert(@Validated(ProductDTO.OnCreate.class) @RequestBody ProductDTO productDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDTO(productService.insert(mapper.mapToDomain(productDTO))));
+    public ResponseEntity<ProductDTO> insert(
+            @Validated(ProductDTO.OnCreate.class) @RequestPart(value = "product") ProductDTO productDTO,
+            @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                mapper.mapToDTO(productService.insert(mapper.mapToDomain(productDTO), file))
+        );
     }
 
     @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") String id, @Validated(ProductDTO.OnUpdate.class) @RequestBody ProductDTO productDTO) {
-        return ResponseEntity.ok().body(mapper.mapToDTO(productService.update(id, mapper.mapToDomain(productDTO))));
+    public ResponseEntity<ProductDTO> update(
+            @PathVariable(name = "id") String id,
+            @Validated(ProductDTO.OnUpdate.class) @RequestPart(value = "product") ProductDTO productDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        return ResponseEntity.ok().body(
+                mapper.mapToDTO(productService.update(id, mapper.mapToDomain(productDTO), file))
+        );
     }
 
     @DeleteMapping(value = "/{id}/desativar")

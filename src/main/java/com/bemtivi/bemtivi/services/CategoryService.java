@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 
@@ -21,6 +22,7 @@ import java.time.Instant;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryPersistenceMapper mapper;
+    private final UploadService uploadService;
 
     public PageResponse<Category> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
@@ -34,7 +36,7 @@ public class CategoryService {
         ));
     }
 
-    public Category insert(Category category) {
+    public Category insert(Category category, MultipartFile file) {
         CategoryEntity saved;
         ActivationStatus activationStatus = ActivationStatus.builder()
                 .isActive(true)
@@ -44,6 +46,7 @@ public class CategoryService {
             category.setId(null);
             category.setActivationStatus(activationStatus);
             CategoryEntity categoryEntity = mapper.mapToEntity(category);
+            categoryEntity.setPathImage(uploadService.uploadObject(file));
             saved = categoryRepository.save(categoryEntity);
         } catch (TransactionSystemException exception) {
             throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
@@ -51,13 +54,13 @@ public class CategoryService {
         return mapper.mapToDomain(saved);
     }
 
-    public Category update(String id, Category categoryNew) {
+    public Category update(String id, Category categoryNew, MultipartFile file) {
         CategoryEntity categoryOld = categoryRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)
         );
         categoryOld.setName(categoryNew.getName() == null ? categoryOld.getName() : categoryNew.getName());
-        categoryOld.setPathImage(categoryNew.getPathImage() == null ? categoryOld.getPathImage() : categoryNew.getPathImage());
         categoryOld.setCardColor(categoryNew.getCardColor() == null ? categoryOld.getCardColor() : categoryNew.getCardColor());
+        if (file != null) categoryOld.setPathImage(uploadService.uploadObject(file));
         CategoryEntity updated;
         try {
             updated = categoryRepository.save(categoryOld);

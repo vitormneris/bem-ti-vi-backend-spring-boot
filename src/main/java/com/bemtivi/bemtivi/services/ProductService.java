@@ -2,7 +2,6 @@ package com.bemtivi.bemtivi.services;
 
 import com.bemtivi.bemtivi.domain.ActivationStatus;
 import com.bemtivi.bemtivi.domain.PageResponse;
-import com.bemtivi.bemtivi.domain.category.Category;
 import com.bemtivi.bemtivi.domain.product.Product;
 import com.bemtivi.bemtivi.exceptions.DataIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 
@@ -23,6 +23,7 @@ import java.time.Instant;
 public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final UploadService uploadService;
     private final ProductPersistenceMapper mapper;
 
     public PageResponse<Product> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
@@ -37,7 +38,7 @@ public class ProductService {
         ));
     }
 
-    public Product insert(Product product) {
+    public Product insert(Product product, MultipartFile file) {
         ProductEntity saved;
         ActivationStatus activationStatus = ActivationStatus.builder()
                 .isActive(true)
@@ -50,6 +51,7 @@ public class ProductService {
                     () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)
             ));
             ProductEntity productEntity = mapper.mapToEntity(product);
+            productEntity.setPathImage(uploadService.uploadObject(file));
             saved = productRepository.save(productEntity);
         } catch (TransactionSystemException exception) {
             throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
@@ -57,14 +59,14 @@ public class ProductService {
         return mapper.mapToDomain(saved);
     }
 
-    public Product update(String id, Product productNew) {
+    public Product update(String id, Product productNew, MultipartFile file) {
         ProductEntity productOld = productRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0003)
         );
         productOld.setName(productNew.getName() == null ? productOld.getName() : productNew.getName());
-        productOld.setPathImage(productNew.getPathImage() == null ? productOld.getPathImage() : productNew.getPathImage());
         productOld.setPrice(productNew.getPrice() == null ? productOld.getPrice() : productNew.getPrice());
         productOld.setDescription(productNew.getDescription() == null ? productOld.getDescription() : productNew.getDescription());
+        if (file != null) productOld.setPathImage(uploadService.uploadObject(file));
         if (productNew.getCategories() != null) {
             productNew.getCategories().forEach(category -> categoryRepository.findById(category.getId()).orElseThrow(
                     () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)

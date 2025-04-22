@@ -5,13 +5,16 @@ import com.bemtivi.bemtivi.controllers.in.category.dto.CategoryDTO;
 import com.bemtivi.bemtivi.controllers.in.category.mappers.CategoryWebMapper;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
 import com.bemtivi.bemtivi.services.CategoryService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,13 +45,24 @@ public class CategoryResource {
     }
 
     @PostMapping(value = "/inserir")
-    public ResponseEntity<CategoryDTO> insert(@Validated(ProductDTO.OnCreate.class) @RequestBody CategoryDTO categoryDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDTO(categoryService.insert(mapper.mapToDomain(categoryDTO))));
+    public ResponseEntity<CategoryDTO> insert(
+            @Validated(ProductDTO.OnCreate.class) @RequestPart(value = "category") CategoryDTO categoryDTO,
+            @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                mapper.mapToDTO(categoryService.insert(mapper.mapToDomain(categoryDTO), file))
+        );
     }
 
     @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<CategoryDTO> update(@PathVariable(name = "id") String id, @Validated(CategoryDTO.OnUpdate.class) @RequestBody CategoryDTO categoryDTO) {
-        return ResponseEntity.ok().body(mapper.mapToDTO(categoryService.update(id, mapper.mapToDomain(categoryDTO))));
+    public ResponseEntity<CategoryDTO> update(
+            @PathVariable(name = "id") String id,
+            @Validated(CategoryDTO.OnUpdate.class) @RequestPart(value = "category") CategoryDTO categoryDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        return ResponseEntity.ok().body(
+                mapper.mapToDTO(categoryService.update(id, mapper.mapToDomain(categoryDTO), file))
+        );
     }
 
     @DeleteMapping(value = "/{id}/desativar")

@@ -4,13 +4,16 @@ import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.petservice.dto.PetServiceDTO;
 import com.bemtivi.bemtivi.controllers.in.petservice.mappers.PetServiceWebMapper;
 import com.bemtivi.bemtivi.services.PetServiceService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,13 +44,24 @@ public class PetServiceResource {
     }
 
     @PostMapping(value = "/inserir")
-    public ResponseEntity<PetServiceDTO> insert(@Validated(PetServiceDTO.OnCreate.class) @RequestBody PetServiceDTO petServiceDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDTO(petServiceService.insert(mapper.mapToDomain(petServiceDTO))));
+    public ResponseEntity<PetServiceDTO> insert(
+            @Validated(PetServiceDTO.OnCreate.class) @RequestPart(value = "service") PetServiceDTO petServiceDTO,
+            @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                mapper.mapToDTO(petServiceService.insert(mapper.mapToDomain(petServiceDTO), file))
+        );
     }
 
     @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<PetServiceDTO> update(@PathVariable(name = "id") String id, @Validated(PetServiceDTO.OnUpdate.class) @RequestBody PetServiceDTO petServiceDTO) {
-        return ResponseEntity.ok().body(mapper.mapToDTO(petServiceService.update(id, mapper.mapToDomain(petServiceDTO))));
+    public ResponseEntity<PetServiceDTO> update(
+            @PathVariable(name = "id") String id,
+            @Validated(PetServiceDTO.OnUpdate.class) @RequestPart(value = "service") PetServiceDTO petServiceDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) {
+        return ResponseEntity.ok().body(
+                mapper.mapToDTO(petServiceService.update(id, mapper.mapToDomain(petServiceDTO), file))
+        );
     }
 
     @DeleteMapping(value = "/{id}/desativar")

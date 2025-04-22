@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 
@@ -21,6 +22,7 @@ import java.time.Instant;
 public class PetServiceService {
     private final PetServiceRepository petServiceRepository;
     private final PetServicePersistenceMapper mapper;
+    private final UploadService uploadService;
 
     public PageResponse<PetService> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
@@ -34,7 +36,7 @@ public class PetServiceService {
         ));
     }
 
-    public PetService insert(PetService petService) {
+    public PetService insert(PetService petService, MultipartFile file) {
         PetServiceEntity saved;
         ActivationStatus activationStatus = ActivationStatus.builder()
                 .isActive(true)
@@ -44,6 +46,7 @@ public class PetServiceService {
             petService.setId(null);
             petService.setActivationStatus(activationStatus);
             PetServiceEntity petServiceEntity = mapper.mapToEntity(petService);
+            petServiceEntity.setPathImage(uploadService.uploadObject(file));
             saved = petServiceRepository.save(petServiceEntity);
         } catch (TransactionSystemException exception) {
             throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
@@ -51,18 +54,18 @@ public class PetServiceService {
         return mapper.mapToDomain(saved);
     }
 
-    public PetService update(String id, PetService petServiceNew) {
-        PetServiceEntity serviceOld = petServiceRepository.findById(id).orElseThrow(
+    public PetService update(String id, PetService petServiceNew, MultipartFile file) {
+        PetServiceEntity petServiceOld = petServiceRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0005)
         );
-        serviceOld.setName(petServiceNew.getName() == null ? serviceOld.getName() : petServiceNew.getName());
-        serviceOld.setPrice(petServiceNew.getPrice() == null ? serviceOld.getPrice() : petServiceNew.getPrice());
-        serviceOld.setEstimated_duration(petServiceNew.getEstimated_duration() == null ? serviceOld.getEstimated_duration() : petServiceNew.getEstimated_duration());
-        serviceOld.setDescription(petServiceNew.getDescription() == null ? serviceOld.getDescription() : petServiceNew.getDescription());
-        serviceOld.setPathImage(petServiceNew.getPathImage() == null ? serviceOld.getPathImage() : petServiceNew.getPathImage());
+        petServiceOld.setName(petServiceNew.getName() == null ? petServiceOld.getName() : petServiceNew.getName());
+        petServiceOld.setPrice(petServiceNew.getPrice() == null ? petServiceOld.getPrice() : petServiceNew.getPrice());
+        petServiceOld.setEstimated_duration(petServiceNew.getEstimated_duration() == null ? petServiceOld.getEstimated_duration() : petServiceNew.getEstimated_duration());
+        petServiceOld.setDescription(petServiceNew.getDescription() == null ? petServiceOld.getDescription() : petServiceNew.getDescription());
+        if (file != null) petServiceOld.setPathImage(uploadService.uploadObject(file));
         PetServiceEntity updated;
         try {
-            updated = petServiceRepository.save(serviceOld);
+            updated = petServiceRepository.save(petServiceOld);
         } catch (TransactionSystemException exception) {
             throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
