@@ -6,9 +6,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum RuntimeErrorEnum {
-    ERR0001("RESOURCE_NOT_FOUND", "Este recurso não foi encontrado."),
-    ERR0002("INVALID_ARGUMENTS", "Existem campos inválidos na solicitação."),
-    ERR0003("DATA_INTEGRITY_VIOLATION", "Houve um erro na operação com o banco de dados.");
+    ERR0001("INVALID_ARGUMENTS", "Existem campos inválidos na solicitação."),
+    ERR0002("DATA_INTEGRITY_VIOLATION", "Houve um erro na operação com o banco de dados."),
+    ERR0003("RESOURCE_NOT_FOUND", "O produto solicitado não foi encontrado."),
+    ERR0004("RESOURCE_NOT_FOUND", "A categoria solicitada não foi encontrada.");
 
     private final String code;
     private final String message;

@@ -30,7 +30,7 @@ public class CategoryService {
 
     public Category findById(String id) {
         return mapper.mapToDomain(categoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0001)
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)
         ));
     }
 
@@ -46,14 +46,14 @@ public class CategoryService {
             CategoryEntity categoryEntity = mapper.mapToEntity(category);
             saved = categoryRepository.save(categoryEntity);
         } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0003);
+            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(saved);
     }
 
     public Category update(String id, Category categoryNew) {
         CategoryEntity categoryOld = categoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0001)
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)
         );
         categoryOld.setName(categoryNew.getName() == null ? categoryOld.getName() : categoryNew.getName());
         categoryOld.setPathImage(categoryNew.getPathImage() == null ? categoryOld.getPathImage() : categoryNew.getPathImage());
@@ -62,14 +62,14 @@ public class CategoryService {
         try {
             updated = categoryRepository.save(categoryOld);
         } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0003);
+            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(updated);
     }
 
     public void deactivate(String id) {
         CategoryEntity category = categoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0001)
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)
         );
         category.getActivationStatus().setIsActive(false);
         category.getActivationStatus().setDeactivationDate(Instant.now());
@@ -78,7 +78,7 @@ public class CategoryService {
 
     public void delete(String id) {
         CategoryEntity category = categoryRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0001)
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)
         );
         categoryRepository.delete(category);
     }

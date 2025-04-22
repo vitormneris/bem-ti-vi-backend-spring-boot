@@ -6,7 +6,6 @@ import com.bemtivi.bemtivi.controllers.in.product.mappers.ProductWebMapper;
 import com.bemtivi.bemtivi.services.ProductService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,12 +41,12 @@ public class ProductResource {
     }
 
     @PostMapping(value = "/inserir")
-    public ResponseEntity<ProductDTO> insert(@Validated(Default.class) @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> insert(@Validated(ProductDTO.OnCreate.class) @RequestBody ProductDTO productDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDTO(productService.insert(mapper.mapToDomain(productDTO))));
     }
 
     @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") String id, @Validated(ProductDTO.Mandatory.class) @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> update(@PathVariable(name = "id") String id, @Validated(ProductDTO.OnUpdate.class) @RequestBody ProductDTO productDTO) {
         return ResponseEntity.ok().body(mapper.mapToDTO(productService.update(id, mapper.mapToDomain(productDTO))));
     }
 

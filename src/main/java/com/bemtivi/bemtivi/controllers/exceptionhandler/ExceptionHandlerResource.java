@@ -37,7 +37,7 @@ public class ExceptionHandlerResource {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessageDTO> methodArgumentNotValid(MethodArgumentNotValidException exception, HttpServletRequest request) {
-        RuntimeErrorEnum errorEnum = RuntimeErrorEnum.ERR0002;
+        RuntimeErrorEnum errorEnum = RuntimeErrorEnum.ERR0001;
         List<ErrorFieldDTO> fields = new ArrayList<>();
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 

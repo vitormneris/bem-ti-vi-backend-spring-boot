@@ -1,11 +1,15 @@
 package com.bemtivi.bemtivi.persistence.entities.category;
 
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
+import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,6 +31,8 @@ public class CategoryEntity {
     @NotNull
     @Column(name = "caminho_da_imagem")
     private String pathImage;
+    @ManyToMany(mappedBy = "categories")
+    private Set<ProductEntity> products;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

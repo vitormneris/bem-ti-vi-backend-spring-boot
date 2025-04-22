@@ -3,10 +3,10 @@ package com.bemtivi.bemtivi.controllers.in.category;
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.category.dto.CategoryDTO;
 import com.bemtivi.bemtivi.controllers.in.category.mappers.CategoryWebMapper;
+import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
 import com.bemtivi.bemtivi.services.CategoryService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,12 +42,12 @@ public class CategoryResource {
     }
 
     @PostMapping(value = "/inserir")
-    public ResponseEntity<CategoryDTO> insert(@Validated(Default.class) @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> insert(@Validated(ProductDTO.OnCreate.class) @RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.mapToDTO(categoryService.insert(mapper.mapToDomain(categoryDTO))));
     }
 
     @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<CategoryDTO> update(@PathVariable(name = "id") String id, @Validated(CategoryDTO.Mandatory.class) @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> update(@PathVariable(name = "id") String id, @Validated(CategoryDTO.OnUpdate.class) @RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity.ok().body(mapper.mapToDTO(categoryService.update(id, mapper.mapToDomain(categoryDTO))));
     }
 
