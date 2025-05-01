@@ -14,7 +14,9 @@ docker run \
 ```
 
 ### 2. Gere os arquivos .jar do projeto
-`./mvnw clean package`
+```
+./mvnw clean package
+```
 
 ### 3. Exclua ou pare o container postgres
 ```
