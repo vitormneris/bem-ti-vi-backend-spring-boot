@@ -1,22 +1,23 @@
-package com.bemtivi.bemtivi.domain.petservice;
+package com.bemtivi.bemtivi.domain.service;
 
 import com.bemtivi.bemtivi.domain.ActivationStatus;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PetService {
+public class Service {
     @EqualsAndHashCode.Include
     private String id;
     private String name;
     private BigDecimal price;
-    private LocalTime estimated_duration;
+    private LocalTime estimatedDuration;
     private String pathImage;
     private String description;
     private ActivationStatus activationStatus;

@@ -1,0 +1,113 @@
+package com.bemtivi.bemtivi.managers;
+
+import com.bemtivi.bemtivi.domain.ActivationStatus;
+import com.bemtivi.bemtivi.domain.PageResponse;
+import com.bemtivi.bemtivi.domain.customer.Address;
+import com.bemtivi.bemtivi.domain.customer.Customer;
+import com.bemtivi.bemtivi.domain.customer.Telephone;
+import com.bemtivi.bemtivi.exceptions.DataIntegrityViolationException;
+import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
+import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
+import com.bemtivi.bemtivi.persistence.entities.customer.AddressEntity;
+import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.customer.TelephoneEntity;
+import com.bemtivi.bemtivi.persistence.mappers.CustomerPersistenceMapper;
+import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.Instant;
+
+@Service
+@RequiredArgsConstructor
+public class CustomerManager {
+    private final CustomerRepository customerRepository;
+    private final CustomerPersistenceMapper mapper;
+    private final UploadManager uploadManager;
+
+    public PageResponse<Customer> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
+        return mapper.mapToPageResponseDomain(
+                customerRepository.findByPagination(isActive, PageRequest.of(page, pageSize), name == null ? "" : name)
+        );
+    }
+
+    public Customer findById(String id) {
+        return mapper.mapToDomain(customerRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
+        ));
+    }
+
+    public Customer insert(Customer customer, MultipartFile file) {
+        CustomerEntity saved;
+        ActivationStatus activationStatus = ActivationStatus.builder()
+                .isActive(true)
+                .creationDate(Instant.now())
+                .build();
+        try {
+            customer.setId(null);
+            customer.setActivationStatus(activationStatus);
+            CustomerEntity customerEntity = mapper.mapToEntity(customer);
+            customerEntity.setPathImage(uploadManager.uploadObject(file));
+            saved = customerRepository.save(customerEntity);
+        } catch (TransactionSystemException exception) {
+            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        }
+        return mapper.mapToDomain(saved);
+    }
+
+    public Customer update(String id, Customer customerNew, MultipartFile file) {
+        CustomerEntity customerOld = customerRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
+        );
+        customerOld.setName(customerNew.getName() == null ? customerOld.getName() : customerNew.getName());
+        customerOld.setBirthDate(customerNew.getBirthDate() == null ? customerOld.getBirthDate() : customerNew.getBirthDate());
+
+        if (customerNew.getTelephones() != null) {
+            Telephone telephoneNew = customerNew.getTelephones();
+            customerOld.setTelephones(new TelephoneEntity(telephoneNew.getPhoneOne(), telephoneNew.getPhoneTwo()));
+        }
+
+        if (customerNew.getAddress() != null) {
+            Address addressNew = customerNew.getAddress();
+            AddressEntity addressOld = customerOld.getAddress();
+            customerOld.setAddress(
+                    AddressEntity.builder()
+                            .state(addressNew.getState() == null ? addressOld.getState() : addressNew.getState())
+                            .city(addressNew.getCity() == null ? addressOld.getCity() : addressNew.getCity())
+                            .neighborhood(addressNew.getNeighborhood() == null ? addressOld.getNeighborhood() : addressNew.getNeighborhood())
+                            .street(addressNew.getStreet() == null ? addressOld.getStreet() : addressNew.getStreet())
+                            .number(addressNew.getNumber() == null ? addressOld.getNumber() : addressNew.getNumber())
+                            .complement(addressNew.getComplement() == null ? addressOld.getComplement() : addressNew.getComplement())
+                            .postalCode(addressNew.getPostalCode() == null ? addressOld.getPostalCode() : addressNew.getPostalCode())
+                            .build()
+            );
+        }
+        if (file != null) customerOld.setPathImage(uploadManager.uploadObject(file));
+        CustomerEntity updated;
+        try {
+            updated = customerRepository.save(customerOld);
+        } catch (TransactionSystemException exception) {
+            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        }
+        return mapper.mapToDomain(updated);
+    }
+
+    public void deactivate(String id) {
+        CustomerEntity service = customerRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
+        );
+        service.getActivationStatus().setIsActive(false);
+        service.getActivationStatus().setDeactivationDate(Instant.now());
+        customerRepository.save(service);
+    }
+
+    public void delete(String id) {
+        CustomerEntity service = customerRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
+        );
+        customerRepository.delete(service);
+    }
+}

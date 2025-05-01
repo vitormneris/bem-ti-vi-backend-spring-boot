@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.services;
+package com.bemtivi.bemtivi.managers;
 
 import com.bemtivi.bemtivi.domain.ActivationStatus;
 import com.bemtivi.bemtivi.domain.PageResponse;
@@ -20,10 +20,10 @@ import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class ProductManager {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
-    private final UploadService uploadService;
+    private final UploadManager uploadManager;
     private final ProductPersistenceMapper mapper;
 
     public PageResponse<Product> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
@@ -51,7 +51,7 @@ public class ProductService {
                     () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)
             ));
             ProductEntity productEntity = mapper.mapToEntity(product);
-            productEntity.setPathImage(uploadService.uploadObject(file));
+            productEntity.setPathImage(uploadManager.uploadObject(file));
             saved = productRepository.save(productEntity);
         } catch (TransactionSystemException exception) {
             throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
@@ -66,7 +66,7 @@ public class ProductService {
         productOld.setName(productNew.getName() == null ? productOld.getName() : productNew.getName());
         productOld.setPrice(productNew.getPrice() == null ? productOld.getPrice() : productNew.getPrice());
         productOld.setDescription(productNew.getDescription() == null ? productOld.getDescription() : productNew.getDescription());
-        if (file != null) productOld.setPathImage(uploadService.uploadObject(file));
+        if (file != null) productOld.setPathImage(uploadManager.uploadObject(file));
         if (productNew.getCategories() != null) {
             productNew.getCategories().forEach(category -> categoryRepository.findById(category.getId()).orElseThrow(
                     () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)

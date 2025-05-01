@@ -11,7 +11,9 @@ public enum RuntimeErrorEnum {
     ERR0003("RESOURCE_NOT_FOUND", "O produto solicitado não foi encontrado."),
     ERR0004("RESOURCE_NOT_FOUND", "A categoria solicitada não foi encontrada."),
     ERR0005("RESOURCE_NOT_FOUND", "O servico solicitado não foi encontrado."),
-    ERR0006("UPLOAD_OBJECT_ERROR", "Houve um erro ao fazer o upload da imagem.");
+    ERR0006("RESOURCE_NOT_FOUND", "O cliente solicitado não foi encontrado."),
+    ERR0007("RESOURCE_NOT_FOUND", "O pet solicitado não foi encontrado."),
+    ERR0008("UPLOAD_OBJECT_ERROR", "Houve um erro ao fazer o upload da imagem.");
 
     private final String code;
     private final String message;

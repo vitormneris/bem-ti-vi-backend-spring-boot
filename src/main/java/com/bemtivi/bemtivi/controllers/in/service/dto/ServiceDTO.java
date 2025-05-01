@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.controllers.in.petservice.dto;
+package com.bemtivi.bemtivi.controllers.in.service.dto;
 
 import com.bemtivi.bemtivi.controllers.in.ActivationStatusDTO;
 import com.bemtivi.bemtivi.controllers.in.category.dto.CategoryDTO;
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 
-public record PetServiceDTO(
+public record ServiceDTO(
         String id,
         @NotBlank(groups = {OnCreate.class}, message = "O nome deve ser preenchido.")
         @Size(groups = {OnCreate.class, OnUpdate.class}, min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres")
@@ -23,7 +23,7 @@ public record PetServiceDTO(
         String description,
         @NotNull(groups = {CategoryDTO.OnCreate.class}, message = "O campo duração estimada deve ser preenchido.")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
-        LocalTime estimated_duration,
+        LocalTime estimatedDuration,
         ActivationStatusDTO activationStatus
 ) {
         public interface OnCreate {}

@@ -1,14 +1,14 @@
 package com.bemtivi.bemtivi.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PageResponse<T> {
     private Integer pageSize;
     private Long totalElements;

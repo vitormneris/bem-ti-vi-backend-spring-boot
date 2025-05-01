@@ -2,10 +2,7 @@ package com.bemtivi.bemtivi.domain.product;
 
 import com.bemtivi.bemtivi.domain.ActivationStatus;
 import com.bemtivi.bemtivi.domain.category.Category;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -13,6 +10,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Product {
     @EqualsAndHashCode.Include

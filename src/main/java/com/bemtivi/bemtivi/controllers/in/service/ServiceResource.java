@@ -1,9 +1,9 @@
-package com.bemtivi.bemtivi.controllers.in.product;
+package com.bemtivi.bemtivi.controllers.in.service;
 
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
-import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
-import com.bemtivi.bemtivi.controllers.in.product.mappers.ProductWebMapper;
-import com.bemtivi.bemtivi.managers.ProductManager;
+import com.bemtivi.bemtivi.controllers.in.service.dto.ServiceDTO;
+import com.bemtivi.bemtivi.controllers.in.service.mappers.ServiceWebMapper;
+import com.bemtivi.bemtivi.managers.ServiceManager;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,13 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/produto")
-public class ProductResource {
-    private final ProductManager productManager;
-    private final ProductWebMapper mapper;
+@RequestMapping(value = "/service")
+public class ServiceResource {
+    private final ServiceManager serviceManager;
+    private final ServiceWebMapper mapper;
 
     @GetMapping(value = "/paginacao")
-    public ResponseEntity<PageResponseDTO<ProductDTO>> paginate(
+    public ResponseEntity<PageResponseDTO<ServiceDTO>> paginate(
             @RequestParam(name = "isActive", defaultValue = "true", required = false)
             Boolean isActive,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false)
@@ -35,44 +35,44 @@ public class ProductResource {
             @RequestParam(name = "name", required = false)
             String name
     ) {
-        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(productManager.paginate(isActive, pageSize, page, name)));
+        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(serviceManager.paginate(isActive, pageSize, page, name)));
     }
 
     @GetMapping(value = "/{id}/buscar")
-    public ResponseEntity<ProductDTO> findById(@PathVariable(name = "id") String id) {
-        return ResponseEntity.ok().body(mapper.mapToDTO(productManager.findById(id)));
+    public ResponseEntity<ServiceDTO> findById(@PathVariable(name = "id") String id) {
+        return ResponseEntity.ok().body(mapper.mapToDTO(serviceManager.findById(id)));
     }
 
     @PostMapping(value = "/inserir")
-    public ResponseEntity<ProductDTO> insert(
-            @Validated(ProductDTO.OnCreate.class) @RequestPart(value = "product") ProductDTO productDTO,
+    public ResponseEntity<ServiceDTO> insert(
+            @Validated(ServiceDTO.OnCreate.class) @RequestPart(value = "service") ServiceDTO serviceDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                mapper.mapToDTO(productManager.insert(mapper.mapToDomain(productDTO), file))
+                mapper.mapToDTO(serviceManager.insert(mapper.mapToDomain(serviceDTO), file))
         );
     }
 
     @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<ProductDTO> update(
+    public ResponseEntity<ServiceDTO> update(
             @PathVariable(name = "id") String id,
-            @Validated(ProductDTO.OnUpdate.class) @RequestPart(value = "product") ProductDTO productDTO,
+            @Validated(ServiceDTO.OnUpdate.class) @RequestPart(value = "service") ServiceDTO serviceDTO,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         return ResponseEntity.ok().body(
-                mapper.mapToDTO(productManager.update(id, mapper.mapToDomain(productDTO), file))
+                mapper.mapToDTO(serviceManager.update(id, mapper.mapToDomain(serviceDTO), file))
         );
     }
 
     @DeleteMapping(value = "/{id}/desativar")
     public ResponseEntity<Void> deactivate(@PathVariable(name = "id") String id) {
-        productManager.deactivate(id);
+        serviceManager.deactivate(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping(value = "/{id}/deletar")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
-        productManager.delete(id);
+        serviceManager.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

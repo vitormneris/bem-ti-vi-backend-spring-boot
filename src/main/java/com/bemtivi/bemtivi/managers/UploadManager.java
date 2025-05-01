@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.services;
+package com.bemtivi.bemtivi.managers;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -14,16 +14,16 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UploadService {
-    private final String bucketName = "bemtivi-bucket";
+public class UploadManager {
     private final AmazonS3 amazonS3Client;
 
     public String uploadObject(MultipartFile objectFile) {
         String fileName = getName(objectFile);
+        String bucketName = "bemtivi-bucket";
         try {
             amazonS3Client.putObject(bucketName, fileName, objectFile.getInputStream(), getMetadata(objectFile));
         } catch (IOException e) {
-            throw new InternalErrorException(RuntimeErrorEnum.ERR0006);
+            throw new InternalErrorException(RuntimeErrorEnum.ERR0008);
         }
         return "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
     }

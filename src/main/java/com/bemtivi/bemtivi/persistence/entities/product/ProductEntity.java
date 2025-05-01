@@ -4,15 +4,16 @@ import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.category.CategoryEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tb_produtos")
@@ -22,17 +23,13 @@ public class ProductEntity {
     @EqualsAndHashCode.Include
     @Column(name = "produto_id")
     private String id;
-    @NotNull
-    @Column(name = "nome")
+    @Column(name = "nome", nullable = false)
     private String name;
-    @NotNull
-    @Column(name = "caminho_da_imagem")
+    @Column(name = "caminho_da_imagem", nullable = false)
     private String pathImage;
-    @NotNull
-    @Column(name = "preco")
+    @Column(name = "preco", nullable = false)
     private BigDecimal price;
-    @NotNull
-    @Column(name = "descricao")
+    @Column(name = "descricao", nullable = false)
     private String description;
     @NotNull
     @ManyToMany

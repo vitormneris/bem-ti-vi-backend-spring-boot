@@ -1,9 +1,10 @@
-package com.bemtivi.bemtivi.controllers.in.petservice;
+package com.bemtivi.bemtivi.controllers.in.customer;
 
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
-import com.bemtivi.bemtivi.controllers.in.petservice.dto.PetServiceDTO;
-import com.bemtivi.bemtivi.controllers.in.petservice.mappers.PetServiceWebMapper;
-import com.bemtivi.bemtivi.services.PetServiceService;
+import com.bemtivi.bemtivi.controllers.in.customer.dto.CustomerDTO;
+import com.bemtivi.bemtivi.controllers.in.customer.mappers.CustomerWebMapper;
+import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
+import com.bemtivi.bemtivi.managers.CustomerManager;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -15,15 +16,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/service")
-public class PetServiceResource {
-    private final PetServiceService petServiceService;
-    private final PetServiceWebMapper mapper;
+@RestController
+@RequestMapping(value = "/cliente")
+public class CustomerResource {
+    private final CustomerManager customerManager;
+    private final CustomerWebMapper mapper;
 
     @GetMapping(value = "/paginacao")
-    public ResponseEntity<PageResponseDTO<PetServiceDTO>> paginate(
+    public ResponseEntity<PageResponseDTO<CustomerDTO>> paginate(
             @RequestParam(name = "isActive", defaultValue = "true", required = false)
             Boolean isActive,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false)
@@ -35,45 +36,46 @@ public class PetServiceResource {
             @RequestParam(name = "name", required = false)
             String name
     ) {
-        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(petServiceService.paginate(isActive, pageSize, page, name)));
+        return ResponseEntity.ok().body(
+                mapper.mapToPageResponseDto(customerManager.paginate(isActive, pageSize, page, name))
+        );
     }
 
     @GetMapping(value = "/{id}/buscar")
-    public ResponseEntity<PetServiceDTO> findById(@PathVariable(name = "id") String id) {
-        return ResponseEntity.ok().body(mapper.mapToDTO(petServiceService.findById(id)));
+    public ResponseEntity<CustomerDTO> findById(@PathVariable(name = "id") String id) {
+        return ResponseEntity.ok().body(mapper.mapToDTO(customerManager.findById(id)));
     }
 
     @PostMapping(value = "/inserir")
-    public ResponseEntity<PetServiceDTO> insert(
-            @Validated(PetServiceDTO.OnCreate.class) @RequestPart(value = "service") PetServiceDTO petServiceDTO,
+    public ResponseEntity<CustomerDTO> insert(
+            @Validated(ProductDTO.OnCreate.class) @RequestPart(value = "customer") CustomerDTO customerDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                mapper.mapToDTO(petServiceService.insert(mapper.mapToDomain(petServiceDTO), file))
+                mapper.mapToDTO(customerManager.insert(mapper.mapToDomain(customerDTO), file))
         );
     }
 
     @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<PetServiceDTO> update(
+    public ResponseEntity<CustomerDTO> update(
             @PathVariable(name = "id") String id,
-            @Validated(PetServiceDTO.OnUpdate.class) @RequestPart(value = "service") PetServiceDTO petServiceDTO,
+            @Validated(CustomerDTO.OnUpdate.class) @RequestPart(value = "customer") CustomerDTO customerDTO,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         return ResponseEntity.ok().body(
-                mapper.mapToDTO(petServiceService.update(id, mapper.mapToDomain(petServiceDTO), file))
+                mapper.mapToDTO(customerManager.update(id, mapper.mapToDomain(customerDTO), file))
         );
     }
 
     @DeleteMapping(value = "/{id}/desativar")
     public ResponseEntity<Void> deactivate(@PathVariable(name = "id") String id) {
-        petServiceService.deactivate(id);
+        customerManager.deactivate(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping(value = "/{id}/deletar")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
-        petServiceService.delete(id);
+        customerManager.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

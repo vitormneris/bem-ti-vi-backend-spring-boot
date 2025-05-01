@@ -5,14 +5,15 @@ import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tb_categorias")
@@ -22,14 +23,11 @@ public class CategoryEntity {
     @EqualsAndHashCode.Include
     @Column(name = "categoria_id")
     private String id;
-    @NotNull
-    @Column(name = "nome")
+    @Column(name = "nome", nullable = false)
     private String name;
-    @NotNull
-    @Column(name = "cor_do_card")
+    @Column(name = "cor_do_card", nullable = false)
     private String cardColor;
-    @NotNull
-    @Column(name = "caminho_da_imagem")
+    @Column(name = "caminho_da_imagem", nullable = false)
     private String pathImage;
     @ManyToMany(mappedBy = "categories")
     private Set<ProductEntity> products;

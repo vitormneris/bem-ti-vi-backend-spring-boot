@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.services;
+package com.bemtivi.bemtivi.managers;
 
 import com.bemtivi.bemtivi.domain.ActivationStatus;
 import com.bemtivi.bemtivi.domain.PageResponse;
@@ -19,10 +19,10 @@ import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService {
+public class CategoryManager {
     private final CategoryRepository categoryRepository;
     private final CategoryPersistenceMapper mapper;
-    private final UploadService uploadService;
+    private final UploadManager uploadManager;
 
     public PageResponse<Category> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
@@ -46,7 +46,7 @@ public class CategoryService {
             category.setId(null);
             category.setActivationStatus(activationStatus);
             CategoryEntity categoryEntity = mapper.mapToEntity(category);
-            categoryEntity.setPathImage(uploadService.uploadObject(file));
+            categoryEntity.setPathImage(uploadManager.uploadObject(file));
             saved = categoryRepository.save(categoryEntity);
         } catch (TransactionSystemException exception) {
             throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
@@ -60,7 +60,7 @@ public class CategoryService {
         );
         categoryOld.setName(categoryNew.getName() == null ? categoryOld.getName() : categoryNew.getName());
         categoryOld.setCardColor(categoryNew.getCardColor() == null ? categoryOld.getCardColor() : categoryNew.getCardColor());
-        if (file != null) categoryOld.setPathImage(uploadService.uploadObject(file));
+        if (file != null) categoryOld.setPathImage(uploadManager.uploadObject(file));
         CategoryEntity updated;
         try {
             updated = categoryRepository.save(categoryOld);

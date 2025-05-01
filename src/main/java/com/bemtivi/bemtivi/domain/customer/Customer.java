@@ -1,9 +1,10 @@
-package com.bemtivi.bemtivi.domain.category;
+package com.bemtivi.bemtivi.domain.customer;
 
 import com.bemtivi.bemtivi.domain.ActivationStatus;
-import com.bemtivi.bemtivi.domain.product.Product;
+import com.bemtivi.bemtivi.domain.pet.Pet;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -12,12 +13,16 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Category {
+public class Customer {
     @EqualsAndHashCode.Include
     private String id;
     private String name;
-    private String cardColor;
+    private String email;
+    private String password;
+    private LocalDate birthDate;
     private String pathImage;
-    private Set<Product> products;
+    private Telephone telephones;
+    private Address address;
+    private Set<Pet> pets;
     private ActivationStatus activationStatus;
 }
