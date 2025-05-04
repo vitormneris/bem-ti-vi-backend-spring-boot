@@ -3,6 +3,7 @@ package com.bemtivi.bemtivi.controllers.exceptionhandler;
 import com.bemtivi.bemtivi.controllers.exceptionhandler.dto.ErrorFieldDTO;
 import com.bemtivi.bemtivi.controllers.exceptionhandler.dto.ErrorMessageDTO;
 import com.bemtivi.bemtivi.exceptions.DataIntegrityViolationException;
+import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,6 +68,22 @@ public class ExceptionHandlerResource {
     public ResponseEntity<ErrorMessageDTO> dataIntegrityViolation(DataIntegrityViolationException exception, HttpServletRequest request) {
         RuntimeErrorEnum runtimeErrorEnum = exception.getError();
         HttpStatus httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+
+        ErrorMessageDTO errorMessageDTO = ErrorMessageDTO.builder()
+                .code(runtimeErrorEnum.getCode())
+                .status(httpStatus.value())
+                .message(runtimeErrorEnum.getMessage())
+                .timestamp(Instant.now())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(httpStatus).body(errorMessageDTO);
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ErrorMessageDTO> duplicateResource(DuplicateResourceException exception, HttpServletRequest request) {
+        RuntimeErrorEnum runtimeErrorEnum = exception.getError();
+        HttpStatus httpStatus = HttpStatus.CONFLICT;
 
         ErrorMessageDTO errorMessageDTO = ErrorMessageDTO.builder()
                 .code(runtimeErrorEnum.getCode())

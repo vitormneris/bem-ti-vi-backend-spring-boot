@@ -17,15 +17,10 @@ public class TelephoneEntity {
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(name = "telefone1", nullable = false, length = 15)
+    @Column(name = "telefone1", nullable = false, unique = true, length = 15)
     private String phoneOne;
-    @Column(name = "telefone2", length = 15)
+    @Column(name = "telefone2", unique = true, length = 15)
     private String phoneTwo;
     @OneToOne(mappedBy = "telephones")
     private CustomerEntity costumer;
-
-    public TelephoneEntity(String phoneOne, String phoneTwo) {
-        this.phoneOne = phoneOne;
-        this.phoneTwo = phoneTwo;
-    }
 }

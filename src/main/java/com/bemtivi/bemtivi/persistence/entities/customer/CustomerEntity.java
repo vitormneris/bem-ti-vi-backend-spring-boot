@@ -25,7 +25,7 @@ public class CustomerEntity {
     private String id;
     @Column(name = "nome", nullable = false, length = 100)
     private String name;
-    @NotNull
+    @Column(nullable = false, unique = true)
     private String email;
     @Column(name = "senha", nullable = false, length = 100)
     private String password;

@@ -6,6 +6,7 @@ import com.bemtivi.bemtivi.domain.customer.Address;
 import com.bemtivi.bemtivi.domain.customer.Customer;
 import com.bemtivi.bemtivi.domain.customer.Telephone;
 import com.bemtivi.bemtivi.exceptions.DataIntegrityViolationException;
+import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.customer.AddressEntity;
@@ -41,6 +42,9 @@ public class CustomerManager {
     }
 
     public Customer insert(Customer customer, MultipartFile file) {
+        customerRepository.findByEmail(customer.getEmail()).ifPresent((register) -> {
+            throw new DuplicateResourceException(RuntimeErrorEnum.ERR0009);
+        });
         CustomerEntity saved;
         ActivationStatus activationStatus = ActivationStatus.builder()
                 .isActive(true)
@@ -67,14 +71,17 @@ public class CustomerManager {
 
         if (customerNew.getTelephones() != null) {
             Telephone telephoneNew = customerNew.getTelephones();
-            customerOld.setTelephones(new TelephoneEntity(telephoneNew.getPhoneOne(), telephoneNew.getPhoneTwo()));
+            TelephoneEntity telephoneOld = customerOld.getTelephones();
+            customerOld.setTelephones(TelephoneEntity.builder()
+                    .phoneOne(telephoneNew.getPhoneOne() == null ? telephoneOld.getPhoneOne() : telephoneNew.getPhoneOne())
+                    .phoneTwo(telephoneNew.getPhoneTwo() == null ? telephoneOld.getPhoneTwo() : telephoneNew.getPhoneTwo())
+                    .build());
         }
 
         if (customerNew.getAddress() != null) {
             Address addressNew = customerNew.getAddress();
             AddressEntity addressOld = customerOld.getAddress();
-            customerOld.setAddress(
-                    AddressEntity.builder()
+            customerOld.setAddress(AddressEntity.builder()
                             .state(addressNew.getState() == null ? addressOld.getState() : addressNew.getState())
                             .city(addressNew.getCity() == null ? addressOld.getCity() : addressNew.getCity())
                             .neighborhood(addressNew.getNeighborhood() == null ? addressOld.getNeighborhood() : addressNew.getNeighborhood())
@@ -82,8 +89,7 @@ public class CustomerManager {
                             .number(addressNew.getNumber() == null ? addressOld.getNumber() : addressNew.getNumber())
                             .complement(addressNew.getComplement() == null ? addressOld.getComplement() : addressNew.getComplement())
                             .postalCode(addressNew.getPostalCode() == null ? addressOld.getPostalCode() : addressNew.getPostalCode())
-                            .build()
-            );
+                            .build());
         }
         if (file != null) customerOld.setPathImage(uploadManager.uploadObject(file));
         CustomerEntity updated;
