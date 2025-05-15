@@ -43,7 +43,7 @@ public class CustomerManager {
 
     public Customer insert(Customer customer, MultipartFile file) {
         customerRepository.findByEmail(customer.getEmail()).ifPresent((register) -> {
-            throw new DuplicateResourceException(RuntimeErrorEnum.ERR0009);
+            throw new DuplicateResourceException(RuntimeErrorEnum.ERR0011);
         });
         CustomerEntity saved;
         ActivationStatus activationStatus = ActivationStatus.builder()

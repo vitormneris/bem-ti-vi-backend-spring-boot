@@ -23,7 +23,7 @@ public class UploadManager {
         try {
             amazonS3Client.putObject(bucketName, fileName, objectFile.getInputStream(), getMetadata(objectFile));
         } catch (IOException e) {
-            throw new InternalErrorException(RuntimeErrorEnum.ERR0008);
+            throw new InternalErrorException(RuntimeErrorEnum.ERR0010);
         }
         return "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
     }
