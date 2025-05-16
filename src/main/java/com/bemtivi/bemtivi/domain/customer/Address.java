@@ -18,5 +18,4 @@ public class Address {
     private Integer number;
     private String complement;
     private String postalCode;
-    private Customer customer;
 }

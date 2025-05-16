@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface OrderWebMapper {
-    OrderDTO mapToDTO(Order product);
-    Order mapToDomain(OrderDTO productDTO);
+    OrderDTO mapToDTO(Order order);
+    Order mapToDomain(OrderDTO orderDTO);
     PageResponseDTO<OrderDTO> mapToPageResponseDto(PageResponse<Order> pageResponse);
 }

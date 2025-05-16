@@ -13,5 +13,4 @@ public class Telephone {
     private String id;
     private String phoneOne;
     private String phoneTwo;
-    private Customer customer;
 }

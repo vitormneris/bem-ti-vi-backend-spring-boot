@@ -1,6 +1,7 @@
 package com.bemtivi.bemtivi.controllers.in.customer.dto;
 
 import com.bemtivi.bemtivi.controllers.in.ActivationStatusDTO;
+import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.pet.dto.PetDTO;
 import jakarta.validation.constraints.*;
 
@@ -29,6 +30,7 @@ public record CustomerDTO(
         @NotNull(groups = {OnCreate.class}, message = "O objeto endereco não deve ser nulo.")
         AddressDTO address,
         Set<PetDTO> pets,
+        Set<OrderDTO> orders,
         ActivationStatusDTO activationStatus
 ) {
         public interface OnCreate {}

@@ -21,8 +21,7 @@ public record AddressDTO(
         String complement,
         @Pattern(groups = {CustomerDTO.OnCreate.class, CustomerDTO.OnUpdate.class}, regexp = "^[0-9]{5}-?[0-9]{3}$")
         @NotBlank(groups = {CustomerDTO.OnCreate.class}, message = "O campo CEP deve ser preenchido.")
-        String postalCode,
-        CustomerDTO customer
+        String postalCode
 ) {
 
 }

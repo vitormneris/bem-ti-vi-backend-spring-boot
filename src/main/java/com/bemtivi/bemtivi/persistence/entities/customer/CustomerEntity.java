@@ -1,6 +1,7 @@
 package com.bemtivi.bemtivi.persistence.entities.customer;
 
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
+import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -41,6 +42,8 @@ public class CustomerEntity {
     private AddressEntity address;
     @OneToMany(mappedBy = "owner", orphanRemoval = true)
     private Set<PetEntity> pets;
+    @OneToMany(mappedBy = "customer", orphanRemoval = true)
+    private Set<OrderEntity> orders;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

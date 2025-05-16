@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+@ToString
 @Getter
 @Setter
 @Builder
@@ -24,7 +25,7 @@ public class OrderItemEntity {
     private BigDecimal price;
     @Column(name = "quantidade", nullable = false)
     private Integer quantity;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
     @JoinColumn(name = "produto_id", referencedColumnName = "produto_id")
     private ProductEntity product;
 }

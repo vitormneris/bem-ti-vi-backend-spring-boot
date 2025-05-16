@@ -21,6 +21,4 @@ public class TelephoneEntity {
     private String phoneOne;
     @Column(name = "telefone2", unique = true, length = 15)
     private String phoneTwo;
-    @OneToOne(mappedBy = "telephones")
-    private CustomerEntity costumer;
 }

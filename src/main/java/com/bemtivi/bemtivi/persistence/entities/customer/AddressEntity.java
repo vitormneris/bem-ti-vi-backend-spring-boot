@@ -31,6 +31,4 @@ public class AddressEntity {
     private String complement;
     @Column(name = "cep", nullable = false, length = 9)
     private String postalCode;
-    @OneToOne(mappedBy = "address")
-    private CustomerEntity costumer;
 }

@@ -7,8 +7,7 @@ public record TelephoneDTO(
         String id,
         @NotBlank(groups = {CustomerDTO.OnCreate.class}, message = "O campo telefone 1 deve ser preenchido.")
         String phoneOne,
-        String phoneTwo,
-        Customer customer
+        String phoneTwo
 ) {
 
 }

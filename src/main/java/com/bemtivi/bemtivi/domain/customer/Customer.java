@@ -1,6 +1,7 @@
 package com.bemtivi.bemtivi.domain.customer;
 
 import com.bemtivi.bemtivi.domain.ActivationStatus;
+import com.bemtivi.bemtivi.domain.order.Order;
 import com.bemtivi.bemtivi.domain.pet.Pet;
 import lombok.*;
 
@@ -24,5 +25,6 @@ public class Customer {
     private Telephone telephones;
     private Address address;
     private Set<Pet> pets;
+    private Set<Order> orders;
     private ActivationStatus activationStatus;
 }

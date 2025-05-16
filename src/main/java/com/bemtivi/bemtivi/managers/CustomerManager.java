@@ -73,6 +73,7 @@ public class CustomerManager {
             Telephone telephoneNew = customerNew.getTelephones();
             TelephoneEntity telephoneOld = customerOld.getTelephones();
             customerOld.setTelephones(TelephoneEntity.builder()
+                    .id(telephoneOld.getId())
                     .phoneOne(telephoneNew.getPhoneOne() == null ? telephoneOld.getPhoneOne() : telephoneNew.getPhoneOne())
                     .phoneTwo(telephoneNew.getPhoneTwo() == null ? telephoneOld.getPhoneTwo() : telephoneNew.getPhoneTwo())
                     .build());
@@ -82,6 +83,7 @@ public class CustomerManager {
             Address addressNew = customerNew.getAddress();
             AddressEntity addressOld = customerOld.getAddress();
             customerOld.setAddress(AddressEntity.builder()
+                            .id(addressOld.getId())
                             .state(addressNew.getState() == null ? addressOld.getState() : addressNew.getState())
                             .city(addressNew.getCity() == null ? addressOld.getCity() : addressNew.getCity())
                             .neighborhood(addressNew.getNeighborhood() == null ? addressOld.getNeighborhood() : addressNew.getNeighborhood())

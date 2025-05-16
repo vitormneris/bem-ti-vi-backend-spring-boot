@@ -71,7 +71,7 @@ public class ProductManager {
             productNew.getCategories().forEach(category -> categoryRepository.findById(category.getId()).orElseThrow(
                     () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)
             ));
-            productOld.setCategories( mapper.mapToSetEntity(productNew.getCategories()) );
+            productOld.setCategories( mapper.mapToSetCategoryEntity(productNew.getCategories()) );
         }
         ProductEntity updated;
         try {
