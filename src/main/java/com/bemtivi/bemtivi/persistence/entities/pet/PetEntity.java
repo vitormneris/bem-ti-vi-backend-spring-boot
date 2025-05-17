@@ -1,11 +1,10 @@
 package com.bemtivi.bemtivi.persistence.entities.pet;
 
-import com.bemtivi.bemtivi.domain.enums.PetGenderEnum;
-import com.bemtivi.bemtivi.domain.enums.PetSizeEnum;
+import com.bemtivi.bemtivi.application.enums.PetGenderEnum;
+import com.bemtivi.bemtivi.application.enums.PetSizeEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;

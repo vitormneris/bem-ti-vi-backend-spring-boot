@@ -4,7 +4,7 @@ import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.dto.CustomerDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.mappers.CustomerWebMapper;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
-import com.bemtivi.bemtivi.managers.CustomerManager;
+import com.bemtivi.bemtivi.application.business.CustomerBusiness;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping(value = "/cliente")
 public class CustomerResource {
-    private final CustomerManager customerManager;
+    private final CustomerBusiness customerBusiness;
     private final CustomerWebMapper mapper;
 
     @GetMapping(value = "/paginacao")
@@ -37,13 +37,13 @@ public class CustomerResource {
             String name
     ) {
         return ResponseEntity.ok().body(
-                mapper.mapToPageResponseDto(customerManager.paginate(isActive, pageSize, page, name))
+                mapper.mapToPageResponseDto(customerBusiness.paginate(isActive, pageSize, page, name))
         );
     }
 
     @GetMapping(value = "/{id}/buscar")
     public ResponseEntity<CustomerDTO> findById(@PathVariable(name = "id") String id) {
-        return ResponseEntity.ok().body(mapper.mapToDTO(customerManager.findById(id)));
+        return ResponseEntity.ok().body(mapper.mapToDTO(customerBusiness.findById(id)));
     }
 
     @PostMapping(value = "/inserir")
@@ -52,7 +52,7 @@ public class CustomerResource {
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                mapper.mapToDTO(customerManager.insert(mapper.mapToDomain(customerDTO), file))
+                mapper.mapToDTO(customerBusiness.insert(mapper.mapToDomain(customerDTO), file))
         );
     }
 
@@ -63,19 +63,19 @@ public class CustomerResource {
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         return ResponseEntity.ok().body(
-                mapper.mapToDTO(customerManager.update(id, mapper.mapToDomain(customerDTO), file))
+                mapper.mapToDTO(customerBusiness.update(id, mapper.mapToDomain(customerDTO), file))
         );
     }
 
     @DeleteMapping(value = "/{id}/desativar")
     public ResponseEntity<Void> deactivate(@PathVariable(name = "id") String id) {
-        customerManager.deactivate(id);
+        customerBusiness.deactivate(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping(value = "/{id}/deletar")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
-        customerManager.delete(id);
+        customerBusiness.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

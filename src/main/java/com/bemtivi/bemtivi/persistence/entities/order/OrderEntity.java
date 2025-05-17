@@ -1,6 +1,6 @@
 package com.bemtivi.bemtivi.persistence.entities.order;
 
-import com.bemtivi.bemtivi.domain.enums.PaymentStatusEnum;
+import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import jakarta.persistence.*;

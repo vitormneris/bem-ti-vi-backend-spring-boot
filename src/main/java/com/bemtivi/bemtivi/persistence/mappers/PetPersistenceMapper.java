@@ -1,9 +1,9 @@
 package com.bemtivi.bemtivi.persistence.mappers;
 
 
-import com.bemtivi.bemtivi.domain.PageResponse;
-import com.bemtivi.bemtivi.domain.customer.Customer;
-import com.bemtivi.bemtivi.domain.pet.Pet;
+import com.bemtivi.bemtivi.application.domain.PageResponse;
+import com.bemtivi.bemtivi.application.domain.customer.Customer;
+import com.bemtivi.bemtivi.application.domain.pet.Pet;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
 import org.mapstruct.Mapper;
@@ -21,6 +21,8 @@ public interface PetPersistenceMapper {
     @Mapping(target = "owner", source = "owner", qualifiedByName = "mapEntityToOwnerDomain")
     Pet mapToDomain(PetEntity pet);
     @Named(value = "mapEntityToOwnerDomain")
+    @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "appointments", ignore = true)
     @Mapping(target = "pets", ignore = true)
     Customer mapEntityToPetDomain(CustomerEntity customer);
 

@@ -1,7 +1,7 @@
 package com.bemtivi.bemtivi.persistence.mappers;
 
-import com.bemtivi.bemtivi.domain.PageResponse;
-import com.bemtivi.bemtivi.domain.service.Service;
+import com.bemtivi.bemtivi.application.domain.PageResponse;
+import com.bemtivi.bemtivi.application.domain.service.Service;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;

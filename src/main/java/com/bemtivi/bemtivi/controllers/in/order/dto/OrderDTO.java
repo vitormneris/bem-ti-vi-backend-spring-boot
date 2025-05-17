@@ -2,7 +2,7 @@ package com.bemtivi.bemtivi.controllers.in.order.dto;
 
 import com.bemtivi.bemtivi.controllers.in.ActivationStatusDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.dto.CustomerDTO;
-import com.bemtivi.bemtivi.domain.enums.PaymentStatusEnum;
+import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;

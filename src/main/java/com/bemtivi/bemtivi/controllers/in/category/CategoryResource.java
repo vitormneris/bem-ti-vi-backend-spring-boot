@@ -4,7 +4,7 @@ import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.category.dto.CategoryDTO;
 import com.bemtivi.bemtivi.controllers.in.category.mappers.CategoryWebMapper;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
-import com.bemtivi.bemtivi.managers.CategoryManager;
+import com.bemtivi.bemtivi.application.business.CategoryBusiness;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RequestMapping(value = "/categoria")
 public class CategoryResource {
-    private final CategoryManager categoryManager;
+    private final CategoryBusiness categoryManager;
     private final CategoryWebMapper mapper;
 
     @GetMapping(value = "/paginacao")

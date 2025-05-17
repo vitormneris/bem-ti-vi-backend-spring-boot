@@ -1,6 +1,8 @@
 package com.bemtivi.bemtivi.controllers.in.customer.dto;
 
+import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
 import com.bemtivi.bemtivi.controllers.in.ActivationStatusDTO;
+import com.bemtivi.bemtivi.controllers.in.appointment.dto.AppointmentDTO;
 import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.pet.dto.PetDTO;
 import jakarta.validation.constraints.*;
@@ -31,6 +33,7 @@ public record CustomerDTO(
         AddressDTO address,
         Set<PetDTO> pets,
         Set<OrderDTO> orders,
+        Set<AppointmentDTO> appointments,
         ActivationStatusDTO activationStatus
 ) {
         public interface OnCreate {}

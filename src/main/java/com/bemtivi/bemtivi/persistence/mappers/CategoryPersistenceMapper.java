@@ -1,8 +1,8 @@
 package com.bemtivi.bemtivi.persistence.mappers;
 
-import com.bemtivi.bemtivi.domain.PageResponse;
-import com.bemtivi.bemtivi.domain.category.Category;
-import com.bemtivi.bemtivi.domain.product.Product;
+import com.bemtivi.bemtivi.application.domain.PageResponse;
+import com.bemtivi.bemtivi.application.domain.category.Category;
+import com.bemtivi.bemtivi.application.domain.product.Product;
 import com.bemtivi.bemtivi.persistence.entities.category.CategoryEntity;
 import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
 import org.mapstruct.Mapper;

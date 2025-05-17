@@ -1,10 +1,10 @@
 package com.bemtivi.bemtivi.persistence.entities.customer;
 
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
+import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -44,6 +44,8 @@ public class CustomerEntity {
     private Set<PetEntity> pets;
     @OneToMany(mappedBy = "customer", orphanRemoval = true)
     private Set<OrderEntity> orders;
+    @OneToMany(mappedBy = "customer", orphanRemoval = true)
+    private Set<AppointmentEntity> appointments;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

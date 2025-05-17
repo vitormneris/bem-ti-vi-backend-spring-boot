@@ -1,6 +1,5 @@
 package com.bemtivi.bemtivi.controllers.in.customer.dto;
 
-import com.bemtivi.bemtivi.domain.customer.Customer;
 import jakarta.validation.constraints.NotBlank;
 
 public record TelephoneDTO(

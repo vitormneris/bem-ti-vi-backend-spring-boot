@@ -3,7 +3,7 @@ package com.bemtivi.bemtivi.controllers.in.order;
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.order.mappers.OrderWebMapper;
-import com.bemtivi.bemtivi.managers.OrderManager;
+import com.bemtivi.bemtivi.application.business.OrderBusiness;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping(value = "/pedido")
 public class OrderResource {
-    private final OrderManager orderManager;
+    private final OrderBusiness orderManager;
     private final OrderWebMapper mapper;
 
     @GetMapping(value = "/paginacao")

@@ -1,10 +1,10 @@
 package com.bemtivi.bemtivi.persistence.mappers;
 
-import com.bemtivi.bemtivi.domain.PageResponse;
-import com.bemtivi.bemtivi.domain.customer.Customer;
-import com.bemtivi.bemtivi.domain.order.Order;
-import com.bemtivi.bemtivi.domain.order.OrderItem;
-import com.bemtivi.bemtivi.domain.product.Product;
+import com.bemtivi.bemtivi.application.domain.PageResponse;
+import com.bemtivi.bemtivi.application.domain.customer.Customer;
+import com.bemtivi.bemtivi.application.domain.order.Order;
+import com.bemtivi.bemtivi.application.domain.order.OrderItem;
+import com.bemtivi.bemtivi.application.domain.product.Product;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderItemEntity;
@@ -34,6 +34,8 @@ public interface OrderPersistenceMapper {
 
     @Named("mapToCustomerDomain")
     @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "appointments", ignore = true)
+    @Mapping(target = "pets", ignore = true)
     Customer mapToCustomerDomain(CustomerEntity customerEntity);
 
     default PageResponse<Order> mapToPageResponseDomain(Page<OrderEntity> pageResponse) {

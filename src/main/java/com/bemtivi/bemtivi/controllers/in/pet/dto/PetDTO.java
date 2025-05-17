@@ -2,8 +2,8 @@ package com.bemtivi.bemtivi.controllers.in.pet.dto;
 
 import com.bemtivi.bemtivi.controllers.in.ActivationStatusDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.dto.CustomerDTO;
-import com.bemtivi.bemtivi.domain.enums.PetGenderEnum;
-import com.bemtivi.bemtivi.domain.enums.PetSizeEnum;
+import com.bemtivi.bemtivi.application.enums.PetGenderEnum;
+import com.bemtivi.bemtivi.application.enums.PetSizeEnum;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;

@@ -2,8 +2,8 @@ package com.bemtivi.bemtivi.controllers.in.product.mappers;
 
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
-import com.bemtivi.bemtivi.domain.PageResponse;
-import com.bemtivi.bemtivi.domain.product.Product;
+import com.bemtivi.bemtivi.application.domain.PageResponse;
+import com.bemtivi.bemtivi.application.domain.product.Product;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
