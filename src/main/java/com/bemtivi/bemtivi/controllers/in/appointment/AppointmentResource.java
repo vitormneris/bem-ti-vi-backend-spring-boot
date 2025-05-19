@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/agendamento")
@@ -29,10 +31,12 @@ public class AppointmentResource {
             Integer pageSize,
             @RequestParam(name = "page", defaultValue = "0", required = false)
             Integer page,
-            @RequestParam(name = "name", required = false)
-            String name
+            @RequestParam(name = "momentStart", required = false)
+            LocalDate momentStart,
+            @RequestParam(name = "momentEnd", required = false)
+            LocalDate momentEnd
     ) {
-        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(appointmentManager.paginate(isActive, pageSize, page, name)));
+        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(appointmentManager.paginate(isActive, pageSize, page, momentStart, momentEnd)));
     }
 
     @GetMapping(value = "/{id}/buscar")

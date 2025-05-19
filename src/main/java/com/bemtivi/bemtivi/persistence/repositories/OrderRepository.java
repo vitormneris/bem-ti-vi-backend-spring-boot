@@ -6,7 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.Instant;
+import java.time.LocalDate;
+
 public interface OrderRepository extends JpaRepository<OrderEntity, String> {
-    @Query(value = "SELECT * FROM tb_pedidos WHERE esta_ativo = ?1 AND momento ILIKE CONCAT('%', ?2, '%')", nativeQuery = true)
-    Page<OrderEntity> findByPagination(Boolean isActive, Pageable pageable, String query);
+    @Query(value = "SELECT * FROM tb_pedidos WHERE esta_ativo = ?1 AND momento BETWEEN ?2 AND ?3", nativeQuery = true)
+    Page<OrderEntity> findByPagination(Boolean isActive, Pageable pageable, LocalDate momentStart, LocalDate momentEnd);
 }

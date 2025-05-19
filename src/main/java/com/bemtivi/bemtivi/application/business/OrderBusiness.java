@@ -21,6 +21,7 @@ import org.springframework.transaction.TransactionSystemException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Slf4j
 @Service
@@ -31,9 +32,9 @@ public class OrderBusiness {
     private final CustomerRepository customerRepository;
     private final OrderPersistenceMapper mapper;
 
-    public PageResponse<Order> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
+    public PageResponse<Order> paginate(Boolean isActive, Integer pageSize, Integer page, LocalDate momentStart, LocalDate momentEnd) {
         return mapper.mapToPageResponseDomain(
-                orderRepository.findByPagination(isActive, PageRequest.of(page, pageSize), name == null ? "" : name)
+                orderRepository.findByPagination(isActive, PageRequest.of(page, pageSize), momentStart, momentEnd)
         );
     }
 

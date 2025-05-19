@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +26,9 @@ public class AppointmentBusiness {
     private final ServiceRepository serviceRepository;
     private final CustomerRepository customerRepository;
 
-    public PageResponse<Appointment> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
+    public PageResponse<Appointment> paginate(Boolean isActive, Integer pageSize, Integer page, LocalDate momentStart, LocalDate momentEnd) {
         return mapper.mapToPageResponseDomain(
-                appointmentRepository.findByPagination(isActive, PageRequest.of(page, pageSize), name == null ? "" : name)
+                appointmentRepository.findByPagination(isActive, PageRequest.of(page, pageSize), momentStart, momentEnd)
         );
     }
 

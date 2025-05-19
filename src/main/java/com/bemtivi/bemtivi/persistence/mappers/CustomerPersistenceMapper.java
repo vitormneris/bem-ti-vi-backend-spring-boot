@@ -1,10 +1,20 @@
 package com.bemtivi.bemtivi.persistence.mappers;
 
 import com.bemtivi.bemtivi.application.domain.PageResponse;
+import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
 import com.bemtivi.bemtivi.application.domain.customer.Customer;
+import com.bemtivi.bemtivi.application.domain.order.Order;
+import com.bemtivi.bemtivi.application.domain.order.OrderItem;
 import com.bemtivi.bemtivi.application.domain.pet.Pet;
+import com.bemtivi.bemtivi.application.domain.product.Product;
+import com.bemtivi.bemtivi.application.domain.service.Service;
+import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
+import com.bemtivi.bemtivi.persistence.entities.order.OrderItemEntity;
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
+import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
+import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -19,16 +29,44 @@ public interface CustomerPersistenceMapper {
     CustomerEntity mapToEntity(Customer customer);
 
     @Mapping(target = "pets", source = "pets", qualifiedByName = "mapToPetsDomain")
-    Customer mapToDomain(CustomerEntity customer);
+    @Mapping(target = "orders", source = "orders", qualifiedByName = "mapToOrdersDomain")
+    @Mapping(target = "appointments", source = "appointments", qualifiedByName = "mapToServicesDomain")
+    Customer mapToDomain(CustomerEntity customerEntity);
 
     @Named(value = "mapToPetsDomain")
     default Set<Pet> mapToPetsDomain(Set<PetEntity> petEntities) {
-            if (petEntities == null) return new HashSet<>();
-            return petEntities.stream().map(this::mapToPetDomain).collect(Collectors.toSet());
+        if (petEntities == null) return new HashSet<>();
+        return petEntities.stream().map(this::mapToPetDomain).collect(Collectors.toSet());
+    }
+
+    @Named(value = "mapToOrdersDomain")
+    default Set<Order> mapToOrdersDomain(Set<OrderEntity> orderEntities) {
+        if (orderEntities == null) return new HashSet<>();
+        return orderEntities.stream().map(this::mapToOrderDomain).collect(Collectors.toSet());
+    }
+
+    @Named(value = "mapToServicesDomain")
+    default Set<Appointment> mapToServicesDomain(Set<AppointmentEntity> appointmentEntities) {
+        if (appointmentEntities == null) return new HashSet<>();
+        return appointmentEntities.stream().map(this::mapToAppointmentDomain).collect(Collectors.toSet());
     }
 
     @Mapping(target = "owner", ignore = true)
     Pet mapToPetDomain(PetEntity petEntity);
+
+    @Mapping(target = "customer", ignore = true)
+    @Mapping(target = "orderItems", source = "orderItems", qualifiedByName = "mapToOrderItemDomain")
+    Order mapToOrderDomain(OrderEntity order);
+
+    @Named("mapToOrderItemDomain")
+    @Mapping(target = "product", source = "product", qualifiedByName = "mapToProductDomain")
+    OrderItem mapToOrderItemDomain(OrderItemEntity orderItem);
+    @Named("mapToProductDomain")
+    @Mapping(target = "categories", ignore = true)
+    Product mapToProductDomain(ProductEntity productEntity);
+
+    @Mapping(target = "customer", ignore = true)
+    Appointment mapToAppointmentDomain(AppointmentEntity  appointmentEntity);
 
     default PageResponse<Customer> mapToPageResponseDomain(Page<CustomerEntity> pageResponse) {
         int previousPage = pageResponse.hasPrevious() ? pageResponse.getNumber() - 1 : pageResponse.getNumber();

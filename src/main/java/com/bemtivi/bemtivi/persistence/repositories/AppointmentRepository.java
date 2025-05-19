@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
+
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, String> {
-    @Query(value = "SELECT * FROM tb_agendamentos WHERE esta_ativo = ?1 AND nome ILIKE CONCAT('%', ?2, '%')", nativeQuery = true)
-    Page<AppointmentEntity> findByPagination(Boolean isActive, Pageable pageable, String name);
+    @Query(value = "SELECT * FROM tb_agendamentos WHERE esta_ativo = ?1 AND momento BETWEEN ?2 AND ?3", nativeQuery = true)
+    Page<AppointmentEntity> findByPagination(Boolean isActive, Pageable pageable, LocalDate momentStart, LocalDate momentEnd);
 }
