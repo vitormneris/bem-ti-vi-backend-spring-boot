@@ -30,6 +30,7 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false, referencedColumnName = "cliente_id")
     private CustomerEntity customer;
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "status_pagamento", nullable = false)
     private PaymentStatusEnum paymentStatus;
     @Column(name = "preco_total", nullable = false)

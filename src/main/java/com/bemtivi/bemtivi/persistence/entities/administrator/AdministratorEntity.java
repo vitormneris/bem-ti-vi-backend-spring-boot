@@ -1,6 +1,7 @@
 package com.bemtivi.bemtivi.persistence.entities.administrator;
 
 
+import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,6 +22,9 @@ public class AdministratorEntity {
     private String id;
     @Column(name = "nome", nullable = false, length = 100)
     private String name;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "papel_do_usuario", nullable = false)
+    private UserRoleEnum role;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(name = "senha", nullable = false, length = 100)

@@ -27,7 +27,7 @@ public class CategoryBusiness {
 
     public PageResponse<Category> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
-                categoryRepository.findByPagination(isActive, PageRequest.of(page, pageSize), name == null ? "" : name)
+                categoryRepository.findByActivationStatus_IsActiveAndNameContainingIgnoreCase(isActive, name == null ? "" : name, PageRequest.of(page, pageSize))
         );
     }
 

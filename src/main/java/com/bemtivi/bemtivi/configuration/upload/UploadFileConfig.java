@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.configuration;
+package com.bemtivi.bemtivi.configuration.upload;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

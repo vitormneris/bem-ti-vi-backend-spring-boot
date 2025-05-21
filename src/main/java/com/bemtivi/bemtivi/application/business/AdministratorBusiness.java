@@ -3,6 +3,7 @@ package com.bemtivi.bemtivi.application.business;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.user.administrator.Administrator;
+import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
@@ -13,6 +14,7 @@ import com.bemtivi.bemtivi.persistence.mappers.AdministratorPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.AdministratorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -36,19 +38,20 @@ public class AdministratorBusiness {
     }
 
     public Administrator insert(Administrator administrator) {
-        administratorRepository.findByEmail(administrator.getEmail()).ifPresent((register) -> {
+        administratorRepository.findByUsername(administrator.getEmail()).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
-        AdministratorEntity saved;
         ActivationStatus activationStatus = ActivationStatus.builder()
                 .isActive(true)
                 .creationDate(Instant.now())
                 .build();
+        administrator.setId(null);
+        administrator.setRole(UserRoleEnum.ADMINISTRATOR);
+        administrator.setPassword(new BCryptPasswordEncoder().encode(administrator.getPassword()));
+        administrator.setActivationStatus(activationStatus);
+        AdministratorEntity saved;
         try {
-            administrator.setId(null);
-            administrator.setActivationStatus(activationStatus);
-            AdministratorEntity administratorEntity = mapper.mapToEntity(administrator);
-            saved = administratorRepository.save(administratorEntity);
+            saved = administratorRepository.save(mapper.mapToEntity(administrator));
         } catch (DataIntegrityViolationException exception) {
             throw new DatabaseIntegrityViolationException((RuntimeErrorEnum.ERR0002));
         }

@@ -31,6 +31,7 @@ public class AppointmentEntity {
     private CustomerEntity customer;
     @Column(name = "preco", nullable = false)
     private BigDecimal price;
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "status_de_pagamento", nullable = false)
     private PaymentStatusEnum paymentStatus;
     @ManyToOne

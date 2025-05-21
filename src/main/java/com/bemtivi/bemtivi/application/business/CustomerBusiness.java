@@ -5,6 +5,7 @@ import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.user.customer.Address;
 import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.user.customer.Telephone;
+import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
@@ -14,9 +15,11 @@ import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.TelephoneEntity;
 import com.bemtivi.bemtivi.persistence.mappers.CustomerPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +35,7 @@ public class CustomerBusiness {
 
     public PageResponse<Customer> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
-                customerRepository.findByPagination(isActive, PageRequest.of(page, pageSize), name == null ? "" : name)
+                customerRepository.findByActivationStatus_IsActiveAndNameContainingIgnoreCase(isActive, name == null ? "" : name, PageRequest.of(page, pageSize))
         );
     }
 
@@ -43,20 +46,22 @@ public class CustomerBusiness {
     }
 
     public Customer insert(Customer customer, MultipartFile file) {
-        customerRepository.findByEmail(customer.getEmail()).ifPresent((register) -> {
+        customerRepository.findByUsername(customer.getEmail()).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
-        CustomerEntity saved;
+
         ActivationStatus activationStatus = ActivationStatus.builder()
                 .isActive(true)
                 .creationDate(Instant.now())
                 .build();
+        customer.setId(null);
+        customer.setActivationStatus(activationStatus);
+        customer.setPathImage(uploadManager.uploadObject(file));
+        customer.setRole(UserRoleEnum.CUSTOMER);
+        customer.setPassword(new BCryptPasswordEncoder().encode(customer.getPassword()));
+        CustomerEntity saved;
         try {
-            customer.setId(null);
-            customer.setActivationStatus(activationStatus);
-            CustomerEntity customerEntity = mapper.mapToEntity(customer);
-            customerEntity.setPathImage(uploadManager.uploadObject(file));
-            saved = customerRepository.save(customerEntity);
+            saved = customerRepository.save(mapper.mapToEntity(customer));
         } catch (DataIntegrityViolationException exception) {
             throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }

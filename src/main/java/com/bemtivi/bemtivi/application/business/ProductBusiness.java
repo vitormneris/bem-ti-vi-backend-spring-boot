@@ -29,7 +29,7 @@ public class ProductBusiness {
 
     public PageResponse<Product> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
-                productRepository.findByPagination(isActive, PageRequest.of(page, pageSize), name == null ? "" : name)
+                productRepository.findByActivationStatus_IsActiveAndNameContainingIgnoreCase(isActive, name == null ? "" : name, PageRequest.of(page, pageSize))
         );
     }
 

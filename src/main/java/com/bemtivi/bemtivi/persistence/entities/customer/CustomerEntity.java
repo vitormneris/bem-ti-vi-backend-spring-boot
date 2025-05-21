@@ -1,5 +1,6 @@
 package com.bemtivi.bemtivi.persistence.entities.customer;
 
+import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
@@ -28,6 +29,9 @@ public class CustomerEntity {
     private String name;
     @Column(nullable = false, unique = true)
     private String email;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "papel_do_usuario", nullable = false)
+    private UserRoleEnum role;
     @Column(name = "senha", nullable = false, length = 100)
     private String password;
     @Column(name = "data_de_nascimento", nullable = false)

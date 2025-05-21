@@ -40,7 +40,6 @@ public class AppointmentBusiness {
     }
 
     public Appointment insert(Appointment appointment) {
-        AppointmentEntity saved;
         ActivationStatus activationStatus = ActivationStatus.builder()
                 .isActive(true)
                 .creationDate(Instant.now())
@@ -50,6 +49,7 @@ public class AppointmentBusiness {
         appointment.setActivationStatus(activationStatus);
         appointment.setMoment(Instant.now());
         appointment.setPaymentStatus(PaymentStatusEnum.WAITING_PAYMENT);
+        AppointmentEntity saved;
         AppointmentEntity appointmentEntity = mapper.mapToEntity(appointment);
 
         customerRepository.findById(appointmentEntity.getCustomer().getId()).orElseThrow(

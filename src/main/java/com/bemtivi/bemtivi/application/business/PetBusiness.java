@@ -29,7 +29,7 @@ public class PetBusiness {
 
     public PageResponse<Pet> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
-                petRepository.findByPagination(isActive, PageRequest.of(page, pageSize), name == null ? "" : name)
+                petRepository.findByActivationStatus_IsActiveAndNameContainingIgnoreCase(isActive, name == null ? "" : name, PageRequest.of(page, pageSize))
         );
     }
 

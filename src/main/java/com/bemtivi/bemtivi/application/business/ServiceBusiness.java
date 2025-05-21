@@ -26,7 +26,7 @@ public class ServiceBusiness {
 
     public PageResponse<Service> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
-                serviceRepository.findByPagination(isActive, PageRequest.of(page, pageSize), name == null ? "" : name)
+                serviceRepository.findByActivationStatus_IsActiveAndNameContainingIgnoreCase(isActive, name == null ? "" : name, PageRequest.of(page, pageSize))
         );
     }
 
