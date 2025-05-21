@@ -1,7 +1,7 @@
 package com.bemtivi.bemtivi.persistence.mappers;
 
 import com.bemtivi.bemtivi.application.domain.PageResponse;
-import com.bemtivi.bemtivi.application.domain.customer.Customer;
+import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.order.Order;
 import com.bemtivi.bemtivi.application.domain.order.OrderItem;
 import com.bemtivi.bemtivi.application.domain.product.Product;

@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.application.domain.customer;
+package com.bemtivi.bemtivi.application.domain.user.customer;
 
 import lombok.*;
 

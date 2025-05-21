@@ -2,7 +2,7 @@ package com.bemtivi.bemtivi.persistence.mappers;
 
 
 import com.bemtivi.bemtivi.application.domain.PageResponse;
-import com.bemtivi.bemtivi.application.domain.customer.Customer;
+import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.pet.Pet;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;

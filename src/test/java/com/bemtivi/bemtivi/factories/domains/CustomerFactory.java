@@ -1,9 +1,9 @@
 package com.bemtivi.bemtivi.factories.domains;
 
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
-import com.bemtivi.bemtivi.application.domain.customer.Address;
-import com.bemtivi.bemtivi.application.domain.customer.Customer;
-import com.bemtivi.bemtivi.application.domain.customer.Telephone;
+import com.bemtivi.bemtivi.application.domain.user.customer.Address;
+import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
+import com.bemtivi.bemtivi.application.domain.user.customer.Telephone;
 import com.bemtivi.bemtivi.factories.ContractFactory;
 import lombok.extern.slf4j.Slf4j;
 

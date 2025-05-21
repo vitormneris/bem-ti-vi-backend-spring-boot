@@ -3,7 +3,7 @@ package com.bemtivi.bemtivi.application.business;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.product.Product;
-import com.bemtivi.bemtivi.exceptions.DataIntegrityViolationException;
+import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
@@ -11,6 +11,7 @@ import com.bemtivi.bemtivi.persistence.mappers.ProductPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.CategoryRepository;
 import com.bemtivi.bemtivi.persistence.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
@@ -53,8 +54,8 @@ public class ProductBusiness {
             ProductEntity productEntity = mapper.mapToEntity(product);
             productEntity.setPathImage(uploadManager.uploadObject(file));
             saved = productRepository.save(productEntity);
-        } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(saved);
     }
@@ -76,8 +77,8 @@ public class ProductBusiness {
         ProductEntity updated;
         try {
             updated = productRepository.save(productOld);
-        } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(updated);
     }

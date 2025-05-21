@@ -3,13 +3,14 @@ package com.bemtivi.bemtivi.application.business;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.category.Category;
-import com.bemtivi.bemtivi.exceptions.DataIntegrityViolationException;
+import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.category.CategoryEntity;
 import com.bemtivi.bemtivi.persistence.mappers.CategoryPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
@@ -48,8 +49,8 @@ public class CategoryBusiness {
             CategoryEntity categoryEntity = mapper.mapToEntity(category);
             categoryEntity.setPathImage(uploadManager.uploadObject(file));
             saved = categoryRepository.save(categoryEntity);
-        } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(saved);
     }
@@ -64,8 +65,8 @@ public class CategoryBusiness {
         CategoryEntity updated;
         try {
             updated = categoryRepository.save(categoryOld);
-        } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(updated);
     }

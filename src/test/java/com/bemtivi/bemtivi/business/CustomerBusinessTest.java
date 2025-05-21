@@ -2,7 +2,7 @@ package com.bemtivi.bemtivi.business;
 
 import com.bemtivi.bemtivi.application.business.CustomerBusiness;
 import com.bemtivi.bemtivi.application.business.UploadBusiness;
-import com.bemtivi.bemtivi.application.domain.customer.Customer;
+import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.mappers.CustomerPersistenceMapper;

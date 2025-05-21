@@ -15,8 +15,9 @@ public enum RuntimeErrorEnum {
     ERR0007("RESOURCE_NOT_FOUND", "O pet solicitado não foi encontrado."),
     ERR0008("RESOURCE_NOT_FOUND", "O pedido solicitado não foi encontrado."),
     ERR0009("RESOURCE_NOT_FOUND", "O agendamento solicitado não foi encontrado."),
-    ERR0010("UPLOAD_OBJECT_ERROR", "Houve um erro ao fazer o upload da imagem."),
-    ERR0011("RESOURCE_DUPLICATED", "Este e-mail já está registrado.");
+    ERR0010("RESOURCE_NOT_FOUND", "O administrador solicitado não foi encontrado."),
+    ERR0012("UPLOAD_OBJECT_ERROR", "Houve um erro ao fazer o upload da imagem."),
+    ERR0013("RESOURCE_DUPLICATED", "Este e-mail já está registrado.");
 
     private final String code;
     private final String message;

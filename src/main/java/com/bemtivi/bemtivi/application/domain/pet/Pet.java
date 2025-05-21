@@ -1,7 +1,7 @@
 package com.bemtivi.bemtivi.application.domain.pet;
 
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
-import com.bemtivi.bemtivi.application.domain.customer.Customer;
+import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.enums.PetGenderEnum;
 import com.bemtivi.bemtivi.application.enums.PetSizeEnum;
 import lombok.*;

@@ -2,10 +2,10 @@ package com.bemtivi.bemtivi.application.business;
 
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
-import com.bemtivi.bemtivi.application.domain.customer.Address;
-import com.bemtivi.bemtivi.application.domain.customer.Customer;
-import com.bemtivi.bemtivi.application.domain.customer.Telephone;
-import com.bemtivi.bemtivi.exceptions.DataIntegrityViolationException;
+import com.bemtivi.bemtivi.application.domain.user.customer.Address;
+import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
+import com.bemtivi.bemtivi.application.domain.user.customer.Telephone;
+import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
@@ -15,6 +15,7 @@ import com.bemtivi.bemtivi.persistence.entities.customer.TelephoneEntity;
 import com.bemtivi.bemtivi.persistence.mappers.CustomerPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
@@ -43,7 +44,7 @@ public class CustomerBusiness {
 
     public Customer insert(Customer customer, MultipartFile file) {
         customerRepository.findByEmail(customer.getEmail()).ifPresent((register) -> {
-            throw new DuplicateResourceException(RuntimeErrorEnum.ERR0011);
+            throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
         CustomerEntity saved;
         ActivationStatus activationStatus = ActivationStatus.builder()
@@ -56,8 +57,8 @@ public class CustomerBusiness {
             CustomerEntity customerEntity = mapper.mapToEntity(customer);
             customerEntity.setPathImage(uploadManager.uploadObject(file));
             saved = customerRepository.save(customerEntity);
-        } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(saved);
     }
@@ -97,8 +98,8 @@ public class CustomerBusiness {
         CustomerEntity updated;
         try {
             updated = customerRepository.save(customerOld);
-        } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(updated);
     }

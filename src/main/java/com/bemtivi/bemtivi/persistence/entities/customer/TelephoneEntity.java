@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "tb_telefone")
+@Table(name = "tb_telefones")
 public class TelephoneEntity {
     @Id
     @Column(name = "telefone_id")

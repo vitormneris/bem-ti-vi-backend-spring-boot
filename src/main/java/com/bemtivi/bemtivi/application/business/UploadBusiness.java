@@ -23,7 +23,7 @@ public class UploadBusiness {
         try {
             amazonS3Client.putObject(bucketName, fileName, objectFile.getInputStream(), getMetadata(objectFile));
         } catch (IOException e) {
-            throw new InternalErrorException(RuntimeErrorEnum.ERR0010);
+            throw new InternalErrorException(RuntimeErrorEnum.ERR0012);
         }
         return "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
     }

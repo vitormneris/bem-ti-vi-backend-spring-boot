@@ -3,7 +3,7 @@ package com.bemtivi.bemtivi.application.business;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.pet.Pet;
-import com.bemtivi.bemtivi.exceptions.DataIntegrityViolationException;
+import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
@@ -11,6 +11,7 @@ import com.bemtivi.bemtivi.persistence.mappers.PetPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
 import com.bemtivi.bemtivi.persistence.repositories.PetRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
@@ -54,8 +55,8 @@ public class PetBusiness {
             PetEntity petEntity = mapper.mapToEntity(pet);
             petEntity.setPathImage(uploadManager.uploadObject(file));
             saved = petRepository.save(petEntity);
-        } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(saved);
     }
@@ -75,8 +76,8 @@ public class PetBusiness {
         PetEntity updated;
         try {
             updated = petRepository.save(petOld);
-        } catch (TransactionSystemException exception) {
-            throw new DataIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
         return mapper.mapToDomain(updated);
     }

@@ -26,6 +26,6 @@ public record ServiceDTO(
         LocalTime estimatedDuration,
         ActivationStatusDTO activationStatus
 ) {
-        public interface OnCreate {}
-        public interface OnUpdate {}
+    public interface OnCreate {}
+    public interface OnUpdate {}
 }

@@ -2,7 +2,7 @@ package com.bemtivi.bemtivi.controllers.exceptionhandler;
 
 import com.bemtivi.bemtivi.controllers.exceptionhandler.dto.ErrorFieldDTO;
 import com.bemtivi.bemtivi.controllers.exceptionhandler.dto.ErrorMessageDTO;
-import com.bemtivi.bemtivi.exceptions.DataIntegrityViolationException;
+import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
@@ -64,8 +64,8 @@ public class ExceptionHandlerResource {
         return ResponseEntity.status(httpStatus).body(errorMessageDTO);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorMessageDTO> dataIntegrityViolation(DataIntegrityViolationException exception, HttpServletRequest request) {
+    @ExceptionHandler(DatabaseIntegrityViolationException.class)
+    public ResponseEntity<ErrorMessageDTO> dataIntegrityViolation(DatabaseIntegrityViolationException exception, HttpServletRequest request) {
         RuntimeErrorEnum runtimeErrorEnum = exception.getError();
         HttpStatus httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
 
