@@ -19,7 +19,10 @@ public enum RuntimeErrorEnum {
     ERR0011("RESOURCE_NOT_FOUND", "O e-mail solicitado não foi encontrado."),
     ERR0012("UPLOAD_OBJECT_ERROR", "Houve um erro ao fazer o upload da imagem."),
     ERR0013("RESOURCE_DUPLICATED", "Este e-mail já está registrado."),
-    ERR0014("AUTHENTICATION_FAILED", "E-mail ou senha estão incorretos.");
+    ERR0014("AUTHENTICATION_FAILED", "E-mail ou senha estão incorretos."),
+    ERR0015("AUTHENTICATION_FAILED", "O token está expirado ou inválido."),
+    ERR0016("INVALID_ARGUMENTS", "A data inserida é inválida.");
+
 
     private final String code;
     private final String message;

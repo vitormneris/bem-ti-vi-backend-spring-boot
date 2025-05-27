@@ -7,6 +7,7 @@ import com.bemtivi.bemtivi.application.business.OrderBusiness;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/pedido")
@@ -48,6 +50,8 @@ public class OrderResource {
     public ResponseEntity<OrderDTO> insert(
             @Validated(OrderDTO.OnCreate.class) @RequestBody OrderDTO orderDTO
     ) {
+
+        log.warn(orderDTO.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.mapToDTO(orderManager.insert(mapper.mapToDomain(orderDTO)))
         );

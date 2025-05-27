@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,8 +25,8 @@ public class AppointmentEntity {
     @EqualsAndHashCode.Include
     @Column(name = "agendamento_id")
     private String id;
-    @Column(name = "momento", nullable = false)
-    private Instant moment;
+    @Column(name = "data_e_hora", nullable = false)
+    private LocalDateTime dateTime;
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false, referencedColumnName = "cliente_id")
     private CustomerEntity customer;

@@ -2,13 +2,16 @@ package com.bemtivi.bemtivi.application.business;
 
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
+import com.bemtivi.bemtivi.application.domain.email.Email;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.application.domain.order.Order;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
+import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderItemEntity;
+import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
 import com.bemtivi.bemtivi.persistence.mappers.OrderPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
 import com.bemtivi.bemtivi.persistence.repositories.OrderRepository;
@@ -18,11 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionSystemException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Service
@@ -31,6 +35,7 @@ public class OrderBusiness {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
+    private final EmailBusiness emailBusiness;
     private final OrderPersistenceMapper mapper;
 
     public PageResponse<Order> paginate(Boolean isActive, Integer pageSize, Integer page, LocalDate momentStart, LocalDate momentEnd) {
@@ -58,24 +63,30 @@ public class OrderBusiness {
         order.setMoment(Instant.now());
         order.setPaymentStatus(PaymentStatusEnum.WAITING_PAYMENT);
 
+        log.warn(order.toString());
         OrderEntity orderEntity = mapper.mapToEntity(order);
+        log.warn(orderEntity.toString());
 
-        customerRepository.findById(orderEntity.getCustomer().getId()).orElseThrow(
+        CustomerEntity customer = customerRepository.findById(orderEntity.getCustomer().getId()).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
         );
 
-        orderEntity.getOrderItems().forEach(orderItem ->
-                orderItem.setProduct(productRepository.findById(orderItem.getProduct().getId()).orElseThrow(
-                        () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0003)
-                ))
-        );
+        for (OrderItemEntity orderItem :  orderEntity.getOrderItems()) {
+            ProductEntity product = productRepository.findById(orderItem.getProduct().getId()).orElseThrow(
+                    () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0003)
+            );
 
-        for (OrderItemEntity orderItem : orderEntity.getOrderItems()) {
-            BigDecimal price = orderItem.getProduct().getPrice();
+            BigDecimal price = product.getPrice();
             totalPrice = totalPrice.add(price);
+            totalPrice = totalPrice.multiply(BigDecimal.valueOf(orderItem.getQuantity()));
+
+            orderItem.setProduct(product);
             orderItem.setPrice(price);
         }
 
+        log.warn(orderEntity.toString());
+
+        orderEntity.setCustomer(customer);
         orderEntity.setTotalPrice(totalPrice);
 
         try {
@@ -83,6 +94,14 @@ public class OrderBusiness {
         } catch (DataIntegrityViolationException exception) {
             throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
         }
+
+        Email email = Email.builder()
+                .to(customer.getEmail())
+                .subject("Olá, " + customer.getName()  + ", tudo bem? seu pedido acabou de ser realizado!")
+                .content(generateContent(orderEntity))
+                .build();
+
+        emailBusiness.sendEmail(email);
         return mapper.mapToDomain(saved);
     }
 
@@ -116,4 +135,27 @@ public class OrderBusiness {
         orderRepository.delete(service);
     }
 
+    private String generateContent(OrderEntity order) {
+        StringBuilder content = new StringBuilder();
+
+        content.append("🧾 Detalhes do seu pedido\n\n")
+                .append("🛍️ Produtos:\n");
+
+        int count = 1;
+        for (OrderItemEntity item : order.getOrderItems()) {
+            BigDecimal subtotal = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+
+            content.append(count++).append(". 📦 Nome: ").append(item.getProduct().getName()).append("\n")
+                    .append("   💰 Preço unitário: R$ ").append(item.getPrice()).append("\n")
+                    .append("   🔢 Quantidade: ").append(item.getQuantity()).append("\n")
+                    .append("   💵 Subtotal: R$ ").append(subtotal).append("\n\n");
+        }
+
+        content.append("💳 Total do pedido: R$ ").append(order.getTotalPrice()).append("\n")
+                .append("📅 Realizado em: ").append(order.getMoment().atZone(ZoneId.of("America/Sao_Paulo"))
+                        .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n")
+                .append("⏳ Status do pagamento: ").append(order.getPaymentStatus().getMessage()).append("\n");
+
+        return content.toString();
+    }
 }

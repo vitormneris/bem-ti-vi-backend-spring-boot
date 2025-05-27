@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ import java.time.Instant;
 public class Appointment {
     @EqualsAndHashCode.Include
     private String id;
-    private Instant moment;
+    private LocalDateTime dateTime;
     private Customer customer;
     private BigDecimal price;
     private PaymentStatusEnum paymentStatus;

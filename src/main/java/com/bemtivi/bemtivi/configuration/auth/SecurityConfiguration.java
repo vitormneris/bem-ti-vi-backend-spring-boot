@@ -61,7 +61,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, "/administrador/{id}/deletar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.DELETE, "/administrador/{id}/desativar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/administrador/{id}/atualizar").hasRole("ADMINISTRATOR")
-                        .requestMatchers(HttpMethod.POST, "/administrador/inserir").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.POST, "/administrador/inserir").permitAll()
                         .requestMatchers(HttpMethod.GET, "/administrador/{id}/buscar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.GET, "/administrador/paginacao").hasRole("ADMINISTRATOR")
 

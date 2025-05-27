@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, String> {
-    @Query(value = "SELECT * FROM tb_agendamentos WHERE esta_ativo = ?1 AND momento BETWEEN ?2 AND ?3", nativeQuery = true)
+    @Query(value = "SELECT * FROM tb_agendamentos WHERE esta_ativo = ?1 AND data_e_hora BETWEEN ?2 AND ?3", nativeQuery = true)
     Page<AppointmentEntity> findByPagination(Boolean isActive, Pageable pageable, LocalDate momentStart, LocalDate momentEnd);
 }

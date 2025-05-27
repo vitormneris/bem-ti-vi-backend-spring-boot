@@ -11,12 +11,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface CustomerWebMapper {
     PageResponseDTO<CustomerDTO> mapToPageResponseDto(PageResponse<Customer> pageResponse);
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "role", target = "role")
-    @Mapping(source = "password", target = "password")
-    @Mapping(source = "activationStatus", target = "activationStatus")
     Customer mapToDomain(CustomerDTO costumer);
     CustomerDTO mapToDTO(Customer customer);
 }

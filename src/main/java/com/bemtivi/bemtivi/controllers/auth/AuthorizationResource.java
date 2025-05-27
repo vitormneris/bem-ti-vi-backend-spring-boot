@@ -1,6 +1,6 @@
 package com.bemtivi.bemtivi.controllers.auth;
 
-import com.bemtivi.bemtivi.application.business.TokenBusiness;
+import com.bemtivi.bemtivi.application.business.security.TokenBusiness;
 import com.bemtivi.bemtivi.application.domain.user.User;
 import com.bemtivi.bemtivi.controllers.auth.dto.AuthorizationDTO;
 import com.bemtivi.bemtivi.controllers.auth.dto.TokenDTO;

@@ -6,7 +6,7 @@ import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 
 public record OrderDTO(
         String id,
@@ -14,7 +14,7 @@ public record OrderDTO(
         PaymentStatusEnum paymentStatus,
         BigDecimal totalPrice,
         CustomerDTO customer,
-        Set<OrderItemDTO> orderItems,
+        List<OrderItemDTO> orderItems,
         ActivationStatusDTO activationStatus
 ) {
     public interface OnCreate {}

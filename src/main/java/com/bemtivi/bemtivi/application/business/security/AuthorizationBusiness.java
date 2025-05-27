@@ -1,5 +1,6 @@
-package com.bemtivi.bemtivi.application.business;
+package com.bemtivi.bemtivi.application.business.security;
 
+import com.bemtivi.bemtivi.exceptions.AuthenticationFailedException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.mappers.AdministratorPersistenceMapper;
@@ -31,7 +32,7 @@ public class AuthorizationBusiness implements UserDetailsService {
             return customerPersistenceMapper.mapUserAuthDTOToDomain(objCustomer.get());
         }
         return administratorPersistenceMapper.mapUserAuthDTOToDomain(administratorRepository.findByUsername(email).orElseThrow(
-                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0011)
+                () -> new AuthenticationFailedException(RuntimeErrorEnum.ERR0014)
         ));
     }
 }

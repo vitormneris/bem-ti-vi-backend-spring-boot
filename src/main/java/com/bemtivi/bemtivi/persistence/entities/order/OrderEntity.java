@@ -8,7 +8,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 
 @ToString
 @Getter
@@ -37,7 +37,7 @@ public class OrderEntity {
     private BigDecimal totalPrice;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "pedido_id")
-    private Set<OrderItemEntity> orderItems;
+    private List<OrderItemEntity> orderItems;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

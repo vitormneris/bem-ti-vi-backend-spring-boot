@@ -24,9 +24,12 @@ public abstract class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (role.equals(UserRoleEnum.ADMINISTRATOR))
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"), new SimpleGrantedAuthority("ROLE_CLIENT"));
-        return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
+        if (role != null) {
+            if (role.equals(UserRoleEnum.ADMINISTRATOR))
+                return List.of(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"), new SimpleGrantedAuthority("ROLE_CLIENT"));
+            return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
+        }
+        return List.of();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.bemtivi.bemtivi.controllers.exceptionhandler;
 
 import com.bemtivi.bemtivi.controllers.exceptionhandler.dto.ErrorFieldDTO;
 import com.bemtivi.bemtivi.controllers.exceptionhandler.dto.ErrorMessageDTO;
+import com.bemtivi.bemtivi.exceptions.AuthenticationFailedException;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -95,4 +97,48 @@ public class ExceptionHandlerResource {
 
         return ResponseEntity.status(httpStatus).body(errorMessageDTO);
     }
+
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<ErrorMessageDTO> authenticationFailed(AuthenticationFailedException exception, HttpServletRequest request) {
+        RuntimeErrorEnum runtimeErrorEnum = exception.getError();
+        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
+
+        ErrorMessageDTO errorMessageDTO = ErrorMessageDTO.builder()
+                .code(runtimeErrorEnum.getCode())
+                .status(httpStatus.value())
+                .message(runtimeErrorEnum.getMessage())
+                .timestamp(Instant.now())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(httpStatus).body(errorMessageDTO);
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ErrorMessageDTO> missingServletRequestPart(HttpServletRequest request) {
+        RuntimeErrorEnum runtimeErrorEnum = RuntimeErrorEnum.ERR0001;
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        List<ErrorFieldDTO> fields = new ArrayList<>();
+
+        ErrorFieldDTO errorFieldDTO = ErrorFieldDTO.builder()
+                .name("IMAGEM")
+                .description("O campo imagem precisa ser enviado.")
+                .value(null)
+                .build();
+
+        fields.add(errorFieldDTO);
+
+        ErrorMessageDTO errorMessageDTO = ErrorMessageDTO.builder()
+                .code(runtimeErrorEnum.getCode())
+                .status(httpStatus.value())
+                .message(runtimeErrorEnum.getMessage())
+                .timestamp(Instant.now())
+                .path(request.getRequestURI())
+                .errorFields(fields)
+                .build();
+
+        return ResponseEntity.status(httpStatus).body(errorMessageDTO);
+    }
 }
+
+

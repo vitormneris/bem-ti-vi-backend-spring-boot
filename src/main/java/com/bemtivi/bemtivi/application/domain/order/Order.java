@@ -7,8 +7,10 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
+@ToString
 @Getter
 @Setter
 @Builder
@@ -22,6 +24,6 @@ public class Order {
     private Customer customer;
     private BigDecimal totalPrice;
     private PaymentStatusEnum paymentStatus;
-    private Set<OrderItem> orderItems;
+    private List<OrderItem> orderItems;
     private ActivationStatus activationStatus;
 }

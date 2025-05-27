@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.application.business;
+package com.bemtivi.bemtivi.application.business.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
