@@ -1,5 +1,6 @@
-package com.bemtivi.bemtivi.application.business;
+package com.bemtivi.bemtivi.application.business.user;
 
+import com.bemtivi.bemtivi.application.business.UploadBusiness;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.user.customer.Address;
@@ -15,13 +16,11 @@ import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.TelephoneEntity;
 import com.bemtivi.bemtivi.persistence.mappers.CustomerPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;

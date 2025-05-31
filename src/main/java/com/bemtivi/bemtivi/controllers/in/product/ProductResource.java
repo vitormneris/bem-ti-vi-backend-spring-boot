@@ -3,7 +3,7 @@ package com.bemtivi.bemtivi.controllers.in.product;
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
 import com.bemtivi.bemtivi.controllers.in.product.mappers.ProductWebMapper;
-import com.bemtivi.bemtivi.application.business.ProductBusiness;
+import com.bemtivi.bemtivi.application.business.product.ProductBusiness;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/produto")
+@RequestMapping(value = "/produtos")
 public class ProductResource {
     private final ProductBusiness productManager;
     private final ProductWebMapper mapper;

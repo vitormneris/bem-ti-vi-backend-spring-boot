@@ -4,7 +4,7 @@ import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.category.dto.CategoryDTO;
 import com.bemtivi.bemtivi.controllers.in.category.mappers.CategoryWebMapper;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
-import com.bemtivi.bemtivi.application.business.CategoryBusiness;
+import com.bemtivi.bemtivi.application.business.product.CategoryBusiness;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -16,9 +16,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/categoria")
+@RequestMapping(value = "/categorias")
 public class CategoryResource {
     private final CategoryBusiness categoryManager;
     private final CategoryWebMapper mapper;
@@ -37,6 +39,11 @@ public class CategoryResource {
             String name
     ) {
         return ResponseEntity.ok().body(mapper.mapToPageResponseDto(categoryManager.paginate(isActive, pageSize, page, name)));
+    }
+
+    @GetMapping(value = "/buscartodos")
+    public ResponseEntity<Set<CategoryDTO>> findAll() {
+        return ResponseEntity.ok().body(mapper.mapToSetCategoryDTO(categoryManager.findAll()));
     }
 
     @GetMapping(value = "/{id}/buscar")

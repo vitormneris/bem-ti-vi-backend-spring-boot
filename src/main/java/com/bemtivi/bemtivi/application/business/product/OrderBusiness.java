@@ -1,5 +1,6 @@
-package com.bemtivi.bemtivi.application.business;
+package com.bemtivi.bemtivi.application.business.product;
 
+import com.bemtivi.bemtivi.application.business.EmailBusiness;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.email.Email;

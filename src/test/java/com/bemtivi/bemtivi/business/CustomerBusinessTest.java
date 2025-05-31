@@ -1,6 +1,6 @@
 package com.bemtivi.bemtivi.business;
 
-import com.bemtivi.bemtivi.application.business.CustomerBusiness;
+import com.bemtivi.bemtivi.application.business.user.CustomerBusiness;
 import com.bemtivi.bemtivi.application.business.UploadBusiness;
 import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;

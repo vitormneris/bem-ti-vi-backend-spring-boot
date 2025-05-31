@@ -1,5 +1,6 @@
-package com.bemtivi.bemtivi.application.business;
+package com.bemtivi.bemtivi.application.business.service;
 
+import com.bemtivi.bemtivi.application.business.EmailBusiness;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
@@ -11,8 +12,6 @@ import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
-import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
-import com.bemtivi.bemtivi.persistence.entities.order.OrderItemEntity;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import com.bemtivi.bemtivi.persistence.mappers.AppointmentPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.*;
@@ -20,13 +19,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionSystemException;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @Service

@@ -2,10 +2,7 @@ package com.bemtivi.bemtivi.controllers.exceptionhandler;
 
 import com.bemtivi.bemtivi.controllers.exceptionhandler.dto.ErrorFieldDTO;
 import com.bemtivi.bemtivi.controllers.exceptionhandler.dto.ErrorMessageDTO;
-import com.bemtivi.bemtivi.exceptions.AuthenticationFailedException;
-import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
-import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
-import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
+import com.bemtivi.bemtivi.exceptions.*;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -135,6 +132,22 @@ public class ExceptionHandlerResource {
                 .timestamp(Instant.now())
                 .path(request.getRequestURI())
                 .errorFields(fields)
+                .build();
+
+        return ResponseEntity.status(httpStatus).body(errorMessageDTO);
+    }
+
+    @ExceptionHandler(UnsupportedMediaTypeException.class)
+    public ResponseEntity<ErrorMessageDTO> unsupportedMediaType(UnsupportedMediaTypeException exception, HttpServletRequest request) {
+        RuntimeErrorEnum runtimeErrorEnum = exception.getError();
+        HttpStatus httpStatus = HttpStatus.UNSUPPORTED_MEDIA_TYPE;
+
+        ErrorMessageDTO errorMessageDTO = ErrorMessageDTO.builder()
+                .code(runtimeErrorEnum.getCode())
+                .status(httpStatus.value())
+                .message(runtimeErrorEnum.getMessage())
+                .timestamp(Instant.now())
+                .path(request.getRequestURI())
                 .build();
 
         return ResponseEntity.status(httpStatus).body(errorMessageDTO);

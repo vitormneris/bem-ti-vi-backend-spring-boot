@@ -13,14 +13,15 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public abstract class User implements UserDetails {
+public class User implements UserDetails {
     @EqualsAndHashCode.Include
     protected String id;
     protected String name;
     protected String email;
+    protected String pathImage;
     protected UserRoleEnum role;
     protected String password;
-    private ActivationStatus activationStatus;
+    protected ActivationStatus activationStatus;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

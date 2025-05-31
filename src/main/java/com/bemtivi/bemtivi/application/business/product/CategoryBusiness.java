@@ -1,5 +1,6 @@
-package com.bemtivi.bemtivi.application.business;
+package com.bemtivi.bemtivi.application.business.product;
 
+import com.bemtivi.bemtivi.application.business.UploadBusiness;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.category.Category;
@@ -13,10 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,10 @@ public class CategoryBusiness {
         return mapper.mapToPageResponseDomain(
                 categoryRepository.findByActivationStatus_IsActiveAndNameContainingIgnoreCase(isActive, name == null ? "" : name, PageRequest.of(page, pageSize))
         );
+    }
+
+    public Set<Category> findAll() {
+        return mapper.mapToSetCategoryDomain(new LinkedHashSet<>(categoryRepository.findAll()));
     }
 
     public Category findById(String id) {

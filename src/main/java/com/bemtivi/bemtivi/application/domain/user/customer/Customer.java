@@ -9,15 +9,12 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.Set;
 
-
 @ToString
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 public class Customer extends User {
     private LocalDate birthDate;
-    private String pathImage;
     private Telephone telephones;
     private Address address;
     private Set<Pet> pets;

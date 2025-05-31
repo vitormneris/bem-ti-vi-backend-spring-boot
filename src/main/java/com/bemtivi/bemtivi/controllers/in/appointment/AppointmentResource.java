@@ -1,6 +1,6 @@
 package com.bemtivi.bemtivi.controllers.in.appointment;
 
-import com.bemtivi.bemtivi.application.business.AppointmentBusiness;
+import com.bemtivi.bemtivi.application.business.service.AppointmentBusiness;
 import com.bemtivi.bemtivi.controllers.in.appointment.dto.AppointmentDTO;
 import com.bemtivi.bemtivi.controllers.in.appointment.mappers.AppointmentWebMapper;
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/agendamento")
+@RequestMapping(value = "/agendamentos")
 public class AppointmentResource {
     private final AppointmentBusiness appointmentManager;
     private final AppointmentWebMapper mapper;

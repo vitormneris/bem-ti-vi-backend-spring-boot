@@ -4,7 +4,7 @@ import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.dto.CustomerDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.mappers.CustomerWebMapper;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
-import com.bemtivi.bemtivi.application.business.CustomerBusiness;
+import com.bemtivi.bemtivi.application.business.user.CustomerBusiness;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/cliente")
+@RequestMapping(value = "/clientes")
 public class CustomerResource {
     private final CustomerBusiness customerBusiness;
     private final CustomerWebMapper mapper;

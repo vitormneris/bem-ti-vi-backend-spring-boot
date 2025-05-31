@@ -14,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/autorizacao")
+@RequestMapping("/autenticacao")
 @RequiredArgsConstructor
 public class AuthorizationResource {
     private final AuthenticationManager authenticationManager;
@@ -24,7 +24,7 @@ public class AuthorizationResource {
     public ResponseEntity<TokenDTO> authenticate(@RequestBody AuthorizationDTO data) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        var user = (User) authenticate.getPrincipal();
+        User user = (User) authenticate.getPrincipal();
         return ResponseEntity.ok().body(new TokenDTO(tokenBusiness.tokenGeneration(user)));
     }
 

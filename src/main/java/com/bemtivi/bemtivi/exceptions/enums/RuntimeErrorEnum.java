@@ -21,7 +21,9 @@ public enum RuntimeErrorEnum {
     ERR0013("RESOURCE_DUPLICATED", "Este e-mail já está registrado."),
     ERR0014("AUTHENTICATION_FAILED", "E-mail ou senha estão incorretos."),
     ERR0015("AUTHENTICATION_FAILED", "O token está expirado ou inválido."),
-    ERR0016("INVALID_ARGUMENTS", "A data inserida é inválida.");
+    ERR0016("INVALID_ARGUMENTS", "A data inserida é inválida."),
+    ERR0017("OPERATION_NOT_ALLOWED", "Não é possível criar mais do que 5 administradores."),
+    ERR0018("UPLOAD_OBJECT_ERROR", "O tipo do arquivo enviado não é válido. Escolha entre (JPEG, PNG, WEBP)");
 
 
     private final String code;

@@ -1,40 +1,30 @@
 package com.bemtivi.bemtivi.controllers.in.administrator;
 
-import com.bemtivi.bemtivi.application.business.AdministratorBusiness;
-import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
+import com.bemtivi.bemtivi.application.business.user.AdministratorBusiness;
 import com.bemtivi.bemtivi.controllers.in.administrator.dto.AdministratorDTO;
 import com.bemtivi.bemtivi.controllers.in.administrator.mappers.AdministratorWebMapper;
-import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-@RequiredArgsConstructor
+import java.util.Set;
+
 @RestController
-@RequestMapping(value = "/administrador")
+@RequiredArgsConstructor
+@RequestMapping(value = "/administradores")
 public class AdministratorResource {
     private final AdministratorBusiness administratorBusiness;
     private final AdministratorWebMapper mapper;
 
-    @GetMapping(value = "/paginacao")
-    public ResponseEntity<PageResponseDTO<AdministratorDTO>> paginate(
-            @RequestParam(name = "isActive", defaultValue = "true", required = false)
-            Boolean isActive,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false)
-            @Min(value = 1, message = "O número mínimo de elementos da página é 1")
-            @Max(value = 30, message = "O número máximo de elementos da página é 30")
-            Integer pageSize,
-            @RequestParam(name = "page", defaultValue = "0", required = false)
-            Integer page,
-            @RequestParam(name = "name", required = false)
-            String name
-    ) {
+    @GetMapping(value = "/buscartodos")
+    public ResponseEntity<Set<AdministratorDTO>> findAll() {
         return ResponseEntity.ok().body(
-                mapper.mapToPageResponseDto(administratorBusiness.paginate(isActive, pageSize, page, name))
+                mapper.mapToSetDTO(administratorBusiness.findAll())
         );
     }
 
@@ -44,19 +34,23 @@ public class AdministratorResource {
     }
 
     @PostMapping(value = "/inserir")
-    public ResponseEntity<AdministratorDTO> insert(@Validated(ProductDTO.OnCreate.class) @RequestBody AdministratorDTO administratorDTO) {
+    public ResponseEntity<AdministratorDTO> insert(
+            @Validated(AdministratorDTO.OnCreate.class) @RequestPart(value = "administrator") AdministratorDTO administratorDTO,
+            @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
+    ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                mapper.mapToDTO(administratorBusiness.insert(mapper.mapToDomain(administratorDTO)))
+                mapper.mapToDTO(administratorBusiness.insert(mapper.mapToDomain(administratorDTO), file))
         );
     }
 
     @PutMapping(value = "/{id}/atualizar")
     public ResponseEntity<AdministratorDTO> update(
             @PathVariable(name = "id") String id,
-            @Validated(AdministratorDTO.OnUpdate.class) @RequestBody AdministratorDTO administratorDTO
+            @Validated(AdministratorDTO.OnUpdate.class) @RequestPart(value = "administrator") AdministratorDTO administratorDTO,
+            @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
         return ResponseEntity.ok().body(
-                mapper.mapToDTO(administratorBusiness.update(id, mapper.mapToDomain(administratorDTO)))
+                mapper.mapToDTO(administratorBusiness.update(id, mapper.mapToDomain(administratorDTO), file))
         );
     }
 

@@ -25,6 +25,8 @@ public class AdministratorEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "papel_do_usuario", nullable = false)
     private UserRoleEnum role;
+    @Column(name = "caminho_da_imagem", nullable = false)
+    private String pathImage;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(name = "senha", nullable = false, length = 100)

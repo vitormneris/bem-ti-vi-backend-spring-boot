@@ -3,7 +3,7 @@ package com.bemtivi.bemtivi.controllers.in.order;
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.order.mappers.OrderWebMapper;
-import com.bemtivi.bemtivi.application.business.OrderBusiness;
+import com.bemtivi.bemtivi.application.business.product.OrderBusiness;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/pedido")
+@RequestMapping(value = "/pedidos")
 public class OrderResource {
     private final OrderBusiness orderManager;
     private final OrderWebMapper mapper;

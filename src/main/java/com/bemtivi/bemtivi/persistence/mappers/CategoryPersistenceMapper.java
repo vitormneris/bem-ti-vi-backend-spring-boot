@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 public interface CategoryPersistenceMapper {
     CategoryEntity mapToEntity(Category category);
 
+    Set<Category> mapToSetCategoryDomain(Set<CategoryEntity> categories);
+
     @Mapping(target = "products", source = "products", qualifiedByName = "mapToProductDomain")
     Category mapToDomain(CategoryEntity categoryEntity);
     @Named("mapToProductDomain")

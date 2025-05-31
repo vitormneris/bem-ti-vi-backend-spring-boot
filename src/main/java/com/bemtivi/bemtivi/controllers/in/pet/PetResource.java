@@ -3,7 +3,7 @@ package com.bemtivi.bemtivi.controllers.in.pet;
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.pet.dto.PetDTO;
 import com.bemtivi.bemtivi.controllers.in.pet.mappers.PetWebMapper;
-import com.bemtivi.bemtivi.application.business.PetBusiness;
+import com.bemtivi.bemtivi.application.business.service.PetBusiness;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/pet")
+@RequestMapping(value = "/pets")
 public class PetResource {
     private final PetBusiness petManager;
     private final PetWebMapper mapper;

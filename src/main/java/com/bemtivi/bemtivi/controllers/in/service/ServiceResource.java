@@ -3,7 +3,7 @@ package com.bemtivi.bemtivi.controllers.in.service;
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.service.dto.ServiceDTO;
 import com.bemtivi.bemtivi.controllers.in.service.mappers.ServiceWebMapper;
-import com.bemtivi.bemtivi.application.business.ServiceBusiness;
+import com.bemtivi.bemtivi.application.business.service.ServiceBusiness;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/service")
+@RequestMapping(value = "/servicos")
 public class ServiceResource {
     private final ServiceBusiness serviceManager;
     private final ServiceWebMapper mapper;

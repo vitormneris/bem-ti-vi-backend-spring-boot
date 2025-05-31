@@ -12,5 +12,7 @@ import org.mapstruct.Mapping;
 public interface CustomerWebMapper {
     PageResponseDTO<CustomerDTO> mapToPageResponseDto(PageResponse<Customer> pageResponse);
     Customer mapToDomain(CustomerDTO costumer);
+    @Mapping(source = "role", target = "role", ignore = true)
+    @Mapping(source = "password", target = "password", ignore = true)
     CustomerDTO mapToDTO(Customer customer);
 }

@@ -3,8 +3,10 @@ package com.bemtivi.bemtivi.application.business;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.bemtivi.bemtivi.exceptions.InternalErrorException;
+import com.bemtivi.bemtivi.exceptions.UnsupportedMediaTypeException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +20,13 @@ public class UploadBusiness {
     private final AmazonS3 amazonS3Client;
 
     public String uploadObject(MultipartFile objectFile) {
-        String fileName = getName(objectFile);
+        String extension = getExtension(objectFile);
+
+        if (!extension.equals(".jpg") && !extension.equals(".png") && !extension.equals(".webp")) {
+            throw new UnsupportedMediaTypeException(RuntimeErrorEnum.ERR0018);
+        }
+
+        String fileName = getName(extension);
         String bucketName = "bemtivi-bucket";
         try {
             amazonS3Client.putObject(bucketName, fileName, objectFile.getInputStream(), getMetadata(objectFile));
@@ -35,8 +43,13 @@ public class UploadBusiness {
         return  metadata;
     }
 
-    private String getName(MultipartFile objectFile) {
-        String extension = Objects.requireNonNull(objectFile.getOriginalFilename()).substring(objectFile.getOriginalFilename().lastIndexOf("."));
+    private String getName(String extension) {
         return UUID.randomUUID() + extension;
+    }
+
+    private String getExtension(MultipartFile objectFile) {
+        return Objects.requireNonNull(
+                objectFile.getOriginalFilename()).substring(objectFile.getOriginalFilename().lastIndexOf(".")
+        ).toLowerCase();
     }
 }
