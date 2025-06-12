@@ -44,7 +44,6 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/categorias/inserir").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.GET, "/categorias/*/buscar", "/categorias/buscartodos", "/categorias/paginacao").permitAll()
 
-
                         .requestMatchers(HttpMethod.DELETE, "/clientes/*/deletar", "/clientes/*/desativar").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.PUT, "/clientes/*/atualizar").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.POST, "/clientes/inserir").permitAll()
@@ -64,6 +63,16 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/agendamentos/*/atualizar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, "/agendamentos/inserir").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.GET, "/agendamentos/paginacao").hasRole("CLIENT")
+
+                        .requestMatchers(HttpMethod.DELETE, "/comentarios/*/deletar", "/comentarios/*/desativar").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.PUT, "/comentarios/*/atualizar").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.POST, "/comentarios/inserir").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/comentarios/buscarporidservico", "/comentarios/buscarporidproduto").hasRole("CLIENT")
+
+                        .requestMatchers(HttpMethod.DELETE, "/pets/*/deletar", "/pets/*/desativar").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.PUT, "/pets/*/atualizar").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.POST, "/pets/inserir").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/pets/paginacao").hasRole("CLIENT")
 
                         .requestMatchers(HttpMethod.POST, "/autenticacao/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/autenticacao/token/cliente").hasRole("CLIENT")
