@@ -30,6 +30,7 @@ public interface OrderPersistenceMapper {
     OrderItem mapToOrderItemDomain(OrderItemEntity orderItem);
     @Named("mapToProductDomain")
     @Mapping(target = "categories", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     Product mapToProductDomain(ProductEntity productEntity);
 
     @Named("mapToCustomerDomain")

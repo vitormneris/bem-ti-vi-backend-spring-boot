@@ -5,7 +5,7 @@ import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.user.administrator.Administrator;
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
-import com.bemtivi.bemtivi.exceptions.OperationNotAllowed;
+import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
 import org.springframework.dao.DataIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
@@ -29,8 +29,8 @@ public class AdministratorBusiness {
     private final AdministratorPersistenceMapper mapper;
     private final UploadBusiness uploadBusiness;
 
-    public Set<Administrator> findAll() {
-        return mapper.mapToSetDomain(new LinkedHashSet<>(administratorRepository.findAll()));
+    public Set<Administrator> findByActivationStatus(Boolean active) {
+        return mapper.mapToSetDomain(new LinkedHashSet<>(administratorRepository.findByActivationStatus_IsActive(active)));
     }
 
     public Administrator findById(String id) {
@@ -44,8 +44,8 @@ public class AdministratorBusiness {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
 
-        if (administratorRepository.findAll().size() >= 6) {
-            throw new OperationNotAllowed(RuntimeErrorEnum.ERR0017);
+        if (administratorRepository.findAll().size() >= 5) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0017);
         }
 
         ActivationStatus activationStatus = ActivationStatus.builder()
@@ -88,6 +88,15 @@ public class AdministratorBusiness {
         );
         service.getActivationStatus().setIsActive(false);
         service.getActivationStatus().setDeactivationDate(Instant.now());
+        administratorRepository.save(service);
+    }
+
+    public void activate(String id) {
+        AdministratorEntity service = administratorRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0010)
+        );
+        service.getActivationStatus().setIsActive(true);
+        service.getActivationStatus().setDeactivationDate(null);
         administratorRepository.save(service);
     }
 

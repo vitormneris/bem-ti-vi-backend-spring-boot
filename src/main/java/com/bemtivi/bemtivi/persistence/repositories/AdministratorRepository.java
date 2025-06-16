@@ -7,10 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AdministratorRepository extends JpaRepository<AdministratorEntity, String> {
-    Page<AdministratorEntity> findByActivationStatus_IsActiveAndNameContainingIgnoreCase(Boolean isActive, String name, Pageable pageable);
     @Query(value = "SELECT new com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO( c.id, c.name, c.email, c.role, c.password ) FROM AdministratorEntity c WHERE c.email = ?1")
     Optional<UserAuthDTO> findByUsername(String email);
+    List<AdministratorEntity> findByActivationStatus_IsActive(Boolean active);
 }

@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -55,7 +56,7 @@ public class FilterToken extends OncePerRequestFilter {
                    SecurityContextHolder.getContext().setAuthentication(authentication);
                } else {
                    Administrator user = administratorPersistenceMapper.mapUserAuthDTOToDomain(administratorRepository.findByUsername(email)
-                           .orElseThrow(() -> new AuthenticationFailedException(RuntimeErrorEnum.ERR0014))
+                           .orElseThrow(() -> new BadCredentialsException(""))
                    );
                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                    SecurityContextHolder.getContext().setAuthentication(authentication);

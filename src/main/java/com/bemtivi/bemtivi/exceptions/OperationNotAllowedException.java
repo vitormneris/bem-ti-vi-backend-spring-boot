@@ -4,10 +4,10 @@ import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import lombok.Getter;
 
 @Getter
-public class OperationNotAllowed extends RuntimeException {
+public class OperationNotAllowedException extends RuntimeException {
     private final RuntimeErrorEnum error;
 
-    public OperationNotAllowed(RuntimeErrorEnum error) {
+    public OperationNotAllowedException(RuntimeErrorEnum error) {
         super(error.getMessage());
         this.error = error;
     }

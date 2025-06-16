@@ -4,6 +4,7 @@ import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.service.Service;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface ServicePersistenceMapper {
     ServiceEntity mapToEntity(Service service);
+    @Mapping(target = "comments", ignore = true)
     Service mapToDomain(ServiceEntity serviceEntity);
 
     default PageResponse<Service> mapToPageResponseDomain(Page<ServiceEntity> pageResponse) {

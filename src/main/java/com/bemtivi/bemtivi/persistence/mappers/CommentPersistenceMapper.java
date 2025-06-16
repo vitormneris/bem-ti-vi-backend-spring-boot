@@ -43,6 +43,7 @@ public interface CommentPersistenceMapper {
     @Mapping(target = "price", ignore = true)
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "activationStatus", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     Service mapToServiceDomain(ServiceEntity serviceEntity);
 
     @Named("mapToProductDomain")
@@ -51,6 +52,7 @@ public interface CommentPersistenceMapper {
     @Mapping(target = "price", ignore = true)
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "activationStatus", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     Product mapToProductDomain(ProductEntity productEntity);
 
 

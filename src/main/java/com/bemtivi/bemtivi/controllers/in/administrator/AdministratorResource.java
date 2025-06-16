@@ -21,10 +21,10 @@ public class AdministratorResource {
     private final AdministratorBusiness administratorBusiness;
     private final AdministratorWebMapper mapper;
 
-    @GetMapping(value = "/buscartodos")
-    public ResponseEntity<Set<AdministratorDTO>> findAll() {
+    @GetMapping(value = "/{active}/buscarporstatus")
+    public ResponseEntity<Set<AdministratorDTO>> findByActivationStatus(@PathVariable(name = "active") Boolean active) {
         return ResponseEntity.ok().body(
-                mapper.mapToSetDTO(administratorBusiness.findAll())
+                mapper.mapToSetDTO(administratorBusiness.findByActivationStatus(active))
         );
     }
 
@@ -57,6 +57,12 @@ public class AdministratorResource {
     @DeleteMapping(value = "/{id}/desativar")
     public ResponseEntity<Void> deactivate(@PathVariable(name = "id") String id) {
         administratorBusiness.deactivate(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping(value = "/{id}/ativar")
+    public ResponseEntity<Void> activate(@PathVariable(name = "id") String id) {
+        administratorBusiness.activate(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

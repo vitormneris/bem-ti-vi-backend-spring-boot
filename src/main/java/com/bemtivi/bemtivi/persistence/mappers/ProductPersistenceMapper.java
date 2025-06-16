@@ -18,6 +18,7 @@ public interface ProductPersistenceMapper {
     ProductEntity mapToEntity(Product product);
 
     @Mapping(target = "categories", source = "categories", qualifiedByName = "mapToCategoryDomain")
+    @Mapping(target = "comments", ignore = true)
     Product mapToDomain(ProductEntity productEntity);
     @Named("mapToCategoryDomain")
     @Mapping(target = "products", ignore = true)

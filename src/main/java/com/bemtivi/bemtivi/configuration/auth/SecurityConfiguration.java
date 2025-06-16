@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -52,7 +51,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, "/administradores/*/deletar", "/administradores/*/desativar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/administradores/*/atualizar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, "/administradores/inserir").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/administradores/*/buscar", "/administradores/buscartodos").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.GET, "/administradores/*/buscar", "/administradores/*/buscarporstatus").hasRole("ADMINISTRATOR")
 
                         .requestMatchers(HttpMethod.DELETE, "/pedidos/*/deletar", "/pedidos/*/desativar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/pedidos/*/atualizar").hasRole("ADMINISTRATOR")

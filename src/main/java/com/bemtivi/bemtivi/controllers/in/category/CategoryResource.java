@@ -53,7 +53,7 @@ public class CategoryResource {
 
     @PostMapping(value = "/inserir")
     public ResponseEntity<CategoryDTO> insert(
-            @Validated(ProductDTO.OnCreate.class) @RequestPart(value = "category") CategoryDTO categoryDTO,
+            @Validated(CategoryDTO.OnCreate.class) @RequestPart(value = "category") CategoryDTO categoryDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(

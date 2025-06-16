@@ -29,7 +29,7 @@ public class CategoryEntity {
     private String cardColor;
     @Column(name = "caminho_da_imagem", nullable = false)
     private String pathImage;
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(cascade = CascadeType.REMOVE, mappedBy = "categories")
     private Set<ProductEntity> products;
     @Embedded
     private ActivationStatusEntity activationStatus;

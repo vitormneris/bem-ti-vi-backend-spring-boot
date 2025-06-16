@@ -2,6 +2,7 @@ package com.bemtivi.bemtivi.persistence.entities.product;
 
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.category.CategoryEntity;
+import com.bemtivi.bemtivi.persistence.entities.comment.CommentEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -39,6 +40,8 @@ public class ProductEntity {
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private Set<CategoryEntity> categories;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<CommentEntity> comments;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

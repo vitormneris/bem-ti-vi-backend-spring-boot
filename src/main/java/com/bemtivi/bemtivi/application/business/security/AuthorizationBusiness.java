@@ -9,6 +9,7 @@ import com.bemtivi.bemtivi.persistence.repositories.AdministratorRepository;
 import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
 import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,7 +33,7 @@ public class AuthorizationBusiness implements UserDetailsService {
             return customerPersistenceMapper.mapUserAuthDTOToDomain(objCustomer.get());
         }
         return administratorPersistenceMapper.mapUserAuthDTOToDomain(administratorRepository.findByUsername(email).orElseThrow(
-                () -> new AuthenticationFailedException(RuntimeErrorEnum.ERR0014)
+                () -> new BadCredentialsException("")
         ));
     }
 }

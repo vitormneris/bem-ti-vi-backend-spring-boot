@@ -23,6 +23,7 @@ public interface CategoryPersistenceMapper {
     Category mapToDomain(CategoryEntity categoryEntity);
     @Named("mapToProductDomain")
     @Mapping(target = "categories", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     Product mapToProductDomain(ProductEntity productEntity);
 
     default PageResponse<Category> mapToPageResponseDomain(Page<CategoryEntity> pageResponse) {

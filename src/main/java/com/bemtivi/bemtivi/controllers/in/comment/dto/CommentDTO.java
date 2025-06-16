@@ -2,6 +2,7 @@ package com.bemtivi.bemtivi.controllers.in.comment.dto;
 
 import com.bemtivi.bemtivi.application.enums.TypeComment;
 import com.bemtivi.bemtivi.controllers.in.ActivationStatusDTO;
+import com.bemtivi.bemtivi.controllers.in.administrator.dto.AdministratorDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.dto.CustomerDTO;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
 import com.bemtivi.bemtivi.controllers.in.service.dto.ServiceDTO;
@@ -9,10 +10,11 @@ import jakarta.validation.constraints.*;
 
 public record CommentDTO(
         String id,
-        @NotBlank(groups = {OnCreate.class}, message = "O título deve ser preenchido.")
-        @Size(groups = {OnCreate.class, OnUpdate.class}, min = 3, max = 50, message = "O título deve ter entre 3 e 50 caracteres")
+        @NotNull(groups = {OnCreate.class}, message = "O título deve ser preenchido.")
+        @Size(groups = {OnCreate.class, OnUpdate.class}, min = 3, message = "O título está muito curto.")
+        @Size(groups = {OnCreate.class, OnUpdate.class}, max = 50, message = "O título está muito longo.")
         String title,
-        @NotBlank(groups = {OnCreate.class}, message = "A mensagem deve ser preenchida.")
+        @NotNull(groups = {OnCreate.class}, message = "A mensagem deve ser preenchida.")
         @Size(groups = {OnCreate.class, OnUpdate.class}, max = 150, message = "A mensagem deve ter no máximo 50 caracteres")
         String message,
         @NotNull(groups = {OnCreate.class}, message = "O tipo de comentário deve ser preenchido.")
