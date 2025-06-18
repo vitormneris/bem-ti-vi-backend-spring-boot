@@ -45,11 +45,19 @@ public class SecurityConfiguration {
 
                         .requestMatchers(HttpMethod.DELETE, "/clientes/*/deletar", "/clientes/*/desativar").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.PUT, "/clientes/*/atualizar").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.PATCH, "/clientes/*/atualizarsenha", "/clientes/*/solicitartrocaemail", "/clientes/*/atualizaremail/*").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.POST, "/clientes/inserir").permitAll()
                         .requestMatchers(HttpMethod.GET, "/clientes/*/buscar", "/clientes/paginacao").hasRole("CLIENT")
 
                         .requestMatchers(HttpMethod.DELETE, "/administradores/*/deletar", "/administradores/*/desativar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/administradores/*/atualizar").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/administradores/*/atualizarsenha",
+                                "/administradores/*/solicitartrocaemail",
+                                "/administradores/*/atualizaremail/*",
+                                "/administradores/*/solicitarconfirmacaoemail",
+                                "/administradores/*/confirmacaoemail/*"
+                                ).hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, "/administradores/inserir").permitAll()
                         .requestMatchers(HttpMethod.GET, "/administradores/*/buscar", "/administradores/*/buscarporstatus").hasRole("ADMINISTRATOR")
 

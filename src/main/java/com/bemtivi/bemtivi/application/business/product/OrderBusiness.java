@@ -7,6 +7,7 @@ import com.bemtivi.bemtivi.application.domain.email.Email;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.application.domain.order.Order;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
+import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
@@ -71,6 +72,10 @@ public class OrderBusiness {
         CustomerEntity customer = customerRepository.findById(orderEntity.getCustomer().getId()).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
         );
+
+        if (!customer.getIsEmailActive()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0021);
+        }
 
         for (OrderItemEntity orderItem :  orderEntity.getOrderItems()) {
             ProductEntity product = productRepository.findById(orderItem.getProduct().getId()).orElseThrow(

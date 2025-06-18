@@ -13,6 +13,7 @@ public record AdministratorDTO(
         @Email(groups = {OnCreate.class, OnUpdate.class}, message = "O e-mail está em formato inválido")
         @NotBlank(groups = {OnCreate.class}, message = "O campo e-mail deve ser preenchido.")
         String email,
+        Boolean isEmailActive,
         String pathImage,
         UserRoleEnum role,
         @Size(groups = {OnCreate.class, OnUpdate.class}, min = 8, message = "A senha está muito curta.")

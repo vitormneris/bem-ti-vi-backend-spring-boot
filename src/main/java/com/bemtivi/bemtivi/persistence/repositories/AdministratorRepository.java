@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AdministratorRepository extends JpaRepository<AdministratorEntity, String> {
-    @Query(value = "SELECT new com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO( c.id, c.name, c.email, c.role, c.password ) FROM AdministratorEntity c WHERE c.email = ?1")
+    @Query(value = "SELECT new com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO( c.id, c.name, c.email, c.isEmailActive, c.role, c.password ) FROM AdministratorEntity c WHERE c.email = ?1")
     Optional<UserAuthDTO> findByUsername(String email);
     List<AdministratorEntity> findByActivationStatus_IsActive(Boolean active);
 }

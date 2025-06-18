@@ -30,6 +30,8 @@ public class CustomerEntity {
     private String name;
     @Column(nullable = false, unique = true)
     private String email;
+    @Column(name="email_esta_ativo" , nullable = false)
+    private Boolean isEmailActive;
     @Enumerated(value = EnumType.STRING)
     @Column(name = "papel_do_usuario", nullable = false)
     private UserRoleEnum role;
@@ -51,6 +53,10 @@ public class CustomerEntity {
     private Set<OrderEntity> orders;
     @OneToMany(mappedBy = "customer", orphanRemoval = true)
     private Set<AppointmentEntity> appointments;
+    @Column(name = "codigo_email")
+    private String codeForEmail;
+    @Column(name = "codigo_senha")
+    private String codeForPassword;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

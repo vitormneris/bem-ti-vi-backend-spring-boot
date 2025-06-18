@@ -1,7 +1,9 @@
 package com.bemtivi.bemtivi.controllers.in.administrator;
 
 import com.bemtivi.bemtivi.application.business.user.AdministratorBusiness;
+import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
 import com.bemtivi.bemtivi.controllers.in.administrator.dto.AdministratorDTO;
+import com.bemtivi.bemtivi.controllers.in.administrator.dto.PasswordsDTO;
 import com.bemtivi.bemtivi.controllers.in.administrator.mappers.AdministratorWebMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -54,6 +56,42 @@ public class AdministratorResource {
         );
     }
 
+    @PatchMapping(value = "/{id}/atualizarsenha")
+    public ResponseEntity<Void> updatePassword(
+            @PathVariable(name = "id") String id, @Validated(PasswordsDTO.OnCreate.class) @RequestBody PasswordsDTO passwords
+    ) {
+        administratorBusiness.updatePassword(id, passwords);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/solicitartrocaemail")
+    public ResponseEntity<Void> sendRequestEmail(
+            @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+    ) {
+        administratorBusiness.sendRequestEmail(id, user.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/atualizaremail/{code}")
+    public ResponseEntity<Void> updateEmail(@PathVariable(name = "id") String id, @PathVariable(name = "code") String code) {
+        administratorBusiness.updateEmail(id, code);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/solicitarconfirmacaoemail")
+    public ResponseEntity<Void> sendRequestConfirmationEmail(
+            @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+    ) {
+        administratorBusiness.sendRequestConfirmationEmail(id, user.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/confirmacaoemail/{code}")
+    public ResponseEntity<Void> confirmationEmail(@PathVariable(name = "id") String id, @PathVariable(name = "code") String code) {
+        administratorBusiness.confirmationEmail(id, code);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping(value = "/{id}/desativar")
     public ResponseEntity<Void> deactivate(@PathVariable(name = "id") String id) {
         administratorBusiness.deactivate(id);
@@ -67,8 +105,10 @@ public class AdministratorResource {
     }
 
     @DeleteMapping(value = "/{id}/deletar")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
-        administratorBusiness.delete(id);
+    public ResponseEntity<Void> delete(
+            @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+    ) {
+        administratorBusiness.delete(id, user.password());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

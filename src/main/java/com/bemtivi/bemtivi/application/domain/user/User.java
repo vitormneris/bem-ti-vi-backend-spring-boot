@@ -18,6 +18,7 @@ public class User implements UserDetails {
     protected String id;
     protected String name;
     protected String email;
+    protected Boolean isEmailActive;
     protected String pathImage;
     protected UserRoleEnum role;
     protected String password;

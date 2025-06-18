@@ -29,6 +29,10 @@ public class AdministratorEntity {
     private String pathImage;
     @Column(nullable = false, unique = true)
     private String email;
+    @Column(name="email_esta_ativo" , nullable = false)
+    private Boolean isEmailActive;
+    @Column(name = "codigo")
+    private String code;
     @Column(name = "senha", nullable = false, length = 100)
     private String password;
     @Embedded

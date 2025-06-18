@@ -23,7 +23,11 @@ public enum RuntimeErrorEnum {
     ERR0015("AUTHENTICATION_FAILED", "O token está expirado ou inválido."),
     ERR0016("INVALID_ARGUMENTS", "A data inserida é inválida."),
     ERR0017("OPERATION_NOT_ALLOWED", "Não é possível criar mais do que 5 administradores."),
-    ERR0018("UPLOAD_OBJECT_ERROR", "O tipo do arquivo enviado não é válido. Escolha entre (JPEG, PNG, WEBP)");
+    ERR0018("UPLOAD_OBJECT_ERROR", "O tipo do arquivo enviado não é válido. Escolha entre (JPEG, PNG, WEBP)"),
+    ERR0019("PASSWORD_WRONG", "A senha digitada está incorreta."),
+    ERR0020("INVALID_CODE", "O código enviado está incorreto. Refaça a solicitação."),
+    ERR0021("EMAIL_IS_NOT_ACTIVE", "O e-mail precisa está ativo para realizar esta operação."),
+    ERR0022("THIS_IS_THE_LAST_ADMINISTRATOR", "Não é possível realizar esta operação, pois este é o último administrador do sistema.");
 
 
     private final String code;

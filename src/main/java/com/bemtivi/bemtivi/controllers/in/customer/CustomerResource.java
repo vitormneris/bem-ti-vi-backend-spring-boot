@@ -1,6 +1,8 @@
 package com.bemtivi.bemtivi.controllers.in.customer;
 
+import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
+import com.bemtivi.bemtivi.controllers.in.administrator.dto.PasswordsDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.dto.CustomerDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.mappers.CustomerWebMapper;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
@@ -48,7 +50,7 @@ public class CustomerResource {
 
     @PostMapping(value = "/inserir")
     public ResponseEntity<CustomerDTO> insert(
-            @Validated(ProductDTO.OnCreate.class) @RequestPart(value = "customer") CustomerDTO customerDTO,
+            @Validated(CustomerDTO.OnCreate.class) @RequestPart(value = "customer") CustomerDTO customerDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -67,6 +69,57 @@ public class CustomerResource {
         );
     }
 
+    @PatchMapping(value = "/{id}/solicitarrecuperacaosenha")
+    public ResponseEntity<Void> sendRequestRetrievePassword(@PathVariable(name = "id") String id) {
+        customerBusiness.sendRequestRetrievePassword(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/recuperarsenha/{code}")
+    public ResponseEntity<Void> retrievePassword(@PathVariable(name = "id") String id, @PathVariable(name = "code") String code) {
+        customerBusiness.retrievePassword(id, code);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/atualizarsenha")
+    public ResponseEntity<Void> updatePassword(
+            @PathVariable(name = "id") String id, @Validated(PasswordsDTO.OnCreate.class) @RequestBody PasswordsDTO passwords
+    ) {
+        customerBusiness.updatePassword(id, passwords);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/solicitartrocaemail")
+    public ResponseEntity<Void> sendRequestEmail(
+            @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+    ) {
+        customerBusiness.sendRequestEmail(id, user.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/atualizaremail/{code}")
+    public ResponseEntity<Void> updateEmail(
+            @PathVariable(name = "id") String id, @PathVariable(name = "code") String code,
+            @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+    ) {
+        customerBusiness.updateEmail(id, code, user.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/solicitarconfirmacaoemail")
+    public ResponseEntity<Void> sendRequestConfirmationEmail(
+            @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+    ) {
+        customerBusiness.sendRequestConfirmationEmail(id, user.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/{id}/confirmacaoemail/{code}")
+    public ResponseEntity<Void> confirmationEmail(@PathVariable(name = "id") String id, @PathVariable(name = "code") String code) {
+        customerBusiness.confirmationEmail(id, code);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping(value = "/{id}/desativar")
     public ResponseEntity<Void> deactivate(@PathVariable(name = "id") String id) {
         customerBusiness.deactivate(id);
@@ -74,8 +127,10 @@ public class CustomerResource {
     }
 
     @DeleteMapping(value = "/{id}/deletar")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
-        customerBusiness.delete(id);
+    public ResponseEntity<Void> delete(
+            @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+    ) {
+        customerBusiness.delete(id, user.password());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
