@@ -69,15 +69,18 @@ public class CustomerResource {
         );
     }
 
-    @PatchMapping(value = "/{id}/solicitarrecuperacaosenha")
-    public ResponseEntity<Void> sendRequestRetrievePassword(@PathVariable(name = "id") String id) {
-        customerBusiness.sendRequestRetrievePassword(id);
+    @PatchMapping(value = "/{email}/solicitarrecuperacaosenha")
+    public ResponseEntity<Void> sendRequestRetrievePassword(@PathVariable(name = "email") String email) {
+        customerBusiness.sendRequestRetrievePassword(email);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping(value = "/{id}/recuperarsenha/{code}")
-    public ResponseEntity<Void> retrievePassword(@PathVariable(name = "id") String id, @PathVariable(name = "code") String code) {
-        customerBusiness.retrievePassword(id, code);
+    @PatchMapping(value = "/{email}/recuperarsenha/{code}")
+    public ResponseEntity<Void> retrievePassword(
+            @PathVariable(name = "email") String email,
+            @PathVariable(name = "code") String code,
+            @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user) {
+        customerBusiness.retrievePassword(email, code, user.password());
         return ResponseEntity.ok().build();
     }
 
@@ -93,16 +96,15 @@ public class CustomerResource {
     public ResponseEntity<Void> sendRequestEmail(
             @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
     ) {
-        customerBusiness.sendRequestEmail(id, user.email());
+        customerBusiness.sendRequestChangeEmail(id, user.email());
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping(value = "/{id}/atualizaremail/{code}")
     public ResponseEntity<Void> updateEmail(
-            @PathVariable(name = "id") String id, @PathVariable(name = "code") String code,
-            @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+            @PathVariable(name = "id") String id, @PathVariable(name = "code") String code
     ) {
-        customerBusiness.updateEmail(id, code, user.email());
+        customerBusiness.updateEmail(id, code);
         return ResponseEntity.ok().build();
     }
 
@@ -128,7 +130,7 @@ public class CustomerResource {
 
     @DeleteMapping(value = "/{id}/deletar")
     public ResponseEntity<Void> delete(
-            @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+            @PathVariable(name = "id") String id, @RequestBody UserAuthDTO user
     ) {
         customerBusiness.delete(id, user.password());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

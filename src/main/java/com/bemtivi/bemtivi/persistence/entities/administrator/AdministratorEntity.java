@@ -33,6 +33,8 @@ public class AdministratorEntity {
     private Boolean isEmailActive;
     @Column(name = "codigo")
     private String code;
+    @Column(name = "email_pretendido")
+    private String emailIntended;
     @Column(name = "senha", nullable = false, length = 100)
     private String password;
     @Embedded

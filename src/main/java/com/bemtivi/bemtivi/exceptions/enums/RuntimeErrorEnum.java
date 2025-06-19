@@ -27,8 +27,13 @@ public enum RuntimeErrorEnum {
     ERR0019("PASSWORD_WRONG", "A senha digitada está incorreta."),
     ERR0020("INVALID_CODE", "O código enviado está incorreto. Refaça a solicitação."),
     ERR0021("EMAIL_IS_NOT_ACTIVE", "O e-mail precisa está ativo para realizar esta operação."),
-    ERR0022("THIS_IS_THE_LAST_ADMINISTRATOR", "Não é possível realizar esta operação, pois este é o último administrador do sistema.");
-
+    ERR0022("THIS_IS_THE_LAST_ADMINISTRATOR", "Não é possível realizar esta operação, pois este é o último administrador do sistema."),
+    ERR0023("EMAIL_IS_ACTIVE", "Não é possível realizar esta operação, pois o e-mail já está ativo."),
+    ERR0024("PASSWORD_IS_NULL", "Não é possível realizar esta operação, pois a senha é nula!!."),
+    ERR0025("EMAIL_IS_NULL", "Não é possível realizar esta operação, pois o e-mail é nulo!."),
+    ERR0026("ID_IS_NULL", "Não é possível realizar esta operação, pois o id é nulo!."),
+    ERR0027("CODE_IS_NULL", "Não é possível realizar esta operação, pois o código é nulo!."),
+    ERR0028("OPERATION_NOT_ALLOWED", "Não é possível realizar esta operação, pois tente novamente mais tarde!.");
 
     private final String code;
     private final String message;

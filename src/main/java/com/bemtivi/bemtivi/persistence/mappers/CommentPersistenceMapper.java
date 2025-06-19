@@ -14,6 +14,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,7 @@ public interface CommentPersistenceMapper {
     default PageResponse<Comment> mapToPageResponseDomain(Page<CommentEntity> pageResponse) {
         int previousPage = pageResponse.hasPrevious() ? pageResponse.getNumber() - 1 : pageResponse.getNumber();
         int nextPage = pageResponse.hasNext() ? pageResponse.getNumber() + 1 : pageResponse.getNumber();
-        Set<Comment> appointments = pageResponse.getContent().stream().map(this::mapToDomain).collect(Collectors.toSet());
+        Set<Comment> appointments = new LinkedHashSet<>(pageResponse.getContent().stream().map(this::mapToDomain).toList());
         return PageResponse.<Comment>builder()
                 .pageSize(pageResponse.getNumberOfElements())
                 .totalElements(pageResponse.getTotalElements())

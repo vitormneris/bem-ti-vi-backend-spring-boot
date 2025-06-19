@@ -65,10 +65,10 @@ public class AdministratorResource {
     }
 
     @PatchMapping(value = "/{id}/solicitartrocaemail")
-    public ResponseEntity<Void> sendRequestEmail(
+    public ResponseEntity<Void> sendRequestChangeEmail(
             @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
     ) {
-        administratorBusiness.sendRequestEmail(id, user.email());
+        administratorBusiness.sendRequestChangeEmail(id, user.email());
         return ResponseEntity.ok().build();
     }
 
@@ -106,7 +106,7 @@ public class AdministratorResource {
 
     @DeleteMapping(value = "/{id}/deletar")
     public ResponseEntity<Void> delete(
-            @PathVariable(name = "id") String id, @Validated(UserAuthDTO.OnUpdate.class) @RequestBody UserAuthDTO user
+            @PathVariable(name = "id") String id, @RequestBody UserAuthDTO user
     ) {
         administratorBusiness.delete(id, user.password());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

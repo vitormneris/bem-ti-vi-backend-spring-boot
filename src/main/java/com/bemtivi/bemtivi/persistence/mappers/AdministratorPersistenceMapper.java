@@ -21,8 +21,8 @@ public interface AdministratorPersistenceMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "email", target = "email")
-    @Mapping(source = "role", target = "role")
-    @Mapping(source = "password", target = "password")
+    @Mapping(source = "role", target = "role", ignore = true)
+    @Mapping(source = "password", target = "password", ignore = true)
     @Mapping(source = "activationStatus", target = "activationStatus")
     Administrator mapToDomain(AdministratorEntity AdministratorEntity);
     @Mapping(source = "id", target = "id")

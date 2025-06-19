@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public interface CategoryPersistenceMapper {
     default PageResponse<Category> mapToPageResponseDomain(Page<CategoryEntity> pageResponse) {
         int previousPage = pageResponse.hasPrevious() ? pageResponse.getNumber() - 1 : pageResponse.getNumber();
         int nextPage = pageResponse.hasNext() ? pageResponse.getNumber() + 1 : pageResponse.getNumber();
-        Set<Category> categories = pageResponse.getContent().stream().map(this::mapToDomain).collect(Collectors.toSet());
+        Set<Category> categories = new LinkedHashSet<>(pageResponse.getContent().stream().map(this::mapToDomain).toList());
         return PageResponse.<Category>builder()
                 .pageSize(pageResponse.getNumberOfElements())
                 .totalElements(pageResponse.getTotalElements())

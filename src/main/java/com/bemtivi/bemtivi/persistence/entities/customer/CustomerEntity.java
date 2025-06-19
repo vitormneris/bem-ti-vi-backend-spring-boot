@@ -55,8 +55,12 @@ public class CustomerEntity {
     private Set<AppointmentEntity> appointments;
     @Column(name = "codigo_email")
     private String codeForEmail;
+    @Column(name = "email_pretendido")
+    private String emailIntended;
     @Column(name = "codigo_senha")
     private String codeForPassword;
+    @Column(name = "senha_pretendida")
+    private String codeIntended;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

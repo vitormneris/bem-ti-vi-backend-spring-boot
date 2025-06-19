@@ -7,13 +7,10 @@ import com.bemtivi.bemtivi.application.domain.email.Email;
 import com.bemtivi.bemtivi.application.domain.user.administrator.Administrator;
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.controllers.in.administrator.dto.PasswordsDTO;
-import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
-import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
+import com.bemtivi.bemtivi.exceptions.*;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
 import org.springframework.dao.DataIntegrityViolationException;
-import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
-import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.administrator.AdministratorEntity;
 import com.bemtivi.bemtivi.persistence.mappers.AdministratorPersistenceMapper;
@@ -106,35 +103,46 @@ public class AdministratorBusiness {
     }
 
 
-    public void sendRequestEmail(String id, String newEmail) {
+    public void sendRequestChangeEmail(String id, String newEmail) {
         AdministratorEntity administrator = checkIfTheIdIsValidAndReturnAdministrator(id);
+
         checkIfTheEmailAlreadyExists(newEmail);
         String code = generateRandomCode();
 
         Email email = new Email();
         email.setTo(newEmail);
         email.setSubject("Confirmação de alteração de e-mail");
-        email.setContent("Olá,\n\n" +
-                "Recebemos uma solicitação para alterar o e-mail da sua conta.\n\n" +
-                "Para confirmar essa alteração, utilize o seguinte código de verificação:\n\n" +
-                "Código: " + code + "\n\n" +
-                "Se você não fez essa solicitação, por favor ignore este e-mail ou entre em contato com o nosso suporte.\n\n" +
-                "Atenciosamente,\nEquipe Mister Gold");
+        email.setContent(
+                "Olá,\n\n" +
+                        "Recebemos uma solicitação para alterar o e-mail da sua conta.\n\n" +
+                        "Para confirmar essa alteração, utilize o seguinte código de verificação:\n\n" +
+                        "Código: " + code + "\n\n" +
+                        "Se você não fez essa solicitação, por favor ignore este e-mail ou entre em contato com o nosso suporte.\n\n" +
+                        "Atenciosamente,\nEquipe Mister Gold"
+        );
         emailBusiness.sendEmail(email);
 
-        administrator.setCode(code + "&" + newEmail);
+        administrator.setCode(code);
+        administrator.setEmailIntended(newEmail);
         administratorRepository.save(administrator);
     }
 
     public void updateEmail(String id, String code) {
+        checkIfTheCodeIsValid(code);
+
         AdministratorEntity administrator = checkIfTheIdIsValidAndReturnAdministrator(id);
-        String codeSaved = administrator.getCode().split("&")[0];
-        String emailSaved = administrator.getCode().split("&")[1];
-        checkIfTheEmailAlreadyExists(emailSaved);
+
+        String codeSaved = administrator.getCode();
+        String emailIntended = administrator.getEmailIntended();
+        checkIfCodeAndEmailOrPasswordIsValid(codeSaved, emailIntended);
+
+        checkIfTheEmailAlreadyExists(emailIntended);
 
         administrator.setCode(null);
+        administrator.setEmailIntended(null);
         if (codeSaved.equals(code)) {
-            administrator.setEmail(emailSaved);
+            administrator.setEmail(emailIntended);
+            administrator.setIsEmailActive(true);
             administratorRepository.save(administrator);
         } else {
             administratorRepository.save(administrator);
@@ -144,9 +152,15 @@ public class AdministratorBusiness {
 
     public void sendRequestConfirmationEmail(String id, String newEmail) {
         AdministratorEntity administrator = checkIfTheIdIsValidAndReturnAdministrator(id);
+
+        if (administrator.getIsEmailActive()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0023);
+        }
+
         if (!administrator.getEmail().equals(newEmail)) {
             checkIfTheEmailAlreadyExists(newEmail);
         }
+
         String code = generateRandomCode();
 
         Email email = new Email();
@@ -163,18 +177,31 @@ public class AdministratorBusiness {
         );
         emailBusiness.sendEmail(email);
 
-        administrator.setCode(code + "&" + newEmail);
+        administrator.setCode(code);
+        administrator.setEmailIntended(newEmail);
         administratorRepository.save(administrator);
     }
 
     public void confirmationEmail(String id, String code) {
+        checkIfTheCodeIsValid(code);
+
         AdministratorEntity administrator = checkIfTheIdIsValidAndReturnAdministrator(id);
-        String codeSaved = administrator.getCode().split("&")[0];
-        String emailSaved = administrator.getCode().split("&")[1];
+
+        if (administrator.getIsEmailActive()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0023);
+        }
+
+        String codeSaved = administrator.getCode();
+        String emailSaved = administrator.getEmailIntended();
+
+        checkIfCodeAndEmailOrPasswordIsValid(codeSaved, emailSaved);
+
         if (!administrator.getEmail().equals(emailSaved)) {
             checkIfTheEmailAlreadyExists(emailSaved);
         }
+
         administrator.setCode(null);
+        administrator.setEmailIntended(null);
         if (codeSaved.equals(code)) {
             administrator.setEmail(emailSaved);
             administrator.setIsEmailActive(true);
@@ -212,7 +239,7 @@ public class AdministratorBusiness {
             throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0022);
         }
 
-        if (!encoder.matches(password, administrator.getPassword())) {
+        if (password == null || !encoder.matches(password, administrator.getPassword())) {
             throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0019);
         }
 
@@ -220,12 +247,18 @@ public class AdministratorBusiness {
     }
 
     private AdministratorEntity checkIfTheIdIsValidAndReturnAdministrator(String id) {
+        if (id == null) {
+            throw new InvalidArgumentException(RuntimeErrorEnum.ERR0026);
+        }
         return administratorRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0010)
         );
     }
 
     private void checkIfTheEmailAlreadyExists(String email) {
+        if (email == null) {
+            throw new InvalidArgumentException(RuntimeErrorEnum.ERR0025);
+        }
         customerRepository.findByUsername(email).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
@@ -233,6 +266,18 @@ public class AdministratorBusiness {
         administratorRepository.findByUsername(email).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
+    }
+
+    private void checkIfTheCodeIsValid(String code) {
+        if (code == null) {
+            throw new InvalidArgumentException(RuntimeErrorEnum.ERR0027);
+        }
+    }
+
+    private void checkIfCodeAndEmailOrPasswordIsValid(String code, String emailOrPassword) {
+        if (code == null || emailOrPassword == null) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0028);
+        }
     }
 
     private String generateRandomCode() {

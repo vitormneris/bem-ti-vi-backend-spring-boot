@@ -22,6 +22,7 @@ import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,8 @@ public interface CustomerPersistenceMapper {
     @Mapping(target = "pets", source = "pets", qualifiedByName = "mapToPetsDomain")
     @Mapping(target = "orders", source = "orders", qualifiedByName = "mapToOrdersDomain")
     @Mapping(target = "appointments", source = "appointments", qualifiedByName = "mapToServicesDomain")
+    @Mapping(source = "role", target = "role", ignore = true)
+    @Mapping(source = "password", target = "password", ignore = true)
     Customer mapToDomain(CustomerEntity customerEntity);
 
     @Mapping(source = "id", target = "id")
@@ -86,7 +89,7 @@ public interface CustomerPersistenceMapper {
     default PageResponse<Customer> mapToPageResponseDomain(Page<CustomerEntity> pageResponse) {
         int previousPage = pageResponse.hasPrevious() ? pageResponse.getNumber() - 1 : pageResponse.getNumber();
         int nextPage = pageResponse.hasNext() ? pageResponse.getNumber() + 1 : pageResponse.getNumber();
-        Set<Customer> customers = pageResponse.getContent().stream().map(this::mapToDomain).collect(Collectors.toSet());
+        Set<Customer> customers = new LinkedHashSet<>(pageResponse.getContent().stream().map(this::mapToDomain).toList());
         return PageResponse.<Customer>builder()
                 .pageSize(pageResponse.getNumberOfElements())
                 .totalElements(pageResponse.getTotalElements())

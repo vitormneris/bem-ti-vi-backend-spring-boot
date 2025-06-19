@@ -11,10 +11,7 @@ import com.bemtivi.bemtivi.application.domain.user.customer.Telephone;
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
 import com.bemtivi.bemtivi.controllers.in.administrator.dto.PasswordsDTO;
-import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
-import com.bemtivi.bemtivi.exceptions.DuplicateResourceException;
-import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
-import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
+import com.bemtivi.bemtivi.exceptions.*;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.administrator.AdministratorEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.AddressEntity;
@@ -138,7 +135,6 @@ public class CustomerBusiness {
     public void sendRequestRetrievePassword(String emailAddress) {
         CustomerEntity customer = checkIfTheEmailIsValidAndReturnCustomer(emailAddress);
         String code = generateRandomCode();
-
         Email email = new Email();
         email.setTo(emailAddress);
         email.setSubject("Recuperação de senha");
@@ -151,19 +147,23 @@ public class CustomerBusiness {
                         "Atenciosamente,\nEquipe Mister Gold"
         );
         emailBusiness.sendEmail(email);
-
-        customer.setCodeForPassword(code + "&" + emailAddress);
+        customer.setCodeForPassword(code);
         customerRepository.save(customer);
     }
 
-    public void retrievePassword(String id, String code) {
-        CustomerEntity customer = checkIfTheIdIsValidAndReturnCustomer(id);
-        String codeSaved = customer.getCodeForPassword().split("&")[0];
-        String password = customer.getCodeForPassword().split("&")[1];
+    public void retrievePassword(String email, String code, String newPassword) {
+        CustomerEntity customer = checkIfTheEmailIsValidAndReturnCustomer(email);
+        String codeSaved = customer.getCodeForPassword();
+        checkIfCodeAndEmailOrPasswordIsValid(codeSaved, "");
 
+        if (newPassword == null) {
+            throw new InvalidArgumentException(RuntimeErrorEnum.ERR0024);
+        }
+
+        checkIfTheCodeIsValid(code);
         customer.setCodeForPassword(null);
         if (codeSaved.equals(code)) {
-            customer.setPassword(new BCryptPasswordEncoder().encode(password));
+            customer.setPassword(new BCryptPasswordEncoder().encode(newPassword));
             customerRepository.save(customer);
         } else {
             customerRepository.save(customer);
@@ -171,8 +171,9 @@ public class CustomerBusiness {
         }
     }
 
-    public void sendRequestEmail(String id, String newEmail) {
+    public void sendRequestChangeEmail(String id, String newEmail) {
         CustomerEntity customer = checkIfTheIdIsValidAndReturnCustomer(id);
+
         checkIfTheEmailAlreadyExists(newEmail);
         String code = generateRandomCode();
 
@@ -189,19 +190,27 @@ public class CustomerBusiness {
         );
         emailBusiness.sendEmail(email);
 
-        customer.setCodeForEmail(code + "&" + newEmail);
+        customer.setCodeForEmail(code);
+        customer.setEmailIntended(newEmail);
         customerRepository.save(customer);
     }
 
-    public void updateEmail(String id, String code, String newEmail) {
+    public void updateEmail(String id, String code) {
+        checkIfTheCodeIsValid(code);
+
         CustomerEntity customer = checkIfTheIdIsValidAndReturnCustomer(id);
-        String codeSaved = customer.getCodeForEmail().split("&")[0];
-        String emailSaved = customer.getCodeForEmail().split("&")[1];
-        checkIfTheEmailAlreadyExists(emailSaved);
+
+        String codeSaved = customer.getCodeForEmail();
+        String emailIntended = customer.getEmailIntended();
+        checkIfCodeAndEmailOrPasswordIsValid(codeSaved, emailIntended);
+
+        checkIfTheEmailAlreadyExists(emailIntended);
 
         customer.setCodeForEmail(null);
+        customer.setEmailIntended(null);
         if (codeSaved.equals(code)) {
-            customer.setEmail(newEmail);
+            customer.setEmail(emailIntended);
+            customer.setIsEmailActive(true);
             customerRepository.save(customer);
         } else {
             customerRepository.save(customer);
@@ -211,7 +220,15 @@ public class CustomerBusiness {
 
     public void sendRequestConfirmationEmail(String id, String newEmail) {
         CustomerEntity customer = checkIfTheIdIsValidAndReturnCustomer(id);
-        checkIfTheEmailAlreadyExists(newEmail);
+
+        if (customer.getIsEmailActive()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0023);
+        }
+
+        if (!customer.getEmail().equals(newEmail)) {
+            checkIfTheEmailAlreadyExists(newEmail);
+        }
+
         String code = generateRandomCode();
 
         Email email = new Email();
@@ -228,17 +245,30 @@ public class CustomerBusiness {
         );
         emailBusiness.sendEmail(email);
 
-        customer.setCodeForEmail(code + "&" + newEmail);
+        customer.setCodeForEmail(code);
+        customer.setEmailIntended(newEmail);
         customerRepository.save(customer);
     }
 
     public void confirmationEmail(String id, String code) {
+        checkIfTheCodeIsValid(code);
+
         CustomerEntity customer = checkIfTheIdIsValidAndReturnCustomer(id);
-        String codeSaved = customer.getCodeForEmail().split("&")[0];
-        String emailSaved = customer.getCodeForEmail().split("&")[1];
-        checkIfTheEmailAlreadyExists(emailSaved);
+
+        if (customer.getIsEmailActive()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0023);
+        }
+
+        String codeSaved = customer.getCodeForEmail();
+        String emailSaved = customer.getEmailIntended();
+        checkIfCodeAndEmailOrPasswordIsValid(codeSaved, emailSaved);
+
+        if (!customer.getEmail().equals(emailSaved)) {
+            checkIfTheEmailAlreadyExists(emailSaved);
+        }
 
         customer.setCodeForEmail(null);
+        customer.setEmailIntended(null);
         if (codeSaved.equals(code)) {
             customer.setEmail(emailSaved);
             customer.setIsEmailActive(true);
@@ -251,9 +281,6 @@ public class CustomerBusiness {
 
     public void deactivate(String id) {
         CustomerEntity customer = checkIfTheIdIsValidAndReturnCustomer(id);
-
-
-
         customer.getActivationStatus().setIsActive(false);
         customer.getActivationStatus().setDeactivationDate(Instant.now());
         customerRepository.save(customer);
@@ -263,7 +290,7 @@ public class CustomerBusiness {
         CustomerEntity customer = checkIfTheIdIsValidAndReturnCustomer(id);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        if (!encoder.matches(password, customer.getPassword())) {
+        if (password == null || !encoder.matches(password, customer.getPassword())) {
             throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0019);
         }
 
@@ -271,18 +298,34 @@ public class CustomerBusiness {
     }
 
     private CustomerEntity checkIfTheIdIsValidAndReturnCustomer(String id) {
+        if (id == null) {
+            throw new InvalidArgumentException(RuntimeErrorEnum.ERR0026);
+        }
         return customerRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
         );
     }
 
     private CustomerEntity checkIfTheEmailIsValidAndReturnCustomer(String email) {
+        if (email == null) {
+            throw new InvalidArgumentException(RuntimeErrorEnum.ERR0025);
+        }
         return customerRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
         );
     }
 
+    private void checkIfTheCodeIsValid(String code) {
+        if (code == null) {
+            throw new InvalidArgumentException(RuntimeErrorEnum.ERR0027);
+        }
+    }
+
     private void checkIfTheEmailAlreadyExists(String email) {
+        if (email == null) {
+            throw new InvalidArgumentException(RuntimeErrorEnum.ERR0025);
+        }
+
         customerRepository.findByUsername(email).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
@@ -290,6 +333,12 @@ public class CustomerBusiness {
         administratorRepository.findByUsername(email).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
+    }
+
+    private void checkIfCodeAndEmailOrPasswordIsValid(String code, String emailOrPassword) {
+        if (code == null || emailOrPassword == null) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0028);
+        }
     }
 
     private String generateRandomCode() {
