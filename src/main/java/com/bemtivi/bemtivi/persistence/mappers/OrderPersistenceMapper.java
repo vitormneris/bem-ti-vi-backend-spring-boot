@@ -22,8 +22,10 @@ import java.util.stream.Collectors;
 public interface OrderPersistenceMapper {
     OrderEntity mapToEntity(Order order);
 
+
     @Mapping(target = "customer", source = "customer", qualifiedByName = "mapToCustomerDomain")
     @Mapping(target = "orderItems", source = "orderItems", qualifiedByName = "mapToOrderItemDomain")
+    @Mapping(target = "pix", source = "pix")
     Order mapToDomain(OrderEntity order);
 
     @Named("mapToOrderItemDomain")

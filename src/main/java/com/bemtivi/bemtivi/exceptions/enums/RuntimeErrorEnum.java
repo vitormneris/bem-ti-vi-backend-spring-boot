@@ -33,7 +33,8 @@ public enum RuntimeErrorEnum {
     ERR0025("EMAIL_IS_NULL", "Não é possível realizar esta operação, pois o e-mail é nulo!."),
     ERR0026("ID_IS_NULL", "Não é possível realizar esta operação, pois o id é nulo!."),
     ERR0027("CODE_IS_NULL", "Não é possível realizar esta operação, pois o código é nulo!."),
-    ERR0028("OPERATION_NOT_ALLOWED", "Não é possível realizar esta operação, pois tente novamente mais tarde!.");
+    ERR0028("OPERATION_NOT_ALLOWED", "Não é possível realizar esta operação, pois tente novamente mais tarde!."),
+    ERR0029("PAYMENT_ERROR", "Não é possível realizar a operação de pagamento, tente novamente mais tarde!.");
 
     private final String code;
     private final String message;

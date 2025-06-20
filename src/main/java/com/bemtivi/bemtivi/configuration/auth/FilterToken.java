@@ -63,7 +63,7 @@ public class FilterToken extends OncePerRequestFilter {
                }
            }
            filterChain.doFilter(request, response);
-       } catch (TokenExpiredException | JWTDecodeException exception) {
+       } catch (BadCredentialsException | TokenExpiredException | JWTDecodeException exception) {
            RuntimeErrorEnum runtimeErrorEnum = RuntimeErrorEnum.ERR0015;
            HttpStatus status = HttpStatus.FORBIDDEN;
 

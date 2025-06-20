@@ -3,6 +3,7 @@ package com.bemtivi.bemtivi.persistence.entities.appointment;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,9 +36,13 @@ public class AppointmentEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "status_de_pagamento", nullable = false)
     private PaymentStatusEnum paymentStatus;
+    @Column(name = "pagamento_id", nullable = false)
+    private Long paymentId;
     @ManyToOne
     @JoinColumn(name = "servico_id", referencedColumnName = "servico_id")
     private ServiceEntity service;
+    @Embedded
+    private PixEntity pix;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

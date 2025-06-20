@@ -57,16 +57,6 @@ public class OrderResource {
         );
     }
 
-    @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<OrderDTO> update(
-            @PathVariable(name = "id") String id,
-            @Validated(OrderDTO.OnUpdate.class) @RequestBody OrderDTO orderDTO
-    ) {
-        return ResponseEntity.ok().body(
-                mapper.mapToDTO(orderManager.update(id, mapper.mapToDomain(orderDTO)))
-        );
-    }
-
     @DeleteMapping(value = "/{id}/desativar")
     public ResponseEntity<Void> deactivate(@PathVariable(name = "id") String id) {
         orderManager.deactivate(id);

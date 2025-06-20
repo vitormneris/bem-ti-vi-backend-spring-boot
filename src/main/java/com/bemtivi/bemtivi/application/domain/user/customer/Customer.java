@@ -14,6 +14,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 public class Customer extends User {
+    private String cpf;
     private LocalDate birthDate;
     private Telephone telephones;
     private Address address;

@@ -171,6 +171,38 @@ public class ExceptionHandlerResource {
 
         return ResponseEntity.status(httpStatus).body(errorMessageDTO);
     }
+
+    @ExceptionHandler(InternalErrorException.class)
+    public ResponseEntity<ErrorMessageDTO> internalError(InternalErrorException exception, HttpServletRequest request) {
+        RuntimeErrorEnum runtimeErrorEnum = exception.getError();
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        ErrorMessageDTO errorMessageDTO = ErrorMessageDTO.builder()
+                .code(runtimeErrorEnum.getCode())
+                .status(httpStatus.value())
+                .message(runtimeErrorEnum.getMessage())
+                .timestamp(Instant.now())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(httpStatus).body(errorMessageDTO);
+    }
+
+    @ExceptionHandler(InvalidArgumentException.class)
+    public ResponseEntity<ErrorMessageDTO> invalidArgument(InvalidArgumentException exception, HttpServletRequest request) {
+        RuntimeErrorEnum runtimeErrorEnum = exception.getError();
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+
+        ErrorMessageDTO errorMessageDTO = ErrorMessageDTO.builder()
+                .code(runtimeErrorEnum.getCode())
+                .status(httpStatus.value())
+                .message(runtimeErrorEnum.getMessage())
+                .timestamp(Instant.now())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(httpStatus).body(errorMessageDTO);
+    }
 }
 
 

@@ -45,7 +45,17 @@ public class SecurityConfiguration {
 
                         .requestMatchers(HttpMethod.DELETE, "/clientes/*/deletar", "/clientes/*/desativar").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.PUT, "/clientes/*/atualizar").hasRole("CLIENT")
-                        .requestMatchers(HttpMethod.PATCH, "/clientes/*/atualizarsenha", "/clientes/*/solicitartrocaemail", "/clientes/*/atualizaremail/*").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/clientes/*/atualizarsenha",
+                                "/clientes/*/solicitartrocaemail",
+                                "/clientes/*/atualizaremail/*",
+                                "/clientes/*/solicitarconfirmacaoemail",
+                                "/clientes/*/confirmacaoemail/*"
+                                ).hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/clientes/*/solicitarrecuperacaosenha",
+                                "/clientes/*/recuperarsenha/*"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/clientes/inserir").permitAll()
                         .requestMatchers(HttpMethod.GET, "/clientes/*/buscar", "/clientes/paginacao").hasRole("CLIENT")
 

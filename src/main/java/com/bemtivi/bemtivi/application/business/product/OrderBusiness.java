@@ -1,9 +1,11 @@
 package com.bemtivi.bemtivi.application.business.product;
 
 import com.bemtivi.bemtivi.application.business.EmailBusiness;
+import com.bemtivi.bemtivi.application.business.payment.PaymentBusiness;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.email.Email;
+import com.bemtivi.bemtivi.application.domain.payment.PaymentResponse;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.application.domain.order.Order;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
@@ -13,6 +15,7 @@ import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderItemEntity;
+import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
 import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
 import com.bemtivi.bemtivi.persistence.mappers.OrderPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
@@ -37,6 +40,7 @@ public class OrderBusiness {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final CustomerRepository customerRepository;
+    private final PaymentBusiness paymentBusiness;
     private final EmailBusiness emailBusiness;
     private final OrderPersistenceMapper mapper;
 
@@ -90,10 +94,14 @@ public class OrderBusiness {
             orderItem.setPrice(price);
         }
 
-        log.warn(orderEntity.toString());
-
         orderEntity.setCustomer(customer);
         orderEntity.setTotalPrice(totalPrice);
+
+        String purchaseInformation = generateContent(orderEntity);
+
+        PaymentResponse paymentResponse = paymentBusiness.processPayment(customer, totalPrice, purchaseInformation);
+        orderEntity.setPaymentId(paymentResponse.getId());
+        orderEntity.setPix(new PixEntity(paymentResponse.getPix().getQrCode(), paymentResponse.getPix().getQrCodeBase64()));
 
         try {
             saved = orderRepository.save(orderEntity);
@@ -104,25 +112,11 @@ public class OrderBusiness {
         Email email = Email.builder()
                 .to(customer.getEmail())
                 .subject("Olá, " + customer.getName()  + ", tudo bem? seu pedido acabou de ser realizado!")
-                .content(generateContent(orderEntity))
+                .content(purchaseInformation)
                 .build();
 
         emailBusiness.sendEmail(email);
         return mapper.mapToDomain(saved);
-    }
-
-    public Order update(String id, Order orderNew) {
-        OrderEntity orderOld = orderRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0008)
-        );
-        orderOld.setPaymentStatus(orderNew.getPaymentStatus() == null ? orderOld.getPaymentStatus() : orderNew.getPaymentStatus());
-        OrderEntity updated;
-        try {
-            updated = orderRepository.save(orderOld);
-        } catch (DataIntegrityViolationException exception) {
-            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
-        }
-        return mapper.mapToDomain(updated);
     }
 
     public void deactivate(String id) {

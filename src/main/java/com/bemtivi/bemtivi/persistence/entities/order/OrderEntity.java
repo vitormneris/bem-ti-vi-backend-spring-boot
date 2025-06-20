@@ -1,8 +1,12 @@
 package com.bemtivi.bemtivi.persistence.entities.order;
 
+import com.bemtivi.bemtivi.application.domain.payment.PaymentResponse;
+import com.bemtivi.bemtivi.application.domain.payment.Pix;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
+import com.mercadopago.resources.payment.Payment;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,9 +39,13 @@ public class OrderEntity {
     private PaymentStatusEnum paymentStatus;
     @Column(name = "preco_total", nullable = false)
     private BigDecimal totalPrice;
+    @Column(name = "pagamento_id", nullable = false)
+    private Long paymentId;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "pedido_id")
     private List<OrderItemEntity> orderItems;
+    @Embedded
+    private PixEntity pix;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

@@ -13,8 +13,10 @@ public record OrderDTO(
         Instant moment,
         PaymentStatusEnum paymentStatus,
         BigDecimal totalPrice,
+        Long paymentId,
         CustomerDTO customer,
         List<OrderItemDTO> orderItems,
+        PixDTO pix,
         ActivationStatusDTO activationStatus
 ) {
     public interface OnCreate {}

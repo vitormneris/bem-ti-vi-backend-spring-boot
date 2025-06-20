@@ -30,6 +30,8 @@ public class CustomerEntity {
     private String name;
     @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false, unique = true)
+    private String cpf;
     @Column(name="email_esta_ativo" , nullable = false)
     private Boolean isEmailActive;
     @Enumerated(value = EnumType.STRING)

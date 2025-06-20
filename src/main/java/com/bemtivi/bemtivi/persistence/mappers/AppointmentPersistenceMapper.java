@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public interface AppointmentPersistenceMapper {
     AppointmentEntity mapToEntity(Appointment appointment);
 
+    @Mapping(target = "pix", source = "pix")
     @Mapping(target = "customer", source = "customer", qualifiedByName = "mapToCustomerDomain")
     Appointment mapToDomain(AppointmentEntity appointment);
 

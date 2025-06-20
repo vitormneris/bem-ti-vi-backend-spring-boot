@@ -6,6 +6,7 @@ import com.bemtivi.bemtivi.controllers.in.appointment.dto.AppointmentDTO;
 import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.pet.dto.PetDTO;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -17,8 +18,11 @@ public record CustomerDTO(
         @NotNull(groups = {OnCreate.class}, message = "O campo nome deve ser preenchido.")
         String name,
         @Email(groups = {OnCreate.class, OnUpdate.class}, message = "O e-mail está em formato inválido")
-        @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "O campo e-mail deve ser preenchido.")
+        @NotBlank(groups = {OnCreate.class}, message = "O campo e-mail deve ser preenchido.")
         String email,
+        @CPF(groups = {OnCreate.class, OnUpdate.class}, message = "O CPF está em formato inválido")
+        @NotBlank(groups = {OnCreate.class}, message = "O campo cpf deve ser preenchido.")
+        String cpf,
         Boolean isEmailActive,
         UserRoleEnum role,
         @Size(groups = {OnCreate.class, OnUpdate.class}, min = 8, message = "A senha está muito curta.")

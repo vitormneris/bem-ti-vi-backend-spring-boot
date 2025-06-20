@@ -1,10 +1,12 @@
 package com.bemtivi.bemtivi.application.business.service;
 
 import com.bemtivi.bemtivi.application.business.EmailBusiness;
+import com.bemtivi.bemtivi.application.business.payment.PaymentBusiness;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
 import com.bemtivi.bemtivi.application.domain.email.Email;
+import com.bemtivi.bemtivi.application.domain.payment.PaymentResponse;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.InvalidArgumentException;
@@ -13,6 +15,7 @@ import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import com.bemtivi.bemtivi.persistence.mappers.AppointmentPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.*;
@@ -34,6 +37,7 @@ public class AppointmentBusiness {
     private final ServiceRepository serviceRepository;
     private final CustomerRepository customerRepository;
     private final EmailBusiness emailBusiness;
+    private final PaymentBusiness paymentBusiness;
 
     public PageResponse<Appointment> paginate(Boolean isActive, Integer pageSize, Integer page, LocalDate momentStart, LocalDate momentEnd) {
         return mapper.mapToPageResponseDomain(
@@ -73,9 +77,15 @@ public class AppointmentBusiness {
         }
 
         appointmentEntity.setService(serviceRepository.findById(appointment.getService().getId()).orElseThrow(
-                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0003)
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0005)
         ));
         appointmentEntity.setPrice(appointmentEntity.getService().getPrice());
+
+        String purchaseInformation = generateContent(appointmentEntity.getService(), appointmentEntity);
+
+        PaymentResponse paymentResponse = paymentBusiness.processPayment(customer, appointmentEntity.getPrice(), purchaseInformation);
+        appointmentEntity.setPaymentId(paymentResponse.getId());
+        appointmentEntity.setPix(new PixEntity(paymentResponse.getPix().getQrCode(), paymentResponse.getPix().getQrCodeBase64()));
 
         try {
             saved = appointmentRepository.save(appointmentEntity);
@@ -86,7 +96,7 @@ public class AppointmentBusiness {
         Email email = Email.builder()
                 .to(customer.getEmail())
                 .subject("Olá, " + customer.getName()  + ", tudo bem? seu agendamento acabou de ser realizado!")
-                .content(generateContent(appointmentEntity.getService(), appointmentEntity))
+                .content(purchaseInformation)
                 .build();
 
         emailBusiness.sendEmail(email);
@@ -97,7 +107,7 @@ public class AppointmentBusiness {
         AppointmentEntity appointmentOld = appointmentRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0009)
         );
-        appointmentOld.setPaymentStatus(appointmentNew.getPaymentStatus() == null ? appointmentOld.getPaymentStatus() : appointmentNew.getPaymentStatus());
+        appointmentOld.setDateTime(appointmentNew.getDateTime() == null ? appointmentOld.getDateTime() : appointmentNew.getDateTime());
         AppointmentEntity updated;
         try {
             updated = appointmentRepository.save(appointmentOld);

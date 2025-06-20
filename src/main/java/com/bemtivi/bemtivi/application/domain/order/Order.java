@@ -1,6 +1,7 @@
 package com.bemtivi.bemtivi.application.domain.order;
 
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
+import com.bemtivi.bemtivi.application.domain.payment.Pix;
 import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import lombok.*;
@@ -23,7 +24,9 @@ public class Order {
     private Instant moment;
     private Customer customer;
     private BigDecimal totalPrice;
+    private Long paymentId;
     private PaymentStatusEnum paymentStatus;
     private List<OrderItem> orderItems;
+    private Pix pix;
     private ActivationStatus activationStatus;
 }
