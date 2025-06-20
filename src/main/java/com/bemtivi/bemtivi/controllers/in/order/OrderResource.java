@@ -4,8 +4,10 @@ import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.order.mappers.OrderWebMapper;
 import com.bemtivi.bemtivi.application.business.product.OrderBusiness;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,7 @@ public class OrderResource {
     private final OrderWebMapper mapper;
 
     @GetMapping(value = "/paginacao")
-    public ResponseEntity<PageResponseDTO<OrderDTO>> paginate(
+    public ResponseEntity<PageResponseDTO<OrderDTO>> findByPagination(
             @RequestParam(name = "isActive", defaultValue = "true", required = false)
             Boolean isActive,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false)
@@ -38,7 +40,28 @@ public class OrderResource {
             @RequestParam(name = "momentEnd", required = false)
             LocalDate momentEnd
     ) {
-        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(orderManager.paginate(isActive, pageSize, page, momentStart, momentEnd)));
+        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(orderManager.findByPagination(isActive, pageSize, page, momentStart, momentEnd)));
+    }
+
+    @GetMapping(value = "/paginacaoporcliente")
+    public ResponseEntity<PageResponseDTO<OrderDTO>> paginate(
+            @RequestParam(name = "isActive", defaultValue = "true", required = false)
+            Boolean isActive,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false)
+            @Min(value = 1, message = "O número mínimo de elementos da página é 1")
+            @Max(value = 30, message = "O número máximo de elementos da página é 30")
+            Integer pageSize,
+            @RequestParam(name = "page", defaultValue = "0", required = false)
+            Integer page,
+            @Valid @NotNull(message = "O ID do cliente não pode ser nulo")
+            @RequestParam(name = "customerId")
+            String customerId,
+            @RequestParam(name = "paymentStatus", defaultValue = "", required = false)
+            String paymentStatus
+    ) {
+        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(
+                orderManager.findByActivationStatusIsActiveAndCustomerIdAndPaymentStatus(isActive, customerId, paymentStatus, pageSize, page)
+        ));
     }
 
     @GetMapping(value = "/{id}/buscar")

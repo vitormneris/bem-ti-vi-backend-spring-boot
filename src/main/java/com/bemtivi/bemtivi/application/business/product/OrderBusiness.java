@@ -44,9 +44,15 @@ public class OrderBusiness {
     private final EmailBusiness emailBusiness;
     private final OrderPersistenceMapper mapper;
 
-    public PageResponse<Order> paginate(Boolean isActive, Integer pageSize, Integer page, LocalDate momentStart, LocalDate momentEnd) {
+    public PageResponse<Order> findByPagination(Boolean isActive, Integer pageSize, Integer page, LocalDate momentStart, LocalDate momentEnd) {
         return mapper.mapToPageResponseDomain(
                 orderRepository.findByPagination(isActive, PageRequest.of(page, pageSize), momentStart, momentEnd)
+        );
+    }
+
+    public PageResponse<Order> findByActivationStatusIsActiveAndCustomerIdAndPaymentStatus(Boolean isActive, String customerId, String paymentStatus, Integer pageSize, Integer page) {
+        return mapper.mapToPageResponseDomain(
+                orderRepository.findOrders(isActive, customerId,  paymentStatus == null ? "" : paymentStatus, PageRequest.of(page, pageSize))
         );
     }
 

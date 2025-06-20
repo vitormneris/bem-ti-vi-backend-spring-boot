@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PetRepository extends JpaRepository<PetEntity, String> {
     Page<PetEntity> findByActivationStatus_IsActiveAndNameContainingIgnoreCase(Boolean isActive, String name, Pageable pageable);
+    Page<PetEntity> findByActivationStatus_IsActiveAndOwner_Id(Boolean isActive, String customerId, Pageable pageable);
 }

@@ -1,6 +1,7 @@
 package com.bemtivi.bemtivi.controllers.in.pet;
 
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
+import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.pet.dto.PetDTO;
 import com.bemtivi.bemtivi.controllers.in.pet.mappers.PetWebMapper;
 import com.bemtivi.bemtivi.application.business.service.PetBusiness;
@@ -23,7 +24,7 @@ public class PetResource {
     private final PetWebMapper mapper;
 
     @GetMapping(value = "/paginacao")
-    public ResponseEntity<PageResponseDTO<PetDTO>> paginate(
+    public ResponseEntity<PageResponseDTO<PetDTO>> findByPagination(
             @RequestParam(name = "isActive", defaultValue = "true", required = false)
             Boolean isActive,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false)
@@ -36,8 +37,27 @@ public class PetResource {
             String name
     ) {
         return ResponseEntity.ok().body(
-                mapper.mapToPageResponseDto(petManager.paginate(isActive, pageSize, page, name))
+                mapper.mapToPageResponseDto(petManager.findByPagination(isActive, pageSize, page, name))
         );
+    }
+
+    @GetMapping(value = "/paginacaoporcliente")
+    public ResponseEntity<PageResponseDTO<PetDTO>> findByActivationStatusIsActiveAndCustomerId(
+            @RequestParam(name = "isActive", defaultValue = "true", required = false)
+            Boolean isActive,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false)
+            @Min(value = 1, message = "O número mínimo de elementos da página é 1")
+            @Max(value = 30, message = "O número máximo de elementos da página é 30")
+            Integer pageSize,
+            @RequestParam(name = "page", defaultValue = "0", required = false)
+            Integer page,
+            @Valid @NotNull(message = "O ID do cliente não pode ser nulo")
+            @RequestParam(name = "customerId")
+            String customerId
+    ) {
+        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(
+                petManager.findByActivationStatus_IsActiveAndOwner_Id(isActive, customerId, pageSize, page)
+        ));
     }
 
     @GetMapping(value = "/{id}/buscar")

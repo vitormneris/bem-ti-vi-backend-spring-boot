@@ -6,6 +6,7 @@ import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
 import com.bemtivi.bemtivi.application.domain.email.Email;
+import com.bemtivi.bemtivi.application.domain.order.Order;
 import com.bemtivi.bemtivi.application.domain.payment.PaymentResponse;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
@@ -39,9 +40,15 @@ public class AppointmentBusiness {
     private final EmailBusiness emailBusiness;
     private final PaymentBusiness paymentBusiness;
 
-    public PageResponse<Appointment> paginate(Boolean isActive, Integer pageSize, Integer page, LocalDate momentStart, LocalDate momentEnd) {
+    public PageResponse<Appointment> findByPagination(Boolean isActive, Integer pageSize, Integer page, LocalDate momentStart, LocalDate momentEnd) {
         return mapper.mapToPageResponseDomain(
                 appointmentRepository.findByPagination(isActive, PageRequest.of(page, pageSize), momentStart, momentEnd)
+        );
+    }
+
+    public PageResponse<Appointment> findByActivationStatusIsActiveAndCustomerIdAndPaymentStatus(Boolean isActive, String customerId, String paymentStatus, Integer pageSize, Integer page) {
+        return mapper.mapToPageResponseDomain(
+                appointmentRepository.findAppointments(isActive, customerId,  paymentStatus == null ? "" : paymentStatus, PageRequest.of(page, pageSize))
         );
     }
 

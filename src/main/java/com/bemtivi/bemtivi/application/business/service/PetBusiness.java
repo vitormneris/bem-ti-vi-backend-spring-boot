@@ -3,6 +3,7 @@ package com.bemtivi.bemtivi.application.business.service;
 import com.bemtivi.bemtivi.application.business.UploadBusiness;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
+import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
 import com.bemtivi.bemtivi.application.domain.pet.Pet;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
@@ -27,9 +28,15 @@ public class PetBusiness {
     private final PetPersistenceMapper mapper;
     private final UploadBusiness uploadManager;
 
-    public PageResponse<Pet> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
+    public PageResponse<Pet> findByPagination(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
                 petRepository.findByActivationStatus_IsActiveAndNameContainingIgnoreCase(isActive, name == null ? "" : name, PageRequest.of(page, pageSize))
+        );
+    }
+
+    public PageResponse<Pet> findByActivationStatus_IsActiveAndOwner_Id(Boolean isActive, String customerId, Integer pageSize, Integer page) {
+        return mapper.mapToPageResponseDomain(
+                petRepository.findByActivationStatus_IsActiveAndOwner_Id(isActive, customerId, PageRequest.of(page, pageSize))
         );
     }
 

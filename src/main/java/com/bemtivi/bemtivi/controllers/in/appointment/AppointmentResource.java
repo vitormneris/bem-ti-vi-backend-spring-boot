@@ -4,8 +4,11 @@ import com.bemtivi.bemtivi.application.business.service.AppointmentBusiness;
 import com.bemtivi.bemtivi.controllers.in.appointment.dto.AppointmentDTO;
 import com.bemtivi.bemtivi.controllers.in.appointment.mappers.AppointmentWebMapper;
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
+import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +39,28 @@ public class AppointmentResource {
             @RequestParam(name = "momentEnd", required = false)
             LocalDate momentEnd
     ) {
-        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(appointmentManager.paginate(isActive, pageSize, page, momentStart, momentEnd)));
+        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(appointmentManager.findByPagination(isActive, pageSize, page, momentStart, momentEnd)));
+    }
+
+    @GetMapping(value = "/paginacaoporcliente")
+    public ResponseEntity<PageResponseDTO<AppointmentDTO>> paginate(
+            @RequestParam(name = "isActive", defaultValue = "true", required = false)
+            Boolean isActive,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false)
+            @Min(value = 1, message = "O número mínimo de elementos da página é 1")
+            @Max(value = 30, message = "O número máximo de elementos da página é 30")
+            Integer pageSize,
+            @RequestParam(name = "page", defaultValue = "0", required = false)
+            Integer page,
+            @Valid @NotNull(message = "O ID do cliente não pode ser nulo")
+            @RequestParam(name = "customerId")
+            String customerId,
+            @RequestParam(name = "paymentStatus", required = false)
+            String paymentStatus
+    ) {
+        return ResponseEntity.ok().body(mapper.mapToPageResponseDto(
+                appointmentManager.findByActivationStatusIsActiveAndCustomerIdAndPaymentStatus(isActive, customerId, paymentStatus, pageSize, page)
+        ));
     }
 
     @GetMapping(value = "/{id}/buscar")

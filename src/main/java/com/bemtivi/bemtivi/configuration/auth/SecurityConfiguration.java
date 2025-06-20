@@ -74,12 +74,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, "/pedidos/*/deletar", "/pedidos/*/desativar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/pedidos/*/atualizar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, "/pedidos/inserir").hasRole("CLIENT")
-                        .requestMatchers(HttpMethod.GET, "/pedidos/paginacao").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/pedidos/paginacao", "/pedidos/paginacaoporcliente").hasRole("CLIENT")
 
                         .requestMatchers(HttpMethod.DELETE, "/agendamentos/*/deletar", "/agendamentos/*/desativar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/agendamentos/*/atualizar").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, "/agendamentos/inserir").hasRole("CLIENT")
-                        .requestMatchers(HttpMethod.GET, "/agendamentos/paginacao").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/agendamentos/paginacao", "/agendamentos/paginacaoporcliente").hasRole("CLIENT")
 
                         .requestMatchers(HttpMethod.DELETE, "/comentarios/*/deletar", "/comentarios/*/desativar").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.PUT, "/comentarios/*/atualizar").hasRole("CLIENT")
@@ -89,7 +89,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, "/pets/*/deletar", "/pets/*/desativar").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.PUT, "/pets/*/atualizar").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.POST, "/pets/inserir").hasRole("CLIENT")
-                        .requestMatchers(HttpMethod.GET, "/pets/paginacao").hasRole("CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/pets/paginacao", "/pets/paginacaoporcliente").hasRole("CLIENT")
 
                         .requestMatchers(HttpMethod.POST, "/autenticacao/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/autenticacao/token/cliente").hasRole("CLIENT")
