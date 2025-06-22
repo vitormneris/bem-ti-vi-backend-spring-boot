@@ -55,7 +55,7 @@ public class CommentResource {
 
     @PostMapping(value = "/inserir")
     public ResponseEntity<CommentDTO> insert(
-            @Validated(ProductDTO.OnCreate.class) @RequestBody CommentDTO commentDTO
+            @Validated(CommentDTO.OnCreate.class) @RequestBody CommentDTO commentDTO
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.mapToDTO(commentBusiness.insert(mapper.mapToDomain(commentDTO)))

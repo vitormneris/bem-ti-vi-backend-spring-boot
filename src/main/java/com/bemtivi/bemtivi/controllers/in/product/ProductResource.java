@@ -4,6 +4,8 @@ import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
 import com.bemtivi.bemtivi.controllers.in.product.mappers.ProductWebMapper;
 import com.bemtivi.bemtivi.application.business.product.ProductBusiness;
+import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
+import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -48,6 +50,9 @@ public class ProductResource {
             @Validated(ProductDTO.OnCreate.class) @RequestPart(value = "product") ProductDTO productDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
+        if (file.isEmpty()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0030);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.mapToDTO(productManager.insert(mapper.mapToDomain(productDTO), file))
         );

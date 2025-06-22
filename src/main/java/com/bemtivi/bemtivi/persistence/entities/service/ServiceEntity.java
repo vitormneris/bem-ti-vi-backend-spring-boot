@@ -32,10 +32,12 @@ public class ServiceEntity {
     private LocalTime estimatedDuration;
     @Column(name = "caminho_da_imagem", nullable = false)
     private String pathImage;
-    @Column(name = "descricao", nullable = false)
+    @Column(name = "descricao", nullable = false, length = 1500)
     private String description;
     @OneToMany(mappedBy = "service", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<CommentEntity> comments;
+    @Column(name = "avaliacao")
+    private Double rate;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

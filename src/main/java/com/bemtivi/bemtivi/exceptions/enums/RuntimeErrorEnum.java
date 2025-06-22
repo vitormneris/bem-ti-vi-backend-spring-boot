@@ -34,7 +34,9 @@ public enum RuntimeErrorEnum {
     ERR0026("ID_IS_NULL", "Não é possível realizar esta operação, pois o id é nulo!."),
     ERR0027("CODE_IS_NULL", "Não é possível realizar esta operação, pois o código é nulo!."),
     ERR0028("OPERATION_NOT_ALLOWED", "Não é possível realizar esta operação, pois tente novamente mais tarde!."),
-    ERR0029("PAYMENT_ERROR", "Não é possível realizar a operação de pagamento, tente novamente mais tarde!.");
+    ERR0029("PAYMENT_ERROR", "Não é possível realizar a operação de pagamento, tente novamente mais tarde!."),
+    ERR0030("IMAGE_IS_NULL", "Não é possível realizar está operação, a imagem não foi enviada!."),
+    ERR0031("RESOURCE_DUPLICATED", "Este CPF já está registrado.");
 
     private final String code;
     private final String message;

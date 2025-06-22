@@ -5,6 +5,8 @@ import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.pet.dto.PetDTO;
 import com.bemtivi.bemtivi.controllers.in.pet.mappers.PetWebMapper;
 import com.bemtivi.bemtivi.application.business.service.PetBusiness;
+import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
+import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -70,6 +72,9 @@ public class PetResource {
             @Validated(PetDTO.OnCreate.class) @RequestPart(value = "pet") PetDTO petDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
+        if (file.isEmpty()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0030);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.mapToDTO(petManager.insert(mapper.mapToDomain(petDTO), file))
         );

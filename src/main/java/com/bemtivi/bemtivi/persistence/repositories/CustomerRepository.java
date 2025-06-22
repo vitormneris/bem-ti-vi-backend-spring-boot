@@ -15,4 +15,5 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, String
     @Query(value = "SELECT new com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO( c.id, c.name, c.email, c.isEmailActive, c.role, c.password ) FROM CustomerEntity c WHERE c.email = ?1")
     Optional<UserAuthDTO> findByUsername(String email);
     Optional<CustomerEntity> findByEmail(String email);
+    Optional<CustomerEntity> findByCpf(String cpf);
 }

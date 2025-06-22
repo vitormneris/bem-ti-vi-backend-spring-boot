@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum PetGenderEnum {
-    MASCULINE("Masculino"),
-    FEMININE("Feminino");
+    MALE("Macho"),
+    FEMALE("Fêmea");
 
     private final String description;
 }

@@ -30,7 +30,7 @@ public class ProductEntity {
     private String pathImage;
     @Column(name = "preco", nullable = false)
     private BigDecimal price;
-    @Column(name = "descricao", nullable = false)
+    @Column(name = "descricao", nullable = false, length = 1500)
     private String description;
     @NotNull
     @ManyToMany
@@ -42,6 +42,8 @@ public class ProductEntity {
     private Set<CategoryEntity> categories;
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<CommentEntity> comments;
+    @Column(name = "avaliacao")
+    private Double rate;
     @Embedded
     private ActivationStatusEntity activationStatus;
 }

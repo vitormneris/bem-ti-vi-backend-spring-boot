@@ -5,6 +5,7 @@ import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.category.Category;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
+import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.category.CategoryEntity;
@@ -49,6 +50,7 @@ public class CategoryBusiness {
                 .isActive(true)
                 .creationDate(Instant.now())
                 .build();
+
         try {
             category.setId(null);
             category.setActivationStatus(activationStatus);

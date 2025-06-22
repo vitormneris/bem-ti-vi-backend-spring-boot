@@ -7,6 +7,8 @@ import com.bemtivi.bemtivi.controllers.in.customer.dto.CustomerDTO;
 import com.bemtivi.bemtivi.controllers.in.customer.mappers.CustomerWebMapper;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
 import com.bemtivi.bemtivi.application.business.user.CustomerBusiness;
+import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
+import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -53,6 +55,9 @@ public class CustomerResource {
             @Validated(CustomerDTO.OnCreate.class) @RequestPart(value = "customer") CustomerDTO customerDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
+        if (file.isEmpty()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0030);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.mapToDTO(customerBusiness.insert(mapper.mapToDomain(customerDTO), file))
         );

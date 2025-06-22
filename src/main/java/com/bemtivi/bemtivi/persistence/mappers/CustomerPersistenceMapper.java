@@ -2,6 +2,7 @@ package com.bemtivi.bemtivi.persistence.mappers;
 
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
+import com.bemtivi.bemtivi.application.domain.service.Service;
 import com.bemtivi.bemtivi.application.domain.user.administrator.Administrator;
 import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.order.Order;
@@ -15,6 +16,7 @@ import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderItemEntity;
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
 import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
+import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -84,7 +86,12 @@ public interface CustomerPersistenceMapper {
     Product mapToProductDomain(ProductEntity productEntity);
 
     @Mapping(target = "customer", ignore = true)
+    @Mapping(target = "service", source = "service", qualifiedByName = "mapToServiceDomain")
     Appointment mapToAppointmentDomain(AppointmentEntity  appointmentEntity);
+
+    @Named("mapToServiceDomain")
+    @Mapping(target = "comments", ignore = true)
+    Service mapToServiceDomain(ServiceEntity serviceEntity);
 
     default PageResponse<Customer> mapToPageResponseDomain(Page<CustomerEntity> pageResponse) {
         int previousPage = pageResponse.hasPrevious() ? pageResponse.getNumber() - 1 : pageResponse.getNumber();

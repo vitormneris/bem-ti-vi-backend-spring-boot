@@ -17,4 +17,5 @@ public class PageResponse<T> {
     private Integer nextPage;
     private Integer previousPage;
     private Set<T> content;
+    private Double totalRate;
 }

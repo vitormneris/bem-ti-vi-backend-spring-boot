@@ -24,7 +24,7 @@ public class Pet {
     private PetGenderEnum gender;
     private String pathImage;
     private String species;
-    private String note;
+    private String details;
     private Customer owner;
     private ActivationStatus activationStatus;
 }

@@ -52,6 +52,12 @@ public class CustomerBusiness {
     public Customer insert(Customer customer, MultipartFile file) {
         checkIfTheEmailAlreadyExists(customer.getEmail());
 
+        String cpf = String.join("", customer.getCpf().split("[.-]"));
+        if (customerRepository.findByCpf(cpf).isPresent()) {
+            throw new DuplicateResourceException(RuntimeErrorEnum.ERR0031);
+        }
+        customer.setCpf(cpf);
+
         ActivationStatus activationStatus = ActivationStatus.builder()
                 .isActive(true)
                 .creationDate(Instant.now())
@@ -326,11 +332,11 @@ public class CustomerBusiness {
             throw new InvalidArgumentException(RuntimeErrorEnum.ERR0025);
         }
 
-        customerRepository.findByUsername(email).ifPresent((register) -> {
+        customerRepository.findByEmail(email).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
 
-        administratorRepository.findByUsername(email).ifPresent((register) -> {
+        administratorRepository.findByEmail(email).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
     }

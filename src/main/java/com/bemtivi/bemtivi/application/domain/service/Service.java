@@ -22,6 +22,7 @@ public class Service {
     private LocalTime estimatedDuration;
     private String pathImage;
     private String description;
+    private Double rate;
     private Set<Comment> comments;
     private ActivationStatus activationStatus;
 }

@@ -4,6 +4,8 @@ import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
 import com.bemtivi.bemtivi.controllers.in.service.dto.ServiceDTO;
 import com.bemtivi.bemtivi.controllers.in.service.mappers.ServiceWebMapper;
 import com.bemtivi.bemtivi.application.business.service.ServiceBusiness;
+import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
+import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -48,6 +50,9 @@ public class ServiceResource {
             @Validated(ServiceDTO.OnCreate.class) @RequestPart(value = "service") ServiceDTO serviceDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
+        if (file.isEmpty()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0030);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.mapToDTO(serviceManager.insert(mapper.mapToDomain(serviceDTO), file))
         );

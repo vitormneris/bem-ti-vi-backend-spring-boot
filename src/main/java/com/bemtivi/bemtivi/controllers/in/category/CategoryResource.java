@@ -5,6 +5,8 @@ import com.bemtivi.bemtivi.controllers.in.category.dto.CategoryDTO;
 import com.bemtivi.bemtivi.controllers.in.category.mappers.CategoryWebMapper;
 import com.bemtivi.bemtivi.controllers.in.product.dto.ProductDTO;
 import com.bemtivi.bemtivi.application.business.product.CategoryBusiness;
+import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
+import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -56,6 +58,9 @@ public class CategoryResource {
             @Validated(CategoryDTO.OnCreate.class) @RequestPart(value = "category") CategoryDTO categoryDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
+        if (file.isEmpty()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0030);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.mapToDTO(categoryManager.insert(mapper.mapToDomain(categoryDTO), file))
         );

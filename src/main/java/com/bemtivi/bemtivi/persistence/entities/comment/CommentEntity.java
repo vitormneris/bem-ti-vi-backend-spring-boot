@@ -24,7 +24,7 @@ public class CommentEntity {
     private String id;
     @Column(name = "titulo", nullable = false)
     private String title;
-    @Column(name = "mensagem", nullable = false, length = 1500)
+    @Column(name = "mensagem", nullable = false, length = 600)
     private String message;
     @Column(name = "nota", nullable = false)
     private Double rate;

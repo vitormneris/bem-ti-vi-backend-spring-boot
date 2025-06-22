@@ -78,7 +78,7 @@ public class PetBusiness {
         petOld.setSpecies(petNew.getSpecies() == null ? petOld.getSpecies() : petNew.getSpecies());
         petOld.setSize(petNew.getSize() == null ? petOld.getSize() : petNew.getSize());
         petOld.setBirthDate(petNew.getBirthDate() == null ? petOld.getBirthDate() : petNew.getBirthDate());
-        petOld.setNote(petNew.getNote() == null ? petOld.getNote() : petNew.getNote());
+        petOld.setDetails(petNew.getDetails() == null ? petOld.getDetails() : petNew.getDetails());
         if (file != null) petOld.setPathImage(uploadManager.uploadObject(file));
         PetEntity updated;
         try {

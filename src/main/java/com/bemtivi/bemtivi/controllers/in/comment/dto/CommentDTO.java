@@ -10,22 +10,21 @@ import jakarta.validation.constraints.*;
 
 public record CommentDTO(
         String id,
-        @NotNull(groups = {OnCreate.class}, message = "O título deve ser preenchido.")
-        @Size(groups = {OnCreate.class, OnUpdate.class}, min = 3, message = "O título está muito curto.")
-        @Size(groups = {OnCreate.class, OnUpdate.class}, max = 50, message = "O título está muito longo.")
+        @NotNull(groups = {OnCreate.class}, message = "O campo título deve ser preenchido.")
+        @Size(groups = {OnCreate.class, OnUpdate.class}, min = 3, message = "O campo título está muito curto.")
+        @Size(groups = {OnCreate.class, OnUpdate.class}, max = 50, message = "O campo título está muito longo.")
         String title,
-        @NotNull(groups = {OnCreate.class}, message = "A mensagem deve ser preenchida.")
-        @Size(groups = {OnCreate.class, OnUpdate.class}, max = 150, message = "A mensagem deve ter no máximo 50 caracteres")
+        @Size(groups = {OnCreate.class, OnUpdate.class}, max = 600, message = "O campo mensagem deve ter no máximo 600 caracteres")
         String message,
-        @NotNull(groups = {OnCreate.class}, message = "O tipo de comentário deve ser preenchido.")
+        @NotNull(groups = {OnCreate.class}, message = "O campo tipo de comentário deve ser preenchido.")
         TypeComment typeComment,
-        @NotNull(groups = {OnCreate.class}, message = "A nota deve ser preenchida.")
-        @Min(groups = {OnCreate.class, OnUpdate.class}, value = 0, message = "O menor valor do nota é 0")
-        @Max(groups = {OnCreate.class, OnUpdate.class}, value = 5, message = "O maior valor do nota é 5")
+        @NotNull(groups = {OnCreate.class}, message = "O campo avaliação deve ser preenchida.")
+        @Min(groups = {OnCreate.class, OnUpdate.class}, value = 1, message = "O menor valor da avaliação é 1")
+        @Max(groups = {OnCreate.class, OnUpdate.class}, value = 5, message = "O maior valor da avaliação é 5")
         Double rate,
         ProductDTO product,
         ServiceDTO service,
-        @NotNull(groups = {OnCreate.class}, message = "O cliente deve ser informado.")
+        @NotNull(groups = {OnCreate.class}, message = "O campo cliente deve ser preenchido.")
         CustomerDTO customer,
         ActivationStatusDTO activationStatus
 ) {

@@ -2,6 +2,7 @@ package com.bemtivi.bemtivi.persistence.repositories;
 
 import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
 import com.bemtivi.bemtivi.persistence.entities.administrator.AdministratorEntity;
+import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +14,6 @@ import java.util.Optional;
 public interface AdministratorRepository extends JpaRepository<AdministratorEntity, String> {
     @Query(value = "SELECT new com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO( c.id, c.name, c.email, c.isEmailActive, c.role, c.password ) FROM AdministratorEntity c WHERE c.email = ?1")
     Optional<UserAuthDTO> findByUsername(String email);
+    Optional<AdministratorEntity> findByEmail(String email);
     List<AdministratorEntity> findByActivationStatus_IsActive(Boolean active);
 }

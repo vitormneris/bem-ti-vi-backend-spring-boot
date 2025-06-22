@@ -26,8 +26,8 @@ public class AddressEntity {
     @Column(name = "rua", nullable = false, length = 100)
     private String street;
     @Column(name = "numero", nullable = false)
-    private Integer number;
-    @Column(name = "complemento", length = 100)
+    private String number;
+    @Column(name = "complemento", length = 150)
     private String complement;
     @Column(name = "cep", nullable = false, length = 9)
     private String postalCode;

@@ -259,11 +259,11 @@ public class AdministratorBusiness {
         if (email == null) {
             throw new InvalidArgumentException(RuntimeErrorEnum.ERR0025);
         }
-        customerRepository.findByUsername(email).ifPresent((register) -> {
+        customerRepository.findByEmail(email).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
 
-        administratorRepository.findByUsername(email).ifPresent((register) -> {
+        administratorRepository.findByEmail(email).ifPresent((register) -> {
             throw new DuplicateResourceException(RuntimeErrorEnum.ERR0013);
         });
     }

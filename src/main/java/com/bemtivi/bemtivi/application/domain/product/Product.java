@@ -24,5 +24,6 @@ public class Product {
     private String description;
     private Set<Category> categories;
     private Set<Comment> comments;
+    private Double rate;
     private ActivationStatus activationStatus;
 }

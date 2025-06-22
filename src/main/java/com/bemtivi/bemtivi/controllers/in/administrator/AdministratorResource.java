@@ -5,6 +5,8 @@ import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
 import com.bemtivi.bemtivi.controllers.in.administrator.dto.AdministratorDTO;
 import com.bemtivi.bemtivi.controllers.in.administrator.dto.PasswordsDTO;
 import com.bemtivi.bemtivi.controllers.in.administrator.mappers.AdministratorWebMapper;
+import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
+import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -40,13 +42,16 @@ public class AdministratorResource {
             @Validated(AdministratorDTO.OnCreate.class) @RequestPart(value = "administrator") AdministratorDTO administratorDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file
     ) {
+        if (file.isEmpty()) {
+            throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0030);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.mapToDTO(administratorBusiness.insert(mapper.mapToDomain(administratorDTO), file))
         );
     }
 
     @PutMapping(value = "/{id}/atualizar")
-    public ResponseEntity<AdministratorDTO> update(
+    public ResponseEntity<AdministratorDTO> updatrequirede(
             @PathVariable(name = "id") String id,
             @Validated(AdministratorDTO.OnUpdate.class) @RequestPart(value = "administrator") AdministratorDTO administratorDTO,
             @Valid @NotNull(message = "A imagem deve ser enviada.") @RequestPart(value = "file") MultipartFile file

@@ -39,8 +39,8 @@ public class PetEntity {
     private PetGenderEnum gender;
     @Column(name = "especie", nullable = false, length = 50)
     private String species;
-    @Column(name = "nota", length = 250)
-    private String note;
+    @Column(name = "detalhes", length = 700)
+    private String details;
     @ManyToOne
     @JoinColumn(name = "dono_id", nullable = false, referencedColumnName = "cliente_id")
     private CustomerEntity owner;
