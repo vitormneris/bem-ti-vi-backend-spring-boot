@@ -4,6 +4,7 @@ import com.bemtivi.bemtivi.application.business.EmailBusiness;
 import com.bemtivi.bemtivi.application.business.payment.PaymentBusiness;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
+import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
 import com.bemtivi.bemtivi.application.domain.email.Email;
 import com.bemtivi.bemtivi.application.domain.payment.PaymentResponse;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
@@ -12,6 +13,7 @@ import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.OperationNotAllowedException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
+import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderItemEntity;
@@ -75,9 +77,7 @@ public class OrderBusiness {
         order.setMoment(Instant.now());
         order.setPaymentStatus(PaymentStatusEnum.WAITING_PAYMENT);
 
-        log.warn(order.toString());
         OrderEntity orderEntity = mapper.mapToEntity(order);
-        log.warn(orderEntity.toString());
 
         CustomerEntity customer = customerRepository.findById(orderEntity.getCustomer().getId()).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
@@ -87,7 +87,7 @@ public class OrderBusiness {
             throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0021);
         }
 
-        for (OrderItemEntity orderItem :  orderEntity.getOrderItems()) {
+        for (OrderItemEntity orderItem : orderEntity.getOrderItems()) {
             ProductEntity product = productRepository.findById(orderItem.getProduct().getId()).orElseThrow(
                     () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0003)
             );
@@ -103,11 +103,13 @@ public class OrderBusiness {
         orderEntity.setCustomer(customer);
         orderEntity.setTotalPrice(totalPrice);
 
-        String purchaseInformation = generateContent(orderEntity);
+        String purchaseInformation = generateContent(orderEntity, customer);
 
-        PaymentResponse paymentResponse = paymentBusiness.processPayment(customer, totalPrice, purchaseInformation);
-        orderEntity.setPaymentId(paymentResponse.getId());
-        orderEntity.setPix(new PixEntity(paymentResponse.getPix().getQrCode(), paymentResponse.getPix().getQrCodeBase64()));
+        if (order.getMethodPaymentByPix()) {
+            PaymentResponse paymentResponse = paymentBusiness.processPayment(customer, totalPrice, purchaseInformation);
+            orderEntity.setPaymentId(paymentResponse.getId());
+            orderEntity.setPix(new PixEntity(paymentResponse.getPix().getQrCode(), paymentResponse.getPix().getQrCodeBase64()));
+        }
 
         try {
             saved = orderRepository.save(orderEntity);
@@ -123,6 +125,20 @@ public class OrderBusiness {
 
         emailBusiness.sendEmail(email);
         return mapper.mapToDomain(saved);
+    }
+
+    public Order update(String id, Order orderNew) {
+        OrderEntity orderOld = orderRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0008)
+        );
+        orderOld.setPaymentStatus(orderNew.getPaymentStatus() == null ? orderOld.getPaymentStatus() : orderNew.getPaymentStatus());
+        OrderEntity updated;
+        try {
+            updated = orderRepository.save(orderOld);
+        } catch (DataIntegrityViolationException exception) {
+            throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        }
+        return mapper.mapToDomain(updated);
     }
 
     public void deactivate(String id) {
@@ -141,7 +157,7 @@ public class OrderBusiness {
         orderRepository.delete(service);
     }
 
-    private String generateContent(OrderEntity order) {
+    private String generateContent(OrderEntity order, CustomerEntity customer) {
         StringBuilder content = new StringBuilder();
 
         content.append("🧾 Detalhes do seu pedido\n\n")
@@ -160,8 +176,24 @@ public class OrderBusiness {
         content.append("💳 Total do pedido: R$ ").append(order.getTotalPrice()).append("\n")
                 .append("📅 Realizado em: ").append(order.getMoment().atZone(ZoneId.of("America/Sao_Paulo"))
                         .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n")
-                .append("⏳ Status do pagamento: ").append(order.getPaymentStatus().getMessage()).append("\n");
+                .append("⏳ Status do pagamento: ").append(order.getPaymentStatus().getMessage()).append("\n")
+                .append("💵 Forma de pagamento: ").append(methodPayment(order.getMethodPaymentByPix())).append("\n")
+                .append("📦 Local de entrega: ").append(deliveryToAddress(order.getDeliverToAddress(), customer)).append("\n");
 
         return content.toString();
+    }
+
+    private String methodPayment(Boolean methodPaymentByPix) {
+        if (methodPaymentByPix) {
+            return "Pix";
+        }
+        return "Dinheiro";
+    }
+
+    private String deliveryToAddress(Boolean deliveryToAddress, CustomerEntity customer) {
+        if (deliveryToAddress) {
+            return "Entregar no endereço: " + customer.getAddress().getPostalCode() + ", " + customer.getAddress().getNumber();
+        }
+        return "Retirar na loja";
     }
 }

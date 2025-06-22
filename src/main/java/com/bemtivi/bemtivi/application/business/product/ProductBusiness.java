@@ -47,6 +47,7 @@ public class ProductBusiness {
                 .build();
         try {
             product.setId(null);
+            product.setRate(0d);
             product.setActivationStatus(activationStatus);
             product.getCategories().forEach(category -> categoryRepository.findById(category.getId()).orElseThrow(
                     () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0004)

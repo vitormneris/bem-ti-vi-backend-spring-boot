@@ -5,6 +5,7 @@ import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.service.Service;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.controllers.in.customer.dto.CustomerDTO;
+import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.order.dto.PixDTO;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
@@ -26,6 +27,8 @@ public record AppointmentDTO(
         PaymentStatusEnum paymentStatus,
         @NotNull(groups = {OnCreate.class}, message = "O campo serviço não deve ser nulo.")
         Service service,
+        @NotNull(groups = {OrderDTO.OnCreate.class}, message = "O campo método de pagamento deve ser preenchido.")
+        Boolean methodPaymentByPix,
         PixDTO pix,
         ActivationStatus activationStatus
 ) {

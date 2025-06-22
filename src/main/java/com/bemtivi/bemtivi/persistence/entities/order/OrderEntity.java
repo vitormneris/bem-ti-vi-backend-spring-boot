@@ -39,11 +39,15 @@ public class OrderEntity {
     private PaymentStatusEnum paymentStatus;
     @Column(name = "preco_total", nullable = false)
     private BigDecimal totalPrice;
-    @Column(name = "pagamento_id", nullable = false)
+    @Column(name = "pagamento_id")
     private Long paymentId;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "pedido_id")
     private List<OrderItemEntity> orderItems;
+    @Column(name = "entregar_endereco", nullable = false)
+    private Boolean deliverToAddress;
+    @Column(name = "metodo_pagamento_pix", nullable = false)
+    private Boolean methodPaymentByPix;
     @Embedded
     private PixEntity pix;
     @Embedded

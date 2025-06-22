@@ -90,9 +90,11 @@ public class AppointmentBusiness {
 
         String purchaseInformation = generateContent(appointmentEntity.getService(), appointmentEntity);
 
-        PaymentResponse paymentResponse = paymentBusiness.processPayment(customer, appointmentEntity.getPrice(), purchaseInformation);
-        appointmentEntity.setPaymentId(paymentResponse.getId());
-        appointmentEntity.setPix(new PixEntity(paymentResponse.getPix().getQrCode(), paymentResponse.getPix().getQrCodeBase64()));
+        if (appointment.getMethodPaymentByPix()) {
+            PaymentResponse paymentResponse = paymentBusiness.processPayment(customer, appointmentEntity.getPrice(), purchaseInformation);
+            appointmentEntity.setPaymentId(paymentResponse.getId());
+            appointmentEntity.setPix(new PixEntity(paymentResponse.getPix().getQrCode(), paymentResponse.getPix().getQrCodeBase64()));
+        }
 
         try {
             saved = appointmentRepository.save(appointmentEntity);
@@ -115,6 +117,7 @@ public class AppointmentBusiness {
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0009)
         );
         appointmentOld.setDateTime(appointmentNew.getDateTime() == null ? appointmentOld.getDateTime() : appointmentNew.getDateTime());
+        appointmentOld.setPaymentStatus(appointmentNew.getPaymentStatus() == null ? appointmentOld.getPaymentStatus() : appointmentNew.getPaymentStatus());
         AppointmentEntity updated;
         try {
             updated = appointmentRepository.save(appointmentOld);
@@ -148,9 +151,16 @@ public class AppointmentBusiness {
                 .append("   📦 Nome: ").append(serviceEntity.getName()).append("\n")
                 .append("   💰 Preço: R$ ").append(serviceEntity.getPrice()).append("\n")
                 .append("   📅 Data: ").append(appointmentEntity.getDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n")
-                .append("   ⏳ Status do pagamento: ").append(appointmentEntity.getPaymentStatus().getMessage()).append("\n");
+                .append("   ⏳ Status do pagamento: ").append(appointmentEntity.getPaymentStatus().getMessage()).append("\n")
+                .append("   💰 Forma de pagamento: ").append(methodPayment(appointmentEntity.getMethodPaymentByPix())).append("\n");
 
         return content.toString();
     }
 
+    private String methodPayment(Boolean methodPaymentByPix) {
+        if (methodPaymentByPix) {
+            return "Pix";
+        }
+        return "Dinheiro";
+    }
 }

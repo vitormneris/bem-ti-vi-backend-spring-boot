@@ -27,6 +27,8 @@ public class Order {
     private Long paymentId;
     private PaymentStatusEnum paymentStatus;
     private List<OrderItem> orderItems;
+    private Boolean deliverToAddress;
+    private Boolean methodPaymentByPix;
     private Pix pix;
     private ActivationStatus activationStatus;
 }

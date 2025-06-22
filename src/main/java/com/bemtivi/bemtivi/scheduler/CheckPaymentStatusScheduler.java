@@ -28,7 +28,7 @@ public class CheckPaymentStatusScheduler {
 
             PaymentStatusEnum paymentStatusEnum = order.getPaymentStatus();
 
-            if (!paymentStatusEnum.equals(PaymentStatusEnum.CANCELED) && !paymentStatusEnum.equals(PaymentStatusEnum.PAID)) {
+            if (!paymentStatusEnum.equals(PaymentStatusEnum.CANCELED) && !paymentStatusEnum.equals(PaymentStatusEnum.PAID) && !order.getMethodPaymentByPix()) {
                 PaymentStatus paymentStatus = paymentBusiness.checkPaymentStatus(order.getPaymentId());
 
                 if (paymentStatus.getStatus().equals("approved")) {
@@ -52,7 +52,7 @@ public class CheckPaymentStatusScheduler {
 
             PaymentStatusEnum paymentStatusEnum = appointment.getPaymentStatus();
 
-            if (!paymentStatusEnum.equals(PaymentStatusEnum.CANCELED) && !paymentStatusEnum.equals(PaymentStatusEnum.PAID)) {
+            if (!paymentStatusEnum.equals(PaymentStatusEnum.CANCELED) && !paymentStatusEnum.equals(PaymentStatusEnum.PAID) && !appointment.getMethodPaymentByPix()) {
 
                 PaymentStatus paymentStatus = paymentBusiness.checkPaymentStatus(appointment.getPaymentId());
 

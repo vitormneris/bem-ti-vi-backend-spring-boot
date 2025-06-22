@@ -26,6 +26,7 @@ public class Appointment {
     private Long paymentId;
     private PaymentStatusEnum paymentStatus;
     private Service service;
+    private Boolean methodPaymentByPix;
     private Pix pix;
     private ActivationStatus activationStatus;
 }

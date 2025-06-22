@@ -36,7 +36,7 @@ public class ServiceEntity {
     private String description;
     @OneToMany(mappedBy = "service", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<CommentEntity> comments;
-    @Column(name = "avaliacao")
+    @Column(name = "avaliacao", nullable = false)
     private Double rate;
     @Embedded
     private ActivationStatusEntity activationStatus;

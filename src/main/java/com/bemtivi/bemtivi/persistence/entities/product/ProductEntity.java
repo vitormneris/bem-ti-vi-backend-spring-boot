@@ -42,7 +42,7 @@ public class ProductEntity {
     private Set<CategoryEntity> categories;
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<CommentEntity> comments;
-    @Column(name = "avaliacao")
+    @Column(name = "avaliacao", nullable = false)
     private Double rate;
     @Embedded
     private ActivationStatusEntity activationStatus;

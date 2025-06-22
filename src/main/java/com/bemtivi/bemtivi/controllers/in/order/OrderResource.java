@@ -1,6 +1,7 @@
 package com.bemtivi.bemtivi.controllers.in.order;
 
 import com.bemtivi.bemtivi.controllers.in.PageResponseDTO;
+import com.bemtivi.bemtivi.controllers.in.appointment.dto.AppointmentDTO;
 import com.bemtivi.bemtivi.controllers.in.order.dto.OrderDTO;
 import com.bemtivi.bemtivi.controllers.in.order.mappers.OrderWebMapper;
 import com.bemtivi.bemtivi.application.business.product.OrderBusiness;
@@ -77,6 +78,13 @@ public class OrderResource {
         log.warn(orderDTO.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 mapper.mapToDTO(orderManager.insert(mapper.mapToDomain(orderDTO)))
+        );
+    }
+
+    @PutMapping(value = "/{id}/atualizar")
+    public ResponseEntity<OrderDTO> update(@PathVariable(name = "id") String id, @RequestBody OrderDTO orderDTO) {
+        return ResponseEntity.ok().body(
+                mapper.mapToDTO(orderManager.update(id, mapper.mapToDomain(orderDTO)))
         );
     }
 

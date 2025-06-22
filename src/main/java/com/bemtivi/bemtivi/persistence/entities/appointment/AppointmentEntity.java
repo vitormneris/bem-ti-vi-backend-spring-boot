@@ -36,11 +36,13 @@ public class AppointmentEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "status_de_pagamento", nullable = false)
     private PaymentStatusEnum paymentStatus;
-    @Column(name = "pagamento_id", nullable = false)
+    @Column(name = "pagamento_id")
     private Long paymentId;
     @ManyToOne
     @JoinColumn(name = "servico_id", referencedColumnName = "servico_id")
     private ServiceEntity service;
+    @Column(name = "metodo_pagamento_pix", nullable = false)
+    private Boolean methodPaymentByPix;
     @Embedded
     private PixEntity pix;
     @Embedded

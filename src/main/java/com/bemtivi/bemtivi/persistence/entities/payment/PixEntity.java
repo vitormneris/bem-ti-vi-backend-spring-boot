@@ -12,10 +12,8 @@ import lombok.*;
 @AllArgsConstructor
 @Embeddable
 public class PixEntity {
-    @NotNull
     @Column(length = 5000)
     private String qrCode;
-    @NotNull
     @Column(length = 5000)
     private String qrCodeBase64;
 }

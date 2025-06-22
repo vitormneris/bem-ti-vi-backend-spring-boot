@@ -44,6 +44,7 @@ public class ServiceBusiness {
                 .build();
         try {
             service.setId(null);
+            service.setRate(0d);
             service.setActivationStatus(activationStatus);
             ServiceEntity serviceEntity = mapper.mapToEntity(service);
             serviceEntity.setPathImage(uploadManager.uploadObject(file));
