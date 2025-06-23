@@ -1,9 +1,11 @@
 package com.bemtivi.bemtivi.persistence.entities.appointment;
 
+import com.bemtivi.bemtivi.application.domain.pet.Pet;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
+import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,6 +43,9 @@ public class AppointmentEntity {
     @ManyToOne
     @JoinColumn(name = "servico_id", referencedColumnName = "servico_id")
     private ServiceEntity service;
+    @ManyToOne
+    @JoinColumn(name = "pet_id", referencedColumnName = "pet_id")
+    private PetEntity pet;
     @Column(name = "metodo_pagamento_pix", nullable = false)
     private Boolean methodPaymentByPix;
     @Embedded

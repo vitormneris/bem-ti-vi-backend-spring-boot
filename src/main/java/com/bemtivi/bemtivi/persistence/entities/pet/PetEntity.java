@@ -27,7 +27,7 @@ public class PetEntity {
     private String name;
     @Column(name = "data_de_aniversario", nullable = false)
     private LocalDate birthDate;
-    @Column(name = "raca", nullable = false, length = 50)
+    @Column(name = "raca", length = 50)
     private String race;
     @Column(name = "caminho_da_imagem", nullable = false)
     private String pathImage;

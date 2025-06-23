@@ -8,6 +8,7 @@ import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
 import com.bemtivi.bemtivi.application.domain.email.Email;
 import com.bemtivi.bemtivi.application.domain.order.Order;
 import com.bemtivi.bemtivi.application.domain.payment.PaymentResponse;
+import com.bemtivi.bemtivi.application.domain.pet.Pet;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.InvalidArgumentException;
@@ -17,9 +18,11 @@ import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
+import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import com.bemtivi.bemtivi.persistence.mappers.AppointmentPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +40,7 @@ public class AppointmentBusiness {
     private final AppointmentPersistenceMapper mapper;
     private final ServiceRepository serviceRepository;
     private final CustomerRepository customerRepository;
+    private final PetRepository petRepository;
     private final EmailBusiness emailBusiness;
     private final PaymentBusiness paymentBusiness;
 
@@ -46,6 +50,7 @@ public class AppointmentBusiness {
         );
     }
 
+    @Transactional
     public PageResponse<Appointment> findByActivationStatusIsActiveAndCustomerIdAndPaymentStatus(Boolean isActive, String customerId, String paymentStatus, Integer pageSize, Integer page) {
         return mapper.mapToPageResponseDomain(
                 appointmentRepository.findAppointments(isActive, customerId,  paymentStatus == null ? "" : paymentStatus, PageRequest.of(page, pageSize))
@@ -79,6 +84,10 @@ public class AppointmentBusiness {
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0006)
         );
 
+        PetEntity pet = petRepository.findById(appointmentEntity.getPet().getId()).orElseThrow(
+                () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0007)
+        );
+
         if (!customer.getIsEmailActive()) {
             throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0021);
         }
@@ -88,7 +97,7 @@ public class AppointmentBusiness {
         ));
         appointmentEntity.setPrice(appointmentEntity.getService().getPrice());
 
-        String purchaseInformation = generateContent(appointmentEntity.getService(), appointmentEntity);
+        String purchaseInformation = generateContent(appointmentEntity.getService(), appointmentEntity, pet);
 
         if (appointment.getMethodPaymentByPix()) {
             PaymentResponse paymentResponse = paymentBusiness.processPayment(customer, appointmentEntity.getPrice(), purchaseInformation);
@@ -143,16 +152,22 @@ public class AppointmentBusiness {
         appointmentRepository.delete(appointment);
     }
 
-    private String generateContent(ServiceEntity serviceEntity, AppointmentEntity appointmentEntity) {
+    private String generateContent(ServiceEntity serviceEntity, AppointmentEntity appointmentEntity, PetEntity pet) {
         StringBuilder content = new StringBuilder();
 
-        content.append("🧾 Detalhes do seu agendamento\n\n")
-                .append("   🛍️ Serviço:\n")
-                .append("   📦 Nome: ").append(serviceEntity.getName()).append("\n")
-                .append("   💰 Preço: R$ ").append(serviceEntity.getPrice()).append("\n")
-                .append("   📅 Data: ").append(appointmentEntity.getDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n")
-                .append("   ⏳ Status do pagamento: ").append(appointmentEntity.getPaymentStatus().getMessage()).append("\n")
-                .append("   💰 Forma de pagamento: ").append(methodPayment(appointmentEntity.getMethodPaymentByPix())).append("\n");
+        content.append("📋 *Confirmação do seu agendamento!*\n\n")
+                .append("🐾 *Informações do Pet*\n")
+                .append("   • Nome: ").append(pet.getName()).append("\n")
+                .append("   • Espécie: ").append(pet.getSpecies()).append("\n\n")
+                .append("🛠️ *Serviço Agendado*\n")
+                .append("   • Nome: ").append(serviceEntity.getName()).append("\n")
+                .append("   • Valor: R$ ").append(serviceEntity.getPrice()).append("\n\n")
+                .append("📅 *Data e Horário*\n")
+                .append("   • ").append(appointmentEntity.getDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm"))).append("\n\n")
+                .append("💳 *Pagamento*\n")
+                .append("   • Status: ").append(appointmentEntity.getPaymentStatus().getMessage()).append("\n")
+                .append("   • Forma de pagamento: ").append(methodPayment(appointmentEntity.getMethodPaymentByPix())).append("\n\n")
+                .append("✅ *Estamos te esperando!*");
 
         return content.toString();
     }

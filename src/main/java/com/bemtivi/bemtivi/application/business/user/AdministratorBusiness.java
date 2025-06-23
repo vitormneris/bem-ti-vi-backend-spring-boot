@@ -113,12 +113,13 @@ public class AdministratorBusiness {
         email.setTo(newEmail);
         email.setSubject("Confirmação de alteração de e-mail");
         email.setContent(
-                "Olá,\n\n" +
-                        "Recebemos uma solicitação para alterar o e-mail da sua conta.\n\n" +
-                        "Para confirmar essa alteração, utilize o seguinte código de verificação:\n\n" +
-                        "Código: " + code + "\n\n" +
-                        "Se você não fez essa solicitação, por favor ignore este e-mail ou entre em contato com o nosso suporte.\n\n" +
-                        "Atenciosamente,\nEquipe Mister Gold"
+                "📧 Olá,\n\n" +
+                        "Recebemos uma solicitação para alterar o e-mail da sua conta Mister Gold.\n\n" +
+                        "👉 Para confirmar essa alteração, utilize o código de verificação abaixo:\n\n" +
+                        "🔐 Código de verificação: " + code + "\n\n" +
+                        "Se você não solicitou essa alteração, pode simplesmente ignorar este e-mail ou entrar em contato com nosso suporte.\n\n" +
+                        "✨ Obrigado por fazer parte da Mister Gold!\n" +
+                        "Equipe Mister Gold"
         );
         emailBusiness.sendEmail(email);
 
@@ -167,12 +168,12 @@ public class AdministratorBusiness {
         email.setTo(newEmail);
         email.setSubject("Confirmação de e-mail");
         email.setContent(
-                "Olá,\n\n" +
-                        "Recebemos uma solicitação para confirmar este endereço de e-mail em sua conta Mister Gold.\n\n" +
-                        "Para concluir o processo de confirmação, utilize o código de verificação abaixo:\n\n" +
-                        "Código de verificação: " + code + "\n\n" +
-                        "Se você não fez essa solicitação, por favor ignore este e-mail ou entre em contato com o nosso suporte.\n\n" +
-                        "Atenciosamente,\n" +
+                "📩 Olá,\n\n" +
+                        "Recebemos uma solicitação para confirmar este endereço de e-mail na sua conta Mister Gold.\n\n" +
+                        "👉 Para concluir a verificação, use o código abaixo:\n\n" +
+                        "🔐 Código de verificação: " + code + "\n\n" +
+                        "Se você não fez essa solicitação, pode simplesmente ignorar este e-mail ou entrar em contato com nosso suporte.\n\n" +
+                        "✨ Obrigado por escolher a Mister Gold!\n" +
                         "Equipe Mister Gold"
         );
         emailBusiness.sendEmail(email);

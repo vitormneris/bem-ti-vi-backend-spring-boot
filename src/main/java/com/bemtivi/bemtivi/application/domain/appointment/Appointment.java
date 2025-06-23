@@ -2,6 +2,7 @@ package com.bemtivi.bemtivi.application.domain.appointment;
 
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.payment.Pix;
+import com.bemtivi.bemtivi.application.domain.pet.Pet;
 import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.service.Service;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
@@ -26,6 +27,7 @@ public class Appointment {
     private Long paymentId;
     private PaymentStatusEnum paymentStatus;
     private Service service;
+    private Pet pet;
     private Boolean methodPaymentByPix;
     private Pix pix;
     private ActivationStatus activationStatus;

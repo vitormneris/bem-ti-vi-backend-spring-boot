@@ -23,6 +23,7 @@ import com.bemtivi.bemtivi.persistence.mappers.OrderPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
 import com.bemtivi.bemtivi.persistence.repositories.OrderRepository;
 import com.bemtivi.bemtivi.persistence.repositories.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -52,6 +53,7 @@ public class OrderBusiness {
         );
     }
 
+    @Transactional
     public PageResponse<Order> findByActivationStatusIsActiveAndCustomerIdAndPaymentStatus(Boolean isActive, String customerId, String paymentStatus, Integer pageSize, Integer page) {
         return mapper.mapToPageResponseDomain(
                 orderRepository.findOrders(isActive, customerId,  paymentStatus == null ? "" : paymentStatus, PageRequest.of(page, pageSize))
@@ -160,28 +162,32 @@ public class OrderBusiness {
     private String generateContent(OrderEntity order, CustomerEntity customer) {
         StringBuilder content = new StringBuilder();
 
-        content.append("🧾 Detalhes do seu pedido\n\n")
-                .append("🛍️ Produtos:\n");
+        content.append("📦 *Confirmação do seu pedido!*\n\n")
+                .append("🛍️ *Itens do Pedido*\n");
 
         int count = 1;
         for (OrderItemEntity item : order.getOrderItems()) {
             BigDecimal subtotal = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
 
-            content.append(count++).append(". 📦 Nome: ").append(item.getProduct().getName()).append("\n")
-                    .append("   💰 Preço unitário: R$ ").append(item.getPrice()).append("\n")
-                    .append("   🔢 Quantidade: ").append(item.getQuantity()).append("\n")
-                    .append("   💵 Subtotal: R$ ").append(subtotal).append("\n\n");
+            content.append(count++).append(". ").append(item.getProduct().getName()).append("\n")
+                    .append("   • Preço unitário: R$ ").append(item.getPrice()).append("\n")
+                    .append("   • Quantidade: ").append(item.getQuantity()).append("\n")
+                    .append("   • Subtotal: R$ ").append(subtotal).append("\n\n");
         }
 
-        content.append("💳 Total do pedido: R$ ").append(order.getTotalPrice()).append("\n")
-                .append("📅 Realizado em: ").append(order.getMoment().atZone(ZoneId.of("America/Sao_Paulo"))
-                        .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))).append("\n")
-                .append("⏳ Status do pagamento: ").append(order.getPaymentStatus().getMessage()).append("\n")
-                .append("💵 Forma de pagamento: ").append(methodPayment(order.getMethodPaymentByPix())).append("\n")
-                .append("📦 Local de entrega: ").append(deliveryToAddress(order.getDeliverToAddress(), customer)).append("\n");
+        content.append("🧾 *Resumo do Pedido*\n")
+                .append("   • Total: R$ ").append(order.getTotalPrice()).append("\n")
+                .append("   • Realizado em: ").append(order.getMoment().atZone(ZoneId.of("America/Sao_Paulo"))
+                        .format(DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm"))).append("\n")
+                .append("   • Status do pagamento: ").append(order.getPaymentStatus().getMessage()).append("\n")
+                .append("   • Forma de pagamento: ").append(methodPayment(order.getMethodPaymentByPix())).append("\n\n")
+                .append("🏠 *Endereço de entrega*\n")
+                .append("   ").append(deliveryToAddress(order.getDeliverToAddress(), customer)).append("\n\n")
+                .append("✅ *Agradecemos pela sua compra!*");
 
         return content.toString();
     }
+
 
     private String methodPayment(Boolean methodPaymentByPix) {
         if (methodPaymentByPix) {
