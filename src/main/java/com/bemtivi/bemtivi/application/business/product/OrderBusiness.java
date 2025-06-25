@@ -47,6 +47,7 @@ public class OrderBusiness {
     private final EmailBusiness emailBusiness;
     private final OrderPersistenceMapper mapper;
 
+    @Transactional
     public PageResponse<Order> findByPagination(Boolean isActive, Integer pageSize, Integer page, LocalDate momentStart, LocalDate momentEnd) {
         return mapper.mapToPageResponseDomain(
                 orderRepository.findByPagination(isActive, PageRequest.of(page, pageSize), momentStart, momentEnd)

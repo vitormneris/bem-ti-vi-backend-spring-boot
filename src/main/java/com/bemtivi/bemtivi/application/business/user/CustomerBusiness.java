@@ -40,6 +40,7 @@ public class CustomerBusiness {
     private final UploadBusiness uploadManager;
     private final EmailBusiness emailBusiness;
 
+    @Transactional
     public PageResponse<Customer> paginate(Boolean isActive, Integer pageSize, Integer page, String name) {
         return mapper.mapToPageResponseDomain(
                 customerRepository.findByActivationStatus_IsActiveAndNameContainingIgnoreCase(isActive, name == null ? "" : name, PageRequest.of(page, pageSize))
