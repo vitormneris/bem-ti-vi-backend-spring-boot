@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ServicePersistenceMapper {
+
     ServiceEntity mapToEntity(Service service);
+
     @Mapping(target = "comments", ignore = true)
     Service mapToDomain(ServiceEntity serviceEntity);
 

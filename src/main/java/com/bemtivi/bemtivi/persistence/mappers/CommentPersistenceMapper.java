@@ -37,6 +37,7 @@ public interface CommentPersistenceMapper {
     @Mapping(source = "role", target = "role", ignore = true)
     @Mapping(source = "password", target = "password", ignore = true)
     @Mapping(target = "activationStatus", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     Customer mapToCustomerDomain(CustomerEntity customerEntity);
 
     @Named("mapToServiceDomain")
@@ -55,7 +56,6 @@ public interface CommentPersistenceMapper {
     @Mapping(target = "activationStatus", ignore = true)
     @Mapping(target = "comments", ignore = true)
     Product mapToProductDomain(ProductEntity productEntity);
-
 
     default PageResponse<Comment> mapToPageResponseDomain(Page<CommentEntity> pageResponse) {
         int previousPage = pageResponse.hasPrevious() ? pageResponse.getNumber() - 1 : pageResponse.getNumber();

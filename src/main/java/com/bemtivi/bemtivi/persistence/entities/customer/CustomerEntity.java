@@ -3,6 +3,7 @@ package com.bemtivi.bemtivi.persistence.entities.customer;
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
+import com.bemtivi.bemtivi.persistence.entities.comment.CommentEntity;
 import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
 import jakarta.persistence.*;
@@ -55,6 +56,8 @@ public class CustomerEntity {
     private Set<OrderEntity> orders;
     @OneToMany(mappedBy = "customer", orphanRemoval = true)
     private Set<AppointmentEntity> appointments;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<CommentEntity> comments;
     @Column(name = "codigo_email")
     private String codeForEmail;
     @Column(name = "email_pretendido")

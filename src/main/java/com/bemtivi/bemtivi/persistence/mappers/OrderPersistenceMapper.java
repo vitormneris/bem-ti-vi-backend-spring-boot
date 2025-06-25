@@ -42,6 +42,7 @@ public interface OrderPersistenceMapper {
     @Mapping(target = "pets", ignore = true)
     @Mapping(source = "role", target = "role", ignore = true)
     @Mapping(source = "password", target = "password", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     Customer mapToCustomerDomain(CustomerEntity customerEntity);
 
     default PageResponse<Order> mapToPageResponseDomain(Page<OrderEntity> pageResponse) {

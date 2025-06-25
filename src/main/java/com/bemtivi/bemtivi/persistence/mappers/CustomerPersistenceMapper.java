@@ -43,6 +43,7 @@ public interface CustomerPersistenceMapper {
     @Mapping(target = "appointments", source = "appointments", qualifiedByName = "mapToServicesDomain")
     @Mapping(source = "role", target = "role", ignore = true)
     @Mapping(source = "password", target = "password", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     Customer mapToDomain(CustomerEntity customerEntity);
 
     @Mapping(source = "id", target = "id")

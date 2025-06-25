@@ -22,6 +22,7 @@ public interface CategoryPersistenceMapper {
 
     @Mapping(target = "products", source = "products", qualifiedByName = "mapToProductDomain")
     Category mapToDomain(CategoryEntity categoryEntity);
+
     @Named("mapToProductDomain")
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "comments", ignore = true)

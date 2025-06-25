@@ -21,12 +21,14 @@ public interface PetPersistenceMapper {
 
     @Mapping(target = "owner", source = "owner", qualifiedByName = "mapEntityToOwnerDomain")
     Pet mapToDomain(PetEntity pet);
+
     @Named(value = "mapEntityToOwnerDomain")
     @Mapping(target = "orders", ignore = true)
     @Mapping(target = "appointments", ignore = true)
     @Mapping(target = "pets", ignore = true)
     @Mapping(source = "role", target = "role", ignore = true)
     @Mapping(source = "password", target = "password", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     Customer mapEntityToPetDomain(CustomerEntity customer);
 
     default PageResponse<Pet> mapToPageResponseDomain(Page<PetEntity> pageResponse) {

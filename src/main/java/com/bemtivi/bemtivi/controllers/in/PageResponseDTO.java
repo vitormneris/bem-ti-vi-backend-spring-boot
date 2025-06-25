@@ -9,7 +9,6 @@ public record PageResponseDTO<T>(
         int currentPage,
         int nextPage,
         int previousPage,
-        Set<T> content,
-        double totalRate
+        Set<T> content
 ) {
 }

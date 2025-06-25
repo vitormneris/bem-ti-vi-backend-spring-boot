@@ -73,7 +73,7 @@ public class PaymentBusiness {
             Payment payment = client.get(paymentId);
             return getPaymentStatus(payment);
         } catch (MPException | MPApiException exception) {
-            throw new InternalErrorException(RuntimeErrorEnum.ERR0029);
+            throw new InternalErrorException(RuntimeErrorEnum.ERR0032);
         }
     }
 

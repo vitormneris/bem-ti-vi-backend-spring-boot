@@ -36,19 +36,15 @@ public class CommentBusiness {
     private final CommentPersistenceMapper mapper;
 
     public PageResponse<Comment> findByServiceId(Boolean isActive, Integer pageSize, Integer page, String serviceId) {
-        PageResponse<Comment> pageResponse= mapper.mapToPageResponseDomain(
+        return mapper.mapToPageResponseDomain(
                 commentRepository.findByActivationStatus_IsActiveAndService_Id(isActive, serviceId, PageRequest.of(page, pageSize)
         ));
-        pageResponse.setTotalRate(getTotalRate(commentRepository.findByActivationStatus_IsActiveAndService_Id(isActive, serviceId)));
-        return pageResponse;
     }
 
     public PageResponse<Comment> findByProductId(Boolean isActive, Integer pageSize, Integer page, String productId) {
-        PageResponse<Comment> pageResponse= mapper.mapToPageResponseDomain(
+        return mapper.mapToPageResponseDomain(
                 commentRepository.findByActivationStatus_IsActiveAndProduct_Id(isActive, productId, PageRequest.of(page, pageSize)
         ));
-        pageResponse.setTotalRate(getTotalRate(commentRepository.findByActivationStatus_IsActiveAndProduct_Id(isActive, productId)));
-        return pageResponse;
     }
 
     public Comment insert(Comment comment) {
@@ -58,13 +54,15 @@ public class CommentBusiness {
                 .creationDate(Instant.now())
                 .build();
 
+        ServiceEntity service = new ServiceEntity();
+        ProductEntity product = new ProductEntity();
         if (comment.getTypeComment().equals(TypeComment.SERVICE)) {
-            ServiceEntity service = serviceRepository.findById(comment.getService().getId()).orElseThrow(
+            service= serviceRepository.findById(comment.getService().getId()).orElseThrow(
                     () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0005)
             );
             updateRateService(service);
         } else if (comment.getTypeComment().equals(TypeComment.PRODUCT)) {
-            ProductEntity product = productRepository.findById(comment.getProduct().getId()).orElseThrow(
+            product = productRepository.findById(comment.getProduct().getId()).orElseThrow(
                     () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0003)
             );
             updateRateProduct(product);
@@ -81,6 +79,12 @@ public class CommentBusiness {
             saved = commentRepository.save(commentEntity);
         } catch (DataIntegrityViolationException exception) {
             throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0002);
+        }
+
+        if (comment.getTypeComment().equals(TypeComment.SERVICE)) {
+            updateRateService(service);
+        } else if (comment.getTypeComment().equals(TypeComment.PRODUCT)) {
+            updateRateProduct(product);
         }
         return mapper.mapToDomain(saved);
     }

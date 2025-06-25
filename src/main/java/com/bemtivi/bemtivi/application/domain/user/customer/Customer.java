@@ -1,6 +1,7 @@
 package com.bemtivi.bemtivi.application.domain.user.customer;
 
 import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
+import com.bemtivi.bemtivi.application.domain.comment.Comment;
 import com.bemtivi.bemtivi.application.domain.order.Order;
 import com.bemtivi.bemtivi.application.domain.pet.Pet;
 import com.bemtivi.bemtivi.application.domain.user.User;
@@ -20,5 +21,6 @@ public class Customer extends User {
     private Address address;
     private Set<Pet> pets;
     private Set<Order> orders;
+    private Set<Comment> comments;
     private Set<Appointment> appointments;
 }
