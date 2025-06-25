@@ -61,12 +61,14 @@ public class OrderBusiness {
         );
     }
 
+    @Transactional
     public Order findById(String id) {
         return mapper.mapToDomain(orderRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0008)
         ));
     }
 
+    @Transactional
     public Order insert(Order order) {
         BigDecimal totalPrice = BigDecimal.valueOf(0);
         OrderEntity saved;
@@ -130,6 +132,7 @@ public class OrderBusiness {
         return mapper.mapToDomain(saved);
     }
 
+    @Transactional
     public Order update(String id, Order orderNew) {
         OrderEntity orderOld = orderRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0008)

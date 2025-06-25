@@ -121,6 +121,7 @@ public class CustomerBusiness {
         return mapper.mapToDomain(updated);
     }
 
+
     public void updatePassword(String id, PasswordsDTO passwords) {
         CustomerEntity customer = checkIfTheIdIsValidAndReturnCustomer(id);
 

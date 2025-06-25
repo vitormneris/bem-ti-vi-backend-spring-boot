@@ -58,12 +58,14 @@ public class AppointmentBusiness {
         );
     }
 
+    @Transactional
     public Appointment findById(String id) {
         return mapper.mapToDomain(appointmentRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0009)
         ));
     }
 
+    @Transactional
     public Appointment insert(Appointment appointment) {
         ActivationStatus activationStatus = ActivationStatus.builder()
                 .isActive(true)
@@ -122,6 +124,7 @@ public class AppointmentBusiness {
         return mapper.mapToDomain(saved);
     }
 
+    @Transactional
     public Appointment update(String id, Appointment appointmentNew) {
         AppointmentEntity appointmentOld = appointmentRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(RuntimeErrorEnum.ERR0009)
