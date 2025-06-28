@@ -2,35 +2,14 @@
 
 ## Instalação
 
-### 1. Crie um container postgres com o docker
+### 1. Na pasta do projeto, gere os arquivos .jar com o comando abaixo
 ```
-docker run \
---name postgres-17-container \
--e POSTGRES_USER=root \
--e POSTGRES_PASSWORD=root \
--e POSTGRES_DB=bemtivi_database \
--p 5432:5432 \
--d postgres:17
-```
-
-### 2. Gere os arquivos .jar do projeto
-```
-./mvnw clean package
-```
-
-### 3. Exclua ou pare o container postgres
-```
-docker rm -f postgres-17-container
+./mvnw clean package -Dmaven.test.skip=true
 ou
-docker stop postgres-17-container
+./mvnw clean package -DskipTests
 ```
 
-### 4. Rode o comando docker compose
+### 2. Em seguida, rode o seguinte comando Docker (necessário ter o Docker instalado em seu sistema operacional)
 ```
 docker compose up
 ```
-
-
-
-
-
