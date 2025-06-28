@@ -7,13 +7,15 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bemtivi_database
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-postgres:5432/bemtivi_database
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATA_MONGODB_URI=mongodb://root:root@db-mongodb:27017/bemtivi_database?authSource=admin
     depends_on:
-      - db
+      - db-postgres
+      - db-mongodb
 
-  db:
+  db-postgres:
     image: postgres:17
     container_name: postgres-db
     ports:
@@ -22,3 +24,13 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=bemtivi_database
+
+  db-mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=bemtivi_database
