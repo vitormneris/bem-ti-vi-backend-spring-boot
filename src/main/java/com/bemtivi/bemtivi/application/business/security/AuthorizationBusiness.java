@@ -1,12 +1,9 @@
 package com.bemtivi.bemtivi.application.business.security;
 
-import com.bemtivi.bemtivi.exceptions.AuthenticationFailedException;
-import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
-import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.mappers.AdministratorPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.mappers.CustomerPersistenceMapper;
-import com.bemtivi.bemtivi.persistence.repositories.AdministratorRepository;
-import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.AdministratorRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.CustomerRepository;
 import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;

@@ -11,14 +11,13 @@ import com.bemtivi.bemtivi.persistence.entities.comment.CommentEntity;
 import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import com.bemtivi.bemtivi.persistence.mappers.CommentPersistenceMapper;
-import com.bemtivi.bemtivi.persistence.repositories.CommentRepository;
-import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
-import com.bemtivi.bemtivi.persistence.repositories.ProductRepository;
-import com.bemtivi.bemtivi.persistence.repositories.ServiceRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.CommentRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.CustomerRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.ProductRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.ServiceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 

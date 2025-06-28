@@ -4,6 +4,7 @@ import com.bemtivi.bemtivi.application.enums.PetGenderEnum;
 import com.bemtivi.bemtivi.application.enums.PetSizeEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class PetEntity {
     private String id;
     @Column(name = "nome", nullable = false, length = 100)
     private String name;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "data_de_aniversario", nullable = false)
     private LocalDate birthDate;
     @Column(name = "raca", length = 50)

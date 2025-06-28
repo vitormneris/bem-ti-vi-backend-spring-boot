@@ -8,13 +8,13 @@ import com.bemtivi.bemtivi.application.domain.user.administrator.Administrator;
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.controllers.in.administrator.dto.PasswordsDTO;
 import com.bemtivi.bemtivi.exceptions.*;
-import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
-import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.CustomerRepository;
+import com.bemtivi.bemtivi.persistence.repositories.mongo.ChatMessageRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.administrator.AdministratorEntity;
 import com.bemtivi.bemtivi.persistence.mappers.AdministratorPersistenceMapper;
-import com.bemtivi.bemtivi.persistence.repositories.AdministratorRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.AdministratorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,7 @@ import java.util.Set;
 public class AdministratorBusiness {
     private final AdministratorRepository administratorRepository;
     private final CustomerRepository customerRepository;
+    private final ChatMessageRepository messageRepository;
     private final AdministratorPersistenceMapper mapper;
     private final UploadBusiness uploadBusiness;
     private final EmailBusiness emailBusiness;
@@ -235,7 +236,6 @@ public class AdministratorBusiness {
     public void delete(String id, String password) {
         AdministratorEntity administrator = checkIfTheIdIsValidAndReturnAdministrator(id);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
         if (administratorRepository.findAll().size() <= 1) {
             throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0022);
         }
@@ -243,7 +243,7 @@ public class AdministratorBusiness {
         if (password == null || !encoder.matches(password, administrator.getPassword())) {
             throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0019);
         }
-
+        messageRepository.deleteByUserId(id);
         administratorRepository.delete(administrator);
     }
 

@@ -1,8 +1,11 @@
 package com.bemtivi.bemtivi.persistence.entities.chat;
 
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -28,4 +31,7 @@ public class ChatMessageEntity {
     private UserRoleEnum sender;
     @Column(name = "conteudo", nullable = false)
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT-3")
+    @Column(name = "momento", nullable = false)
+    private Instant moment;
 }

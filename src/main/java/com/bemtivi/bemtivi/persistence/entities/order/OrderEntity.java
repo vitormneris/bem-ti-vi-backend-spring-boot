@@ -6,6 +6,7 @@ import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mercadopago.resources.payment.Payment;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,6 +30,7 @@ public class OrderEntity {
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT-3")
     @Column(name = "momento", nullable = false)
     private Instant moment;
     @ManyToOne

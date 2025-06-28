@@ -2,6 +2,7 @@ package com.bemtivi.bemtivi.persistence.entities.service;
 
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
 import com.bemtivi.bemtivi.persistence.entities.comment.CommentEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -28,6 +29,7 @@ public class ServiceEntity {
     private String name;
     @Column(name = "preco", nullable = false)
     private BigDecimal price;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "duracao_estimada", nullable = false)
     private LocalTime estimatedDuration;
     @Column(name = "caminho_da_imagem", nullable = false)

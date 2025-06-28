@@ -9,7 +9,7 @@ import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
 import com.bemtivi.bemtivi.persistence.mappers.ServicePersistenceMapper;
-import com.bemtivi.bemtivi.persistence.repositories.ServiceRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.ServiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;

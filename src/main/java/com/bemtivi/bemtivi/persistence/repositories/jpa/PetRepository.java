@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.persistence.repositories;
+package com.bemtivi.bemtivi.persistence.repositories.jpa;
 
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
 import org.springframework.data.domain.Page;

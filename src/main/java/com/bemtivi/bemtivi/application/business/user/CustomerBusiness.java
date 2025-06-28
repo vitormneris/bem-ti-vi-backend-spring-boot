@@ -9,17 +9,16 @@ import com.bemtivi.bemtivi.application.domain.user.customer.Address;
 import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.user.customer.Telephone;
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
-import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
 import com.bemtivi.bemtivi.controllers.in.administrator.dto.PasswordsDTO;
 import com.bemtivi.bemtivi.exceptions.*;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
-import com.bemtivi.bemtivi.persistence.entities.administrator.AdministratorEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.AddressEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.customer.TelephoneEntity;
 import com.bemtivi.bemtivi.persistence.mappers.CustomerPersistenceMapper;
-import com.bemtivi.bemtivi.persistence.repositories.AdministratorRepository;
-import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.AdministratorRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.CustomerRepository;
+import com.bemtivi.bemtivi.persistence.repositories.mongo.ChatMessageRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -37,6 +36,7 @@ public class CustomerBusiness {
     private final CustomerRepository customerRepository;
     private final AdministratorRepository administratorRepository;
     private final CustomerPersistenceMapper mapper;
+    private final ChatMessageRepository messageRepository;
     private final UploadBusiness uploadManager;
     private final EmailBusiness emailBusiness;
 
@@ -302,11 +302,10 @@ public class CustomerBusiness {
     public void delete(String id, String password) {
         CustomerEntity customer = checkIfTheIdIsValidAndReturnCustomer(id);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
         if (password == null || !encoder.matches(password, customer.getPassword())) {
             throw new OperationNotAllowedException(RuntimeErrorEnum.ERR0019);
         }
-
+        messageRepository.deleteByUserId(id);
         customerRepository.delete(customer);
     }
 

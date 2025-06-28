@@ -7,6 +7,7 @@ import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
 import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
 import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,7 @@ public class AppointmentEntity {
     @EqualsAndHashCode.Include
     @Column(name = "agendamento_id")
     private String id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "data_e_hora", nullable = false)
     private LocalDateTime dateTime;
     @ManyToOne

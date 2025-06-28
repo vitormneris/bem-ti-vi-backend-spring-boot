@@ -8,13 +8,14 @@ import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
 import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.mappers.ChatMessagePersistenceMapper;
-import com.bemtivi.bemtivi.persistence.repositories.ChatMessageRepository;
-import com.bemtivi.bemtivi.persistence.repositories.CustomerRepository;
+import com.bemtivi.bemtivi.persistence.repositories.mongo.ChatMessageRepository;
+import com.bemtivi.bemtivi.persistence.repositories.jpa.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,7 @@ public class ChatBusiness {
         if (!message.getSender().equals(UserRoleEnum.CUSTOMER)) {
             throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0034);
         }
+        message.setMoment(Instant.now());
         message.setUserName(customerOptional.get().getName());
         messageRepository.save(mapper.mapToEntity(message));
         messagingTemplate.convertAndSend("/topic/admin", message);
@@ -52,6 +54,7 @@ public class ChatBusiness {
         if (!message.getSender().equals(UserRoleEnum.ADMINISTRATOR)) {
             throw new DatabaseIntegrityViolationException(RuntimeErrorEnum.ERR0034);
         }
+        message.setMoment(Instant.now());
         messageRepository.save(mapper.mapToEntity(message));
         messagingTemplate.convertAndSend("/topic/client." + message.getUserId(), message);
     }

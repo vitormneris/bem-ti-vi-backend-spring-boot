@@ -3,6 +3,8 @@ package com.bemtivi.bemtivi.application.domain.chat;
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import lombok.*;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @Builder
@@ -16,4 +18,5 @@ public class ChatMessage {
     private String userName;
     private UserRoleEnum sender;
     private String content;
+    private Instant moment;
 }
