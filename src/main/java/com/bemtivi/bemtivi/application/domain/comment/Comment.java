@@ -15,13 +15,13 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Comment {
     @EqualsAndHashCode.Include
-    String id;
-    String title;
-    String message;
-    TypeComment typeComment;
-    Double rate;
-    Product product;
-    Service service;
-    Customer customer;
-    ActivationStatus activationStatus;
+    private String id;
+    private String title;
+    private String message;
+    private TypeComment typeComment;
+    private Double rate;
+    private Product product;
+    private Service service;
+    private Customer customer;
+    private ActivationStatus activationStatus;
 }

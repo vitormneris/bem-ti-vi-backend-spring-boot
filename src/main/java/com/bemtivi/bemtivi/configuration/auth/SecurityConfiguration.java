@@ -95,6 +95,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/autenticacao/token/cliente").hasRole("CLIENT")
                         .requestMatchers(HttpMethod.GET,  "/autenticacao/token/administrador").hasRole("ADMINISTRATOR")
 
+                        .requestMatchers(HttpMethod.GET,  "/mensagens/buscartodosids").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.GET,  "/mensagens/restaurarhistorico/*").hasRole("CLIENT")
+
+                        .requestMatchers("/bemtivi-app-websocket/**").permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(filterToken, UsernamePasswordAuthenticationFilter.class)

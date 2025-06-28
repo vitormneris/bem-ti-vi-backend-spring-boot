@@ -29,7 +29,7 @@ public enum RuntimeErrorEnum {
     ERR0021("EMAIL_IS_NOT_ACTIVE", "O e-mail precisa está ativo para realizar esta operação."),
     ERR0022("THIS_IS_THE_LAST_ADMINISTRATOR", "Não é possível realizar esta operação, pois este é o último administrador do sistema."),
     ERR0023("EMAIL_IS_ACTIVE", "Não é possível realizar esta operação, pois o e-mail já está ativo."),
-    ERR0024("PASSWORD_IS_NULL", "Não é possível realizar esta operação, pois a senha é nula!!."),
+    ERR0024("PASSWORD_IS_NULL", "Não é possível realizar esta operação, pois a senha é nula!."),
     ERR0025("EMAIL_IS_NULL", "Não é possível realizar esta operação, pois o e-mail é nulo!."),
     ERR0026("ID_IS_NULL", "Não é possível realizar esta operação, pois o id é nulo!."),
     ERR0027("CODE_IS_NULL", "Não é possível realizar esta operação, pois o código é nulo!."),
@@ -37,7 +37,9 @@ public enum RuntimeErrorEnum {
     ERR0029("PAYMENT_ERROR", "Não é possível realizar a operação de pagamento, tente novamente mais tarde!."),
     ERR0030("IMAGE_IS_NULL", "Não é possível realizar está operação, a imagem não foi enviada!."),
     ERR0031("RESOURCE_DUPLICATED", "Este CPF já está registrado."),
-    ERR0032("PAYMENT_ERROR", "Não é possível checar este pagamento, tente novamente mais tarde!.");
+    ERR0032("PAYMENT_ERROR", "Não é possível checar este pagamento, tente novamente mais tarde!."),
+    ERR0033("NAME_IS_NULL", "Não é possível realizar a operação, pois o nome é nulo!."),
+    ERR0034("INVALID_ROLE", "Não é possível realizar a operação, pois a role está inválida.");
 
     private final String code;
     private final String message;
