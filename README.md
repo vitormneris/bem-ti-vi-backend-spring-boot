@@ -5,7 +5,9 @@
 ### 1. Na pasta do projeto, gere os arquivos .jar com o comando abaixo
 ```
 ./mvnw clean package -Dmaven.test.skip=true
+```
 ou
+```
 ./mvnw clean package -DskipTests
 ```
 
