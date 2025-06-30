@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.persistence.entities.customer;
+package com.bemtivi.bemtivi.persistence.entities.jpa.customer;
 
 import jakarta.persistence.*;
 import lombok.*;

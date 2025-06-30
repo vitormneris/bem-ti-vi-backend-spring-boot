@@ -1,6 +1,6 @@
-package com.bemtivi.bemtivi.persistence.entities.order;
+package com.bemtivi.bemtivi.persistence.entities.jpa.order;
 
-import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

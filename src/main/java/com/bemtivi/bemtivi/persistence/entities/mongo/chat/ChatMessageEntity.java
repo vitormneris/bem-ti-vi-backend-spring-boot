@@ -1,9 +1,11 @@
-package com.bemtivi.bemtivi.persistence.entities.chat;
+package com.bemtivi.bemtivi.persistence.entities.mongo.chat;
 
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
 
@@ -13,25 +15,22 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "tb_chat")
+@Document(collection = "mensagens")
 public class ChatMessageEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @EqualsAndHashCode.Include
-    @Column(name = "chat_id")
+    @Field(name = "chat_id")
     private String id;
-    @Column(name = "usuario_id", nullable = false)
+    @Field(name = "usuario_id")
     private String userId;
-    @Column(name = "usuario_nome", nullable = false)
+    @Field(name = "usuario_nome")
     private String userName;
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "enviador", nullable = false)
+    @Field(name = "remetente")
     private UserRoleEnum sender;
-    @Column(name = "conteudo", nullable = false)
+    @Field(name = "conteudo")
     private String content;
+    @Field(name = "momento")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT-3")
-    @Column(name = "momento", nullable = false)
     private Instant moment;
 }

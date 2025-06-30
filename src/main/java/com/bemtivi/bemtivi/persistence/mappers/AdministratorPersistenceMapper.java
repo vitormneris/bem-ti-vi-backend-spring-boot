@@ -2,7 +2,7 @@ package com.bemtivi.bemtivi.persistence.mappers;
 
 import com.bemtivi.bemtivi.application.domain.user.administrator.Administrator;
 import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
-import com.bemtivi.bemtivi.persistence.entities.administrator.AdministratorEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.administrator.AdministratorEntity;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

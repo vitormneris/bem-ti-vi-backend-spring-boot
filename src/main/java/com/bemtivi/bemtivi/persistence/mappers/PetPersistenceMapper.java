@@ -4,8 +4,8 @@ package com.bemtivi.bemtivi.persistence.mappers;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.pet.Pet;
-import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
-import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.pet.PetEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface PetPersistenceMapper {

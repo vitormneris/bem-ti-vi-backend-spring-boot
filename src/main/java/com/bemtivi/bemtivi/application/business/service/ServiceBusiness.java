@@ -7,7 +7,7 @@ import com.bemtivi.bemtivi.application.domain.service.Service;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
-import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.service.ServiceEntity;
 import com.bemtivi.bemtivi.persistence.mappers.ServicePersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.jpa.ServiceRepository;
 import lombok.RequiredArgsConstructor;

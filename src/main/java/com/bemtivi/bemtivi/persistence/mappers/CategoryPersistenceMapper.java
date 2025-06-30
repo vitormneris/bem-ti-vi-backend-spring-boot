@@ -3,8 +3,8 @@ package com.bemtivi.bemtivi.persistence.mappers;
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.category.Category;
 import com.bemtivi.bemtivi.application.domain.product.Product;
-import com.bemtivi.bemtivi.persistence.entities.category.CategoryEntity;
-import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.category.CategoryEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.product.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CategoryPersistenceMapper {

@@ -1,7 +1,7 @@
 package com.bemtivi.bemtivi.persistence.repositories.jpa;
 
 import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
-import com.bemtivi.bemtivi.persistence.entities.administrator.AdministratorEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.administrator.AdministratorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

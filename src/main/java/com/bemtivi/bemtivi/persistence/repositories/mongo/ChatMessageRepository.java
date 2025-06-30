@@ -1,6 +1,6 @@
 package com.bemtivi.bemtivi.persistence.repositories.mongo;
 
-import com.bemtivi.bemtivi.persistence.entities.chat.ChatMessageEntity;
+import com.bemtivi.bemtivi.persistence.entities.mongo.chat.ChatMessageEntity;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

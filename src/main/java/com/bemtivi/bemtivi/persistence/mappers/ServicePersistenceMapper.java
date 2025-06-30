@@ -2,14 +2,13 @@ package com.bemtivi.bemtivi.persistence.mappers;
 
 import com.bemtivi.bemtivi.application.domain.PageResponse;
 import com.bemtivi.bemtivi.application.domain.service.Service;
-import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.service.ServiceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ServicePersistenceMapper {

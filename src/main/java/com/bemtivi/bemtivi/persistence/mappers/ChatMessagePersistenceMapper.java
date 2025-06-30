@@ -1,7 +1,7 @@
 package com.bemtivi.bemtivi.persistence.mappers;
 
 import com.bemtivi.bemtivi.application.domain.chat.ChatMessage;
-import com.bemtivi.bemtivi.persistence.entities.chat.ChatMessageEntity;
+import com.bemtivi.bemtivi.persistence.entities.mongo.chat.ChatMessageEntity;
 import org.mapstruct.Mapper;
 
 import java.util.List;

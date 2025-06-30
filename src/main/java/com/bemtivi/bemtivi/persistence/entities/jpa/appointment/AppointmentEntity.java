@@ -1,18 +1,16 @@
-package com.bemtivi.bemtivi.persistence.entities.appointment;
+package com.bemtivi.bemtivi.persistence.entities.jpa.appointment;
 
-import com.bemtivi.bemtivi.application.domain.pet.Pet;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
-import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
-import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
-import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
-import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.payment.PixEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.pet.PetEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.service.ServiceEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter

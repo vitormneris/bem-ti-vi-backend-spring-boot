@@ -1,11 +1,11 @@
-package com.bemtivi.bemtivi.persistence.entities.customer;
+package com.bemtivi.bemtivi.persistence.entities.jpa.customer;
 
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
-import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
-import com.bemtivi.bemtivi.persistence.entities.comment.CommentEntity;
-import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
-import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.appointment.AppointmentEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.comment.CommentEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.order.OrderEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.pet.PetEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

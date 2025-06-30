@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.persistence.entities.administrator;
+package com.bemtivi.bemtivi.persistence.entities.jpa.administrator;
 
 
 import com.bemtivi.bemtivi.application.enums.UserRoleEnum;

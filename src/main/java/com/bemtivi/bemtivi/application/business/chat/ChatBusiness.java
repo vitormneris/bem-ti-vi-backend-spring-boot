@@ -6,7 +6,7 @@ import com.bemtivi.bemtivi.controllers.auth.dto.UserAuthDTO;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
-import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.customer.CustomerEntity;
 import com.bemtivi.bemtivi.persistence.mappers.ChatMessagePersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.mongo.ChatMessageRepository;
 import com.bemtivi.bemtivi.persistence.repositories.jpa.CustomerRepository;

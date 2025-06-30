@@ -1,9 +1,9 @@
-package com.bemtivi.bemtivi.persistence.entities.comment;
+package com.bemtivi.bemtivi.persistence.entities.jpa.comment;
 
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
-import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
-import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
-import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.product.ProductEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.service.ServiceEntity;
 import jakarta.persistence.*;
 
 import lombok.*;

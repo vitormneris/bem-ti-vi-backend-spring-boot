@@ -12,7 +12,7 @@ import com.bemtivi.bemtivi.persistence.repositories.jpa.CustomerRepository;
 import com.bemtivi.bemtivi.persistence.repositories.mongo.ChatMessageRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
-import com.bemtivi.bemtivi.persistence.entities.administrator.AdministratorEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.administrator.AdministratorEntity;
 import com.bemtivi.bemtivi.persistence.mappers.AdministratorPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.jpa.AdministratorRepository;
 import lombok.RequiredArgsConstructor;

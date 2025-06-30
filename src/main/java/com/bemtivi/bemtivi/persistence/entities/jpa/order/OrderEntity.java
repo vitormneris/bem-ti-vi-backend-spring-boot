@@ -1,13 +1,10 @@
-package com.bemtivi.bemtivi.persistence.entities.order;
+package com.bemtivi.bemtivi.persistence.entities.jpa.order;
 
-import com.bemtivi.bemtivi.application.domain.payment.PaymentResponse;
-import com.bemtivi.bemtivi.application.domain.payment.Pix;
 import com.bemtivi.bemtivi.application.enums.PaymentStatusEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
-import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
-import com.bemtivi.bemtivi.persistence.entities.payment.PixEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.payment.PixEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.mercadopago.resources.payment.Payment;
 import jakarta.persistence.*;
 import lombok.*;
 

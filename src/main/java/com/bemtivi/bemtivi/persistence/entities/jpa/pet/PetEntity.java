@@ -1,9 +1,9 @@
-package com.bemtivi.bemtivi.persistence.entities.pet;
+package com.bemtivi.bemtivi.persistence.entities.jpa.pet;
 
 import com.bemtivi.bemtivi.application.enums.PetGenderEnum;
 import com.bemtivi.bemtivi.application.enums.PetSizeEnum;
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
-import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.customer.CustomerEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;

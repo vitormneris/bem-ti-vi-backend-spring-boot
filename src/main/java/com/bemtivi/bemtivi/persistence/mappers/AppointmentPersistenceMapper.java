@@ -5,10 +5,10 @@ import com.bemtivi.bemtivi.application.domain.pet.Pet;
 import com.bemtivi.bemtivi.application.domain.service.Service;
 import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.appointment.Appointment;
-import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
-import com.bemtivi.bemtivi.persistence.entities.appointment.AppointmentEntity;
-import com.bemtivi.bemtivi.persistence.entities.pet.PetEntity;
-import com.bemtivi.bemtivi.persistence.entities.service.ServiceEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.appointment.AppointmentEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.pet.PetEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.service.ServiceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface AppointmentPersistenceMapper {

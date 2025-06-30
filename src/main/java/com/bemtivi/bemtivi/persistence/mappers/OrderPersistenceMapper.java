@@ -5,10 +5,10 @@ import com.bemtivi.bemtivi.application.domain.user.customer.Customer;
 import com.bemtivi.bemtivi.application.domain.order.Order;
 import com.bemtivi.bemtivi.application.domain.order.OrderItem;
 import com.bemtivi.bemtivi.application.domain.product.Product;
-import com.bemtivi.bemtivi.persistence.entities.customer.CustomerEntity;
-import com.bemtivi.bemtivi.persistence.entities.order.OrderEntity;
-import com.bemtivi.bemtivi.persistence.entities.order.OrderItemEntity;
-import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.customer.CustomerEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.order.OrderEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.order.OrderItemEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.product.ProductEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface OrderPersistenceMapper {

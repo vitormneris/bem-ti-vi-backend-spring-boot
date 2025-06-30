@@ -3,7 +3,6 @@ package com.bemtivi.bemtivi.application.domain.product;
 import com.bemtivi.bemtivi.application.domain.ActivationStatus;
 import com.bemtivi.bemtivi.application.domain.category.Category;
 import com.bemtivi.bemtivi.application.domain.comment.Comment;
-import com.bemtivi.bemtivi.persistence.entities.comment.CommentEntity;
 import lombok.*;
 
 import java.math.BigDecimal;

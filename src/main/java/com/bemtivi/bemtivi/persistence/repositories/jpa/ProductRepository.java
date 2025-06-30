@@ -1,6 +1,6 @@
 package com.bemtivi.bemtivi.persistence.repositories.jpa;
 
-import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.product.ProductEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Pageable;

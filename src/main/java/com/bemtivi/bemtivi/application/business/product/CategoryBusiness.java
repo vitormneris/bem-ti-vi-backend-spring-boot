@@ -7,7 +7,7 @@ import com.bemtivi.bemtivi.application.domain.category.Category;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
-import com.bemtivi.bemtivi.persistence.entities.category.CategoryEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.category.CategoryEntity;
 import com.bemtivi.bemtivi.persistence.mappers.CategoryPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.jpa.CategoryRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,8 @@
-package com.bemtivi.bemtivi.persistence.entities.category;
+package com.bemtivi.bemtivi.persistence.entities.jpa.category;
 
 import com.bemtivi.bemtivi.persistence.entities.ActivationStatusEntity;
-import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.bemtivi.bemtivi.persistence.entities.jpa.product.ProductEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.Set;

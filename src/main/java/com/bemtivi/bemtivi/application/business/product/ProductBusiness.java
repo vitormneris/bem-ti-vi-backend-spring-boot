@@ -7,7 +7,7 @@ import com.bemtivi.bemtivi.application.domain.product.Product;
 import com.bemtivi.bemtivi.exceptions.DatabaseIntegrityViolationException;
 import com.bemtivi.bemtivi.exceptions.ResourceNotFoundException;
 import com.bemtivi.bemtivi.exceptions.enums.RuntimeErrorEnum;
-import com.bemtivi.bemtivi.persistence.entities.product.ProductEntity;
+import com.bemtivi.bemtivi.persistence.entities.jpa.product.ProductEntity;
 import com.bemtivi.bemtivi.persistence.mappers.ProductPersistenceMapper;
 import com.bemtivi.bemtivi.persistence.repositories.jpa.CategoryRepository;
 import com.bemtivi.bemtivi.persistence.repositories.jpa.ProductRepository;

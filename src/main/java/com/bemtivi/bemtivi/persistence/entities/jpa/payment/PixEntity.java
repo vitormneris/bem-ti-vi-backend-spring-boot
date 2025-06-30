@@ -1,4 +1,4 @@
-package com.bemtivi.bemtivi.persistence.entities.payment;
+package com.bemtivi.bemtivi.persistence.entities.jpa.payment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
