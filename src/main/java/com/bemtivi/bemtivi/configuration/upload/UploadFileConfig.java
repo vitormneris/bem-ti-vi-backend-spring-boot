@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UploadFileConfig {
     public AWSCredentials credentials() {
-        return new BasicAWSCredentials("AKIA4RCAOBYHKUREZHH5", "vwgmx/fl2g5gaAyifO8vY0Z8fYgkuWbDmTel5cbq");
+        return new BasicAWSCredentials("INSERT_YOUR_CREDENTIALS", "INSERT_YOUR_CREDENTIALS");
     }
 
     @Bean
