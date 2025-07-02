@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Service
 public class PaymentBusiness {
-    private static final String accessToken = "APP_USR-3457729516752224-061919-562bcafc2d4e54253dea96033b1741c6-826370617";
+    private static final String accessToken = "INSERT_YOUR_ACCESS_TOKEN";
 
     public PaymentResponse processPayment(CustomerEntity customer, BigDecimal transactionAmount, String description) {
         try {
