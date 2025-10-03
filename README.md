@@ -42,7 +42,7 @@ O backend foi projetado para ser seguro, escalável e de fácil manutenção, fo
 
 ---
 
-## Instalação
+## Instalação (Rodar localmente)
 ### 1. Na pasta do projeto, gere os arquivos .jar com o comando abaixo
 ```bash
 ./mvnw clean package -Dmaven.test.skip=true
